@@ -5,12 +5,25 @@
 <title>Cancionero católico con carisma agustino</title>
 <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0">
 <link rel="stylesheet" type="text/css" href="https://fjcerdav.github.io/cancionero.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 </head>
 
 <body>
 
-<div id="nav-placeholder"></div>
-	
+<nav class="navbar sticky-top  bg-primary" data-bs-theme="dark">
+  <div class="container-fluid">
+	 	 	<a class="navbar-brand" href="https://cancioneroagustino.github.io/index.html">
+	   	 	<img src="https://fjcerdav.github.io/files/logo agustino.png"  alt="Logo" width="30" height="24" class="d-inline-block align-text-top">ÍNDICE</a>
+  </div>
+	  <div class="d-flex justify-content-center">
+	    <form class="d-flex" role="search">
+	        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+	        <button class="btn btn-outline-success" type="submit">Search</button>
+	    </form>    
+	  </div>
+	</div>
+</nav>
+
 <div> 
 <h1 class="portada">Cancionero católico con Carisma Agustino</h1>
 </div>
@@ -31,14 +44,6 @@
 	<div class="col-8 col-sm-6 col-md-4 col-lg-3 mx-auto"><a class="d-block btn btn-primary" href="18 Agustinianos.html">Agustinianos</a></div>
 	<div class="col-8 col-sm-6 col-md-4 col-lg-3 mx-auto"><a class="d-block btn btn-primary" href="19 Villancicos.html">Villancicos</a></div>
 </div>
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-
-<script>
-$(function(){
-  $("#nav-placeholder").load("files/navbar.html");
-});
-</script>
   
   </body>
-  </html>
+ </html>

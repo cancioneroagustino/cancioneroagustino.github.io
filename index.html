@@ -10,14 +10,12 @@
 
 <body>
 
-<nav class="navbar sticky-top  bg-primary" data-bs-theme="dark">
-  <div class="container-fluid">
-	 	 	<a class="navbar-brand" href="https://cancioneroagustino.github.io/index.html">
-	   	 	<img src="https://fjcerdav.github.io/files/logo agustino.png"  alt="Logo" width="30" height="24" class="d-inline-block align-text-top">ÍNDICE</a>
-	    <script async src="https://cse.google.com/cse.js?cx=3533cbc779ca14baf"></script>
-			<div class="gcse-search"></div>   
-	  </div>
-</nav>
+<div id="nav-placeholder"></div>
+<script>
+$(function(){
+  $("#nav-placeholder").load("https://fjcerdav.github.io/files/navbar.html");
+});
+</script>
 
 <div> 
 <h1 class="portada">Cancionero católico con Carisma Agustino</h1>

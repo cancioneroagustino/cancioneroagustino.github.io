@@ -10,11 +10,11 @@
 </url>
 <url>
 <loc>https://www.cancionerocatolico.cl/10 Cordero.html</loc>
-<lastmod>2023-09-14T12:51:35-03:00</lastmod>
+<lastmod>2023-10-06T13:18:48-03:00</lastmod>
 </url>
 <url>
 <loc>https://www.cancionerocatolico.cl/11 Comunión.html</loc>
-<lastmod>2023-09-10T01:06:50-03:00</lastmod>
+<lastmod>2023-09-30T11:37:48-03:00</lastmod>
 </url>
 <url>
 <loc>https://www.cancionerocatolico.cl/12 Espíritu Santo.html</loc>
@@ -42,7 +42,7 @@
 </url>
 <url>
 <loc>https://www.cancionerocatolico.cl/18 Agustinianos.html</loc>
-<lastmod>2023-04-25T01:02:42-04:00</lastmod>
+<lastmod>2023-09-30T11:42:53-03:00</lastmod>
 </url>
 <url>
 <loc>https://www.cancionerocatolico.cl/19 Villancicos.html</loc>
@@ -90,7 +90,7 @@
 </url>
 <url>
 <loc>https://www.cancionerocatolico.cl/Misa a la chilena.html</loc>
-<lastmod>2023-09-14T12:51:35-03:00</lastmod>
+<lastmod>2023-10-06T13:18:48-03:00</lastmod>
 </url>
 <url>
 <loc>https://www.cancionerocatolico.cl/Navidad.html</loc>
@@ -103,6 +103,10 @@
 <url>
 <loc>https://www.cancionerocatolico.cl/Agustinianos/Canción a Santa Mónica.html</loc>
 <lastmod>2023-04-25T01:02:42-04:00</lastmod>
+</url>
+<url>
+<loc>https://www.cancionerocatolico.cl/Agustinianos/Corazón inquieto (Javier Moreno).html</loc>
+<lastmod>2023-10-07T10:03:17-03:00</lastmod>
 </url>
 <url>
 <loc>https://www.cancionerocatolico.cl/Agustinianos/Corazón inquieto.html</loc>
@@ -778,7 +782,7 @@
 </url>
 <url>
 <loc>https://www.cancionerocatolico.cl/Comunión/Maestro bueno.html</loc>
-<lastmod>2023-04-25T01:02:42-04:00</lastmod>
+<lastmod>2023-10-01T01:12:05-03:00</lastmod>
 </url>
 <url>
 <loc>https://www.cancionerocatolico.cl/Comunión/Mar adentro.html</loc>
@@ -1125,6 +1129,10 @@
 <lastmod>2023-04-25T01:02:42-04:00</lastmod>
 </url>
 <url>
+<loc>https://www.cancionerocatolico.cl/Comunión/Ven y verás.html</loc>
+<lastmod>2023-10-07T10:03:17-03:00</lastmod>
+</url>
+<url>
 <loc>https://www.cancionerocatolico.cl/Comunión/Ven y ámame.html</loc>
 <lastmod>2023-04-25T01:02:42-04:00</lastmod>
 </url>
@@ -1185,10 +1193,6 @@
 <lastmod>2023-04-25T01:02:42-04:00</lastmod>
 </url>
 <url>
-<loc>https://www.cancionerocatolico.cl/Cordero/Cordero de Dios (Misa por Chile).html</loc>
-<lastmod>2023-09-14T12:51:35-03:00</lastmod>
-</url>
-<url>
 <loc>https://www.cancionerocatolico.cl/Cordero/Cordero de Dios Betsaida.html</loc>
 <lastmod>2023-04-25T01:02:42-04:00</lastmod>
 </url>
@@ -1213,16 +1217,20 @@
 <lastmod>2023-04-25T01:02:42-04:00</lastmod>
 </url>
 <url>
+<loc>https://www.cancionerocatolico.cl/Cordero/Cordero de Dios SOL.html</loc>
+<lastmod>2023-10-06T13:18:48-03:00</lastmod>
+</url>
+<url>
 <loc>https://www.cancionerocatolico.cl/Cordero/Cordero de Dios Tomás Aragüés.html</loc>
 <lastmod>2023-04-25T01:02:42-04:00</lastmod>
 </url>
 <url>
 <loc>https://www.cancionerocatolico.cl/Cordero/Cordero de Dios folclórico (Polka).html</loc>
-<lastmod>2023-09-14T12:51:35-03:00</lastmod>
+<lastmod>2023-10-07T10:03:17-03:00</lastmod>
 </url>
 <url>
 <loc>https://www.cancionerocatolico.cl/Cordero/Cordero de Dios folclórico Raúl de Ramón.html</loc>
-<lastmod>2023-09-14T00:38:04-03:00</lastmod>
+<lastmod>2023-10-07T10:03:17-03:00</lastmod>
 </url>
 <url>
 <loc>https://www.cancionerocatolico.cl/Cordero/Cordero de Dios folclórico Vicente Bianchi.html</loc>
@@ -1670,7 +1678,7 @@
 </url>
 <url>
 <loc>https://www.cancionerocatolico.cl/Leccionales/Dios es ternura (Taizé).html</loc>
-<lastmod>2023-07-02T01:48:50-04:00</lastmod>
+<lastmod>2023-10-07T10:03:17-03:00</lastmod>
 </url>
 <url>
 <loc>https://www.cancionerocatolico.cl/Leccionales/Dios está aquí.html</loc>
@@ -1698,7 +1706,7 @@
 </url>
 <url>
 <loc>https://www.cancionerocatolico.cl/Leccionales/El canto del mar.html</loc>
-<lastmod>2023-09-30T10:27:42-03:00</lastmod>
+<lastmod>2023-10-04T13:10:57-03:00</lastmod>
 </url>
 <url>
 <loc>https://www.cancionerocatolico.cl/Leccionales/En el nombre de Jesucristo.html</loc>
@@ -2882,6 +2890,6 @@
 </url>
 <url>
 <loc>https://www.cancionerocatolico.cl/gloria/Gloria pascual (Gen verde).html</loc>
-<lastmod>2023-09-24T11:15:01-03:00</lastmod>
+<lastmod>2023-10-07T11:26:07-03:00</lastmod>
 </url>
 </urlset>

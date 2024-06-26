@@ -148,7 +148,7 @@ pre {
 }
 
 .seccion {
-	color: #CA7216;
+	color: #C21712;
 	text-align: center;
 	font-size: 2rem;
 	margin-top: 1rem;
@@ -156,7 +156,7 @@ pre {
 }
 
 .titulo {
-	color: #8B0E00;
+	color: #C21712;
 	margin-top: 1.5rem;
 	margin-bottom: 1.5rem;
 	padding-left: 1rem;
@@ -180,7 +180,6 @@ h2 {
     font-variant: normal;
     font-size: 1.2rem;
     font-weight: 700;
-    color: #1255CC;
     vertical-align: baseline;
     line-height: 100%;
 }

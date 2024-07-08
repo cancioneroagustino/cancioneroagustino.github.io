@@ -1,0 +1,57 @@
+<nav class="navbar sticky-top navbar-dark bg-primary">
+  <div class="container-fluid">
+	 	 	<a class="navbar-brand" href="https://www.cancionerocatolico.cl/index.html">
+	   	 	<img src="https://www.cancionerocatolico.cl/images/logoagustino.png"  alt="Logo" width="30" height="30" class="d-inline-block align-text-top">INICIO</a>
+
+<div class="dropdown">
+  <button onclick="myFunction()" class="dropbtn">ÍNDICE</button>
+  <div id="myDropdown" class="dropdown-content">
+    <input type="text" placeholder="Buscar.." id="myInput" onkeyup="filterFunction()">
+    <a href="#entrada">ENTRADA</a>
+    <a href="#perdon">PERDON</a>
+    <a href="#gloria">GLORIA</a>
+    <a href="#aleluya">ALELUYA</a>
+    <a href="#leccionales">LECCIONALES</a>
+    <a href="#ofertorio">OFERTORIO</a>
+    <a href="#santo">SANTO</a>
+    <a href="#padrenuestro">PADRENUESTRO</a>
+    <a href="#paz">PAZ</a>
+    <a href="#cordero">CORDERO</a>
+    <a href="#comunion">COMUNION</a>
+    <a href="#espiritu">ESPIRITU SANTO</a>
+    <a href="#salida">SALIDA</a>
+    <a href="#marianos">MARIANOS</a>
+    <a href="#rosario">ROSARIO</a>
+    <a href="#matrimonio">MATRIMONIO</a>
+    <a href="#liturgiaesp">LITURGIAS ESPECIALES</a>
+    <a href="#agustinianos">AGUSTINIANOS</a>
+    <a href="#villancicos">VILLANCICOS</a>
+  </div>
+</div>
+	    <script async src="https://cse.google.com/cse.js?cx=3533cbc779ca14baf"></script>
+			<div class="gcse-search"></div>   
+	  </div>
+
+<script>
+/* mostrar y ocultar la lista al hacer clic */
+function myFunction() {
+  document.getElementById("myDropdown").classList.toggle("show");
+}
+
+function filterFunction() {
+  const input = document.getElementById("myInput");
+  const filter = input.value.toUpperCase();
+  const div = document.getElementById("myDropdown");
+  const a = div.getElementsByTagName("a");
+  for (let i = 0; i < a.length; i++) {
+    txtValue = a[i].textContent || a[i].innerText;
+    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+      a[i].style.display = "";
+    } else {
+      a[i].style.display = "none";
+    }
+  }
+}
+</script>
+
+</nav>

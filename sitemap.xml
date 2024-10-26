@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
 <loc>https://www.cancionerocatolico.cl/</loc>
-<lastmod>2024-06-19T01:33:35-04:00</lastmod>
+<lastmod>2024-10-26T13:18:53-03:00</lastmod>
 </url>
 <url>
 <loc>https://www.cancionerocatolico.cl/1 Entrada.html</loc>
@@ -18,7 +18,7 @@
 </url>
 <url>
 <loc>https://www.cancionerocatolico.cl/12 Espíritu Santo.html</loc>
-<lastmod>2024-06-22T18:02:07-04:00</lastmod>
+<lastmod>2024-10-26T13:14:46-03:00</lastmod>
 </url>
 <url>
 <loc>https://www.cancionerocatolico.cl/13 Salida.html</loc>
@@ -38,7 +38,7 @@
 </url>
 <url>
 <loc>https://www.cancionerocatolico.cl/17 Liturgias especiales.html</loc>
-<lastmod>2024-03-30T14:16:07-03:00</lastmod>
+<lastmod>2024-10-26T13:29:45-03:00</lastmod>
 </url>
 <url>
 <loc>https://www.cancionerocatolico.cl/18 Agustinianos.html</loc>
@@ -51,6 +51,10 @@
 <url>
 <loc>https://www.cancionerocatolico.cl/2 Perdón.html</loc>
 <lastmod>2024-06-29T20:15:18-04:00</lastmod>
+</url>
+<url>
+<loc>https://www.cancionerocatolico.cl/20 Varios.html</loc>
+<lastmod>2024-10-26T13:24:52-03:00</lastmod>
 </url>
 <url>
 <loc>https://www.cancionerocatolico.cl/3 Gloria.html</loc>
@@ -554,7 +558,7 @@
 </url>
 <url>
 <loc>https://www.cancionerocatolico.cl/Comunión/El cazador.html</loc>
-<lastmod>2024-06-29T23:37:24-04:00</lastmod>
+<lastmod>2024-10-26T10:59:50-03:00</lastmod>
 </url>
 <url>
 <loc>https://www.cancionerocatolico.cl/Comunión/El crucifijo.html</loc>
@@ -926,7 +930,7 @@
 </url>
 <url>
 <loc>https://www.cancionerocatolico.cl/Comunión/Plegaria simple.html</loc>
-<lastmod>2024-06-30T01:57:54-04:00</lastmod>
+<lastmod>2024-10-04T18:10:00-03:00</lastmod>
 </url>
 <url>
 <loc>https://www.cancionerocatolico.cl/Comunión/Prepáranos, Señor.html</loc>
@@ -1609,18 +1613,6 @@
 <lastmod>2024-07-03T21:36:17-04:00</lastmod>
 </url>
 <url>
-<loc>https://www.cancionerocatolico.cl/Espíritu Santo/Secuencia de Pentecostés (Coro Seminario Mayor).html</loc>
-<lastmod>2024-07-03T21:36:17-04:00</lastmod>
-</url>
-<url>
-<loc>https://www.cancionerocatolico.cl/Espíritu Santo/Secuencia de Pentecostés (gregoriano-español).html</loc>
-<lastmod>2024-07-03T21:36:17-04:00</lastmod>
-</url>
-<url>
-<loc>https://www.cancionerocatolico.cl/Espíritu Santo/Secuencia de Pentecostés (gregoriano-latin).html</loc>
-<lastmod>2024-06-30T18:18:57-04:00</lastmod>
-</url>
-<url>
 <loc>https://www.cancionerocatolico.cl/Espíritu Santo/Si Tú no vienes.html</loc>
 <lastmod>2024-07-03T21:36:17-04:00</lastmod>
 </url>
@@ -1663,10 +1655,6 @@
 <url>
 <loc>https://www.cancionerocatolico.cl/Espíritu Santo/Ven, Espíritu de santidad.html</loc>
 <lastmod>2024-07-03T21:36:17-04:00</lastmod>
-</url>
-<url>
-<loc>https://www.cancionerocatolico.cl/Espíritu Santo/Ven, Espíritu divino.html</loc>
-<lastmod>2024-06-22T20:30:27-04:00</lastmod>
 </url>
 <url>
 <loc>https://www.cancionerocatolico.cl/Espíritu Santo/Ven, Espíritu, ven.html</loc>
@@ -1830,7 +1818,7 @@
 </url>
 <url>
 <loc>https://www.cancionerocatolico.cl/Leccionales/Oh Padre, entre tus manos.html</loc>
-<lastmod>2024-06-22T19:38:27-04:00</lastmod>
+<lastmod>2024-10-26T01:28:58-03:00</lastmod>
 </url>
 <url>
 <loc>https://www.cancionerocatolico.cl/Leccionales/Oh, Jesús, Pan de Dios.html</loc>
@@ -1937,24 +1925,12 @@
 <lastmod>2024-06-29T21:13:23-04:00</lastmod>
 </url>
 <url>
-<loc>https://www.cancionerocatolico.cl/Liturgias especiales/Canción a Alberto Hurtado.html</loc>
-<lastmod>2024-07-03T21:36:17-04:00</lastmod>
-</url>
-<url>
 <loc>https://www.cancionerocatolico.cl/Liturgias especiales/Cena pascual.html</loc>
 <lastmod>2024-07-03T21:36:17-04:00</lastmod>
 </url>
 <url>
 <loc>https://www.cancionerocatolico.cl/Liturgias especiales/Con estas cenizas, Señor.html</loc>
 <lastmod>2024-06-22T23:50:05-04:00</lastmod>
-</url>
-<url>
-<loc>https://www.cancionerocatolico.cl/Liturgias especiales/Himno a San José.html</loc>
-<lastmod>2024-07-03T22:05:11-04:00</lastmod>
-</url>
-<url>
-<loc>https://www.cancionerocatolico.cl/Liturgias especiales/Himno a Teresita de Los Andes.html</loc>
-<lastmod>2024-07-03T21:36:17-04:00</lastmod>
 </url>
 <url>
 <loc>https://www.cancionerocatolico.cl/Liturgias especiales/Lava mis pies.html</loc>
@@ -1967,10 +1943,6 @@
 <url>
 <loc>https://www.cancionerocatolico.cl/Liturgias especiales/Letanía de los santos.html</loc>
 <lastmod>2024-06-24T00:09:09-04:00</lastmod>
-</url>
-<url>
-<loc>https://www.cancionerocatolico.cl/Liturgias especiales/Mensajero de la vida.html</loc>
-<lastmod>2024-07-03T21:36:17-04:00</lastmod>
 </url>
 <url>
 <loc>https://www.cancionerocatolico.cl/Liturgias especiales/Pregón Pascual (Camino Neocatecumenal).html</loc>
@@ -1987,6 +1959,26 @@
 <url>
 <loc>https://www.cancionerocatolico.cl/Liturgias especiales/Reciban su alma.html</loc>
 <lastmod>2024-07-03T21:36:17-04:00</lastmod>
+</url>
+<url>
+<loc>https://www.cancionerocatolico.cl/Liturgias especiales/Secuencia de Corpus Christi.html</loc>
+<lastmod>2024-10-26T13:31:22-03:00</lastmod>
+</url>
+<url>
+<loc>https://www.cancionerocatolico.cl/Liturgias especiales/Secuencia de Pentecostés (Coro Seminario Mayor).html</loc>
+<lastmod>2024-10-26T13:14:46-03:00</lastmod>
+</url>
+<url>
+<loc>https://www.cancionerocatolico.cl/Liturgias especiales/Secuencia de Pentecostés (gregoriano-español).html</loc>
+<lastmod>2024-10-26T13:14:46-03:00</lastmod>
+</url>
+<url>
+<loc>https://www.cancionerocatolico.cl/Liturgias especiales/Secuencia de Pentecostés (gregoriano-latin).html</loc>
+<lastmod>2024-10-26T13:14:46-03:00</lastmod>
+</url>
+<url>
+<loc>https://www.cancionerocatolico.cl/Liturgias especiales/Ven, Espíritu divino.html</loc>
+<lastmod>2024-10-26T13:14:46-03:00</lastmod>
 </url>
 <url>
 <loc>https://www.cancionerocatolico.cl/Liturgias especiales/Venid, oh cristianos.html</loc>
@@ -2805,6 +2797,26 @@
 <lastmod>2024-06-29T23:37:24-04:00</lastmod>
 </url>
 <url>
+<loc>https://www.cancionerocatolico.cl/Varios/Canción a Alberto Hurtado.html</loc>
+<lastmod>2024-10-26T13:14:46-03:00</lastmod>
+</url>
+<url>
+<loc>https://www.cancionerocatolico.cl/Varios/Himno a San José.html</loc>
+<lastmod>2024-10-26T13:14:46-03:00</lastmod>
+</url>
+<url>
+<loc>https://www.cancionerocatolico.cl/Varios/Himno a Santa Teresa de Los Andes.html</loc>
+<lastmod>2024-10-26T13:14:46-03:00</lastmod>
+</url>
+<url>
+<loc>https://www.cancionerocatolico.cl/Varios/Himno del Jubileo 2025.html</loc>
+<lastmod>2024-10-26T13:26:47-03:00</lastmod>
+</url>
+<url>
+<loc>https://www.cancionerocatolico.cl/Varios/Mensajero de la vida.html</loc>
+<lastmod>2024-10-26T13:14:46-03:00</lastmod>
+</url>
+<url>
 <loc>https://www.cancionerocatolico.cl/Varios/SalmosVP.html</loc>
 <lastmod>2024-07-03T21:36:17-04:00</lastmod>
 </url>
@@ -3037,10 +3049,6 @@
 <lastmod>2024-03-18T23:21:13-03:00</lastmod>
 </url>
 <url>
-<loc>https://www.cancionerocatolico.cl/Espíritu Santo/files/secuencia-de-pentecostes-gregoriano-español.pdf</loc>
-<lastmod>2024-06-03T01:47:31-04:00</lastmod>
-</url>
-<url>
 <loc>https://www.cancionerocatolico.cl/Leccionales/files/Aclamación al Evangelio, 1er y 2º Domingo de Cuaresma, Ciclo A.pdf</loc>
 <lastmod>2024-03-19T00:29:57-03:00</lastmod>
 </url>
@@ -3075,6 +3083,10 @@
 <url>
 <loc>https://www.cancionerocatolico.cl/Liturgias especiales/files/secuencia-corpus-christi.pdf</loc>
 <lastmod>2024-06-03T01:43:53-04:00</lastmod>
+</url>
+<url>
+<loc>https://www.cancionerocatolico.cl/Liturgias especiales/files/secuencia-de-pentecostes-gregoriano-español.pdf</loc>
+<lastmod>2024-10-26T13:14:46-03:00</lastmod>
 </url>
 <url>
 <loc>https://www.cancionerocatolico.cl/Marianos/files/la-salve.pdf</loc>
@@ -3123,6 +3135,10 @@
 <url>
 <loc>https://www.cancionerocatolico.cl/Santo/files/santo-misa-comunitaria.pdf</loc>
 <lastmod>2024-03-19T01:16:28-03:00</lastmod>
+</url>
+<url>
+<loc>https://www.cancionerocatolico.cl/Varios/files/Himno Jubileo 2025 coro.pdf</loc>
+<lastmod>2024-10-26T13:14:46-03:00</lastmod>
 </url>
 <url>
 <loc>https://www.cancionerocatolico.cl/Villancicos/files/canta-un-angel-en-el-cielo.pdf</loc>

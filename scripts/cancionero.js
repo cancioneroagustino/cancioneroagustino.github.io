@@ -157,17 +157,14 @@
         return o.join("");
     }
     
-    // Función para envolver los acordes en un span
     var wrapChords = function (input) {
         return input.replace(opts.chordReplaceRegex, "<span class='c'>$1</span>");
     };
 
-    // Función para alternar la visibilidad de los acordes
     var toggleChordsVisibility = function () {
-        $("span.c").toggle();
+        $(".chord-line").toggle();
     };
-    
-    // Añadir el botón al inicio del contenido
+
     var addToggleButton = function (target) {
         var toggleButton = $("<button id='toggleChords' class='btn btn-outline-primary btn-sm col-3 mx-auto'>Sólo texto</button>");
         toggleButton.click(function() {
@@ -211,7 +208,6 @@
       
       $(this).before(keysHtml);
 
-      // Añadir botón para alternar la visibilidad de los acordes
       addToggleButton(this);
 
       var output = [];
@@ -220,7 +216,11 @@
 
       for (var i = 0; i < lines.length; i++) {
           line = lines[i];
-          output.push("<span>" + wrapChords(line) + "</span>");
+          if (opts.chordRegex.test(line)) {
+              output.push("<span class='chord-line'>" + wrapChords(line) + "</span>");
+          } else {
+              output.push("<span>" + line + "</span>");
+          }
       };
 
       $(this).html(output.join("\n"));
@@ -228,8 +228,8 @@
   };
 
   $.fn.transpose.defaults = {
-    chordRegex: /^(\bDO|\bRE|\bMI|\bFA|\bSOL|\bLA|\bSI)[b\#]?(m|sus2|sus4|maj7|maj9|dim|aug|°|Ø|m7b5|m\/maj7|m6|m7|m9|7|9|11|13|6\/9|7\-5|7\-9|7\#5|7\#9|7\+5|7\+9|7b5|7b9|add2|add4|add9)?(\/[A-G][b\#]?)?$/g,
-    chordReplaceRegex: /(\bDO|\bRE|\bMI|\bFA|\bSOL|\bLA|\bSI)[b\#]?(m|sus2|sus4|maj7|maj9|dim|aug|°|Ø|m7b5|m\/maj7|m6|m7|m9|7|9|11|13|6\/9|7\-5|7\-9|7\#5|7\#9|7\+5|7\+9|7b5|7b9|add2|add4|add9)?(\/[A-G][b\#]?)?/g
+    chordRegex: /^(\bDO|\bRE|\bMI|\bFA|\bSOL|\bLA|\bSI)[b\#]?(2|4|5|6|7|9|11|13|6\/9|7\-5|7\-9|7\#5|7\#9|7\+5|7\+9|7b5|7b9|7sus2|7sus4|add2|add4|add9|aug|°|dim|Ø|dim7|mb5|m7b5|m\/maj7|m6|m7|m7b5|m9|maj7|sus2|sus4)?$/,
+    chordReplaceRegex: /((\bDO|\bRE|\bMI|\bFA|\bSOL|\bLA|\bSI)[b\#]?(2|4|5|6|7|9|11|13|6\/9|7\-5|7\-9|7\#5|7\#9|7\+5|7\+9|7b5|7b9|7sus2|7sus4|add2|add4|add9|aug|°|dim|Ø|dim7|mb5|m7b5|m\/maj7|m6|m7|m7b5|m9|maj7|sus2|sus4)?)/g
   };
 
 })(jQuery);

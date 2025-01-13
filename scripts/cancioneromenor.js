@@ -38,10 +38,9 @@
 
     var getChordRoot = function (input) {
         var ind = 2;
-        console.log("getChordRoot: "+input);
-        if(input.substring(0,2)=="SO"){
-            //alert("Nota sol");
-            ind=3;}
+        if(input.substring(0,3)=="SOL"){
+            ind = 3;
+        }
         if (input.length > ind && (input.charAt(ind) == "b" || input.charAt(ind) == "#"))
             return input.substr(0, ind+1);
         else
@@ -49,9 +48,7 @@
     };
 
     var getNewKey = function (oldKey, delta, targetKey) {
-        console.log("oldKey: "+oldKey + " - delta: " + delta);
         var keyValue = getKeyByName(oldKey).value + delta;
-console.log(keyValue);
         if (keyValue > 11) {
             keyValue -= 12;
         } else if (keyValue < 0) {
@@ -136,7 +133,6 @@ console.log(keyValue);
         var oldChordRoot = getChordRoot(oldChord);
         var newChordRoot = getNewKey(oldChordRoot, delta, targetKey);
         var newChord = newChordRoot.name + oldChord.substr(oldChordRoot.length);
-        console.log("newChord: "+newChord);
         el.text(newChord);
 
         var sib = el[0].nextSibling;
@@ -161,12 +157,24 @@ console.log(keyValue);
         return o.join("");
     }
     
-
-    
+    // Función para envolver los acordes en un span
     var wrapChords = function (input) {
         return input.replace(opts.chordReplaceRegex, "<span class='c'>$1</span>");
     };
+
+    // Función para alternar la visibilidad de los acordes
+    var toggleChordsVisibility = function () {
+        $("span.c").toggle();
+    };
     
+    // Añadir el botón al inicio del contenido
+    var addToggleButton = function (target) {
+        var toggleButton = $("<button id='toggleChords' class='btn btn-primary'>Sólo texto</button>");
+        toggleButton.click(function() {
+            toggleChordsVisibility();
+        });
+        $(target).before(toggleButton);
+    };
     
     return $(this).each(function() {
     
@@ -182,7 +190,6 @@ console.log(keyValue);
       
       currentKey = getKeyByName(startKey);
 
-      // Build tranpose links ===========================================
       var keyLinks = [];
       $(keys).each(function(i, key) {
           if (currentKey.name == key.name)
@@ -190,7 +197,6 @@ console.log(keyValue);
           else
               keyLinks.push("<a href='#'>" + key.name + "</a>");
       });
-
 
       var $this = $(this);
       var keysHtml = $("<div class='transpose-keys col-12'></div>");
@@ -205,25 +211,25 @@ console.log(keyValue);
       
       $(this).before(keysHtml);
 
+      // Añadir botón para alternar la visibilidad de los acordes
+      addToggleButton(this);
+
       var output = [];
       var lines = $(this).html().split("\n");
       var line, tmp = "";
 
       for (var i = 0; i < lines.length; i++) {
           line = lines[i];
-              output.push("<span>" + wrapChords(line) + "</span>");
+          output.push("<span>" + wrapChords(line) + "</span>");
       };
 
       $(this).html(output.join("\n"));
     });
   };
 
-
   $.fn.transpose.defaults = {
-    chordRegex: /^(\bDO|\bRE|\bMI|\bFA|\bSOL|\bLA|\bSI)[b\#]?(2|4|5|6|7|9|11|13|6\/9|7\-5|7\-9|7\#5|7\#9|7\+5|7\+9|7b5|7b9|7sus2|7sus4|add2|add4|add9|aug|°|dim|Ø|dim7|mb5|m7b5|m\/maj7|m6|m7|m7b5|m9|m11|m13|maj7|maj9|maj11|maj13|m|sus|sus2|sus4)*(\/[A-G][b\#]*)*$/,
-    chordReplaceRegex: /((\bDO|\bRE|\bMI|\bFA|\bSOL|\bLA|\bSI)[b\#]?(2|4|5|6|7|9|11|13|6\/9|7\-5|7\-9|7\#5|7\#9|7\+5|7\+9|7b5|7b9|7sus2|7sus4|add2|add4|add9|aug|°|dim|Ø|dim7|mb5|m7b5|m\/maj7|m6|m7|m7b5|m9|m11|m13|maj7|maj9|maj11|maj13|m|sus|sus2|sus4)*)/g
+    chordRegex: /^(\bDO|\bRE|\bMI|\bFA|\bSOL|\bLA|\bSI)[b\#]?(2|4|5|6|7|9|11|13|6\/9|7\-5|7\-9|7\#5|7\#9|7\+5|7\+9|7b5|7b9|7sus2|7sus4|add2|add4|add9|aug|°|dim|Ø|dim7|mb5|m7b5|m\/maj7|m6|m7|m7b5|m9|maj7|sus2|sus4)?$/,
+    chordReplaceRegex: /((\bDO|\bRE|\bMI|\bFA|\bSOL|\bLA|\bSI)[b\#]?(2|4|5|6|7|9|11|13|6\/9|7\-5|7\-9|7\#5|7\#9|7\+5|7\+9|7b5|7b9|7sus2|7sus4|add2|add4|add9|aug|°|dim|Ø|dim7|mb5|m7b5|m\/maj7|m6|m7|m7b5|m9|maj7|sus2|sus4)?)/g
   };
 
-    
-    
 })(jQuery);

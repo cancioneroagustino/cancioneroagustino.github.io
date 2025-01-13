@@ -224,7 +224,20 @@ console.log(keyValue);
 
       $(this).html(output.join("\n"));
     });
+
   };
+
+  // Función para ocultar/mostrar acordes
+  function toggleChords() {
+    $('span.c').each(function() {
+      $(this).toggle(); // Alterna la visibilidad del elemento
+    });
+  }
+
+  // Asociar la función al evento de clic del botón
+  $('#toggleChordsButton').click(function() {
+    toggleChords();
+  });
 
 
   $.fn.transpose.defaults = {

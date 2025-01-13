@@ -230,6 +230,17 @@ console.log(keyValue);
     });
   };
 
+      // Función para ocultar/mostrar acordes
+  function toggleChords() {
+    $('span.c').each(function() {
+      $(this).toggle(); // Alterna la visibilidad del elemento
+    });
+  }
+
+  // Asociar la función al evento de clic del botón
+  $('#toggleChordsButton').click(function() {
+    toggleChords();
+  });
 
   $.fn.transpose.defaults = {
     chordRegex: /^(\bDO|\bRE|\bMI|\bFA|\bSOL|\bLA|\bSI)[b\#]?(2|4|5|6|7|9|11|13|6\/9|7\-5|7\-9|7\#5|7\#9|7\+5|7\+9|7b5|7b9|7sus2|7sus4|add2|add4|add9|aug|°|dim|Ø|dim7|mb5|m7b5|m\/maj7|m6|m7|m7b5|m9|m11|m13|maj7|maj9|maj11|maj13|m|sus|sus2|sus4)*(\/[A-G][b\#]*)*$/,

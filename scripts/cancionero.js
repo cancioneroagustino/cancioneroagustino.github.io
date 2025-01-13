@@ -1,5 +1,28 @@
 (function($) {
 
+  // Función para determinar si una línea es de acordes
+  var isChordLine = function(line) {
+    return /(\bDO|\bRE|\bMI|\bFA|\bSOL|\bLA|\bSI)[b#]?/.test(line);
+  };
+
+  // Función para ocultar/mostrar acordes
+  function toggleChords() {
+    $('#letra span').each(function() {
+      var lineText = $(this).text();
+      if (isChordLine(lineText)) {
+        $(this).toggle(); // Alterna la visibilidad del elemento
+      }
+    });
+  }
+
+  // Asociar la función al evento de clic del botón
+  $('#toggleChordsButton').click(function() {
+    toggleChords();
+  });
+
+
+
+
   $.fn.transpose = function(options) {
     var opts = $.extend({}, $.fn.transpose.defaults, options);
     
@@ -230,20 +253,6 @@ console.log(keyValue);
     });
   };
 
-  // Función para ocultar/mostrar acordes
-  function toggleChords() {
-    $('#letra span').each(function() {
-      // Utiliza isChordLine para decidir si ocultar/mostrar la línea
-      if (isChordLine($(this).text())) {
-        $(this).parent().toggle(); // Alterna la visibilidad del elemento padre (la línea completa)
-      }
-    });
-  }
-
-  // Asociar la función al evento de clic del botón
-  $('#toggleChordsButton').click(function() {
-    toggleChords();
-  });
 
   $.fn.transpose.defaults = {
     chordRegex: /^(\bDO|\bRE|\bMI|\bFA|\bSOL|\bLA|\bSI)[b\#]?(2|4|5|6|7|9|11|13|6\/9|7\-5|7\-9|7\#5|7\#9|7\+5|7\+9|7b5|7b9|7sus2|7sus4|add2|add4|add9|aug|°|dim|Ø|dim7|mb5|m7b5|m\/maj7|m6|m7|m7b5|m9|m11|m13|maj7|maj9|maj11|maj13|m|sus|sus2|sus4)*(\/[A-G][b\#]*)*$/,

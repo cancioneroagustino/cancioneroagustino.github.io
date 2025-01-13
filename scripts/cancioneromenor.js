@@ -162,6 +162,17 @@ console.log(keyValue);
     }
     
 
+    var isChordLine = function (input) {
+        var tokens = input.replace(/\s+/, " ").split(" ");
+
+        // Try to find tokens that aren't chords
+        // if we find one we know that this line is not a 'chord' line.
+        for (var i = 0; i < tokens.length; i++) {
+            if (!$.trim(tokens[i]).length == 0 && !tokens[i].match(opts.chordRegex))
+                return false;
+        }
+        return true;
+    };
     
     var wrapChords = function (input) {
         return input.replace(opts.chordReplaceRegex, "<span class='c'>$1</span>");
@@ -209,9 +220,13 @@ console.log(keyValue);
       var lines = $(this).html().split("\n");
       var line, tmp = "";
 
-      for (var i = 0; i < lines.length; i++) {
+       for (var i = 0; i < lines.length; i++) {
           line = lines[i];
+
+          if (isChordLine(line))
               output.push("<span>" + wrapChords(line) + "</span>");
+          else
+              output.push("<span>" + line + "</span>");
       };
 
       $(this).html(output.join("\n"));

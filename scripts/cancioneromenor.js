@@ -162,16 +162,9 @@ console.log(keyValue);
     }
     
 
-    var isChordLine = function (input) {
-        var tokens = input.replace(/\s+/, " ").split(" ");
-
-        // Try to find tokens that aren't chords
-        // if we find one we know that this line is not a 'chord' line.
-        for (var i = 0; i < tokens.length; i++) {
-            if (!$.trim(tokens[i]).length == 0 && !tokens[i].match(opts.chordRegex))
-                return false;
-        }
-        return true;
+    // Función para determinar si una línea es de acordes
+    var isChordLine = function(line) {
+        return /(\bDO|\bRE|\bMI|\bFA|\bSOL|\bLA|\bSI)[b#]?/.test(line);
     };
     
     var wrapChords = function (input) {

@@ -229,8 +229,11 @@ console.log(keyValue);
 
   // Función para ocultar/mostrar acordes
   function toggleChords() {
-    $('span.c').each(function() {
-      $(this).toggle(); // Alterna la visibilidad del elemento
+    $('#cancion span').each(function() {
+      // Utiliza isChordLine para decidir si ocultar/mostrar la línea
+      if (isChordLine($(this).text())) {
+        $(this).parent().toggle(); // Alterna la visibilidad del elemento padre (la línea completa)
+      }
     });
   }
 

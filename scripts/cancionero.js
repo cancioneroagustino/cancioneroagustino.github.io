@@ -169,7 +169,7 @@
     
     // Añadir el botón al inicio del contenido
     var addToggleButton = function (target) {
-        var toggleButton = $("<button id='toggleChords' class='btn btn-primary'>Sólo texto</button>");
+        var toggleButton = $("<button id='toggleChords' class='btn btn-outline-primary btn-sm'>Sólo texto</button>");
         toggleButton.click(function() {
             toggleChordsVisibility();
         });

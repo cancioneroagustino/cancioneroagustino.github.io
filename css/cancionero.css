@@ -122,15 +122,15 @@
 
 .btn-acordes 
 {
-   font-weight: 600;
+   font-weight: 500;
   --bs-btn-color: #14477A;
-  --bs-btn-border-color: #14477A;
+  --bs-btn-border-color: #9EC2E6;
   --bs-btn-bg: transparent;
   --bs-btn-hover-bg: transparent;
-  --bs-btn-hover-border-color: #14477A;
+  --bs-btn-hover-border-color: #9EC2E6;
   --bs-btn-active-color: #14477A;
   --bs-btn-active-bg: transparent;
-  --bs-btn-active-border-color: #14477A;
+  --bs-btn-active-border-color: #9EC2E6;
 }
 
 

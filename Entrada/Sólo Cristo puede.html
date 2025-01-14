@@ -33,7 +33,11 @@ $(function(){
 <p class="texto">Tiempo de cuaresma</p>
 </div>
 
-<div class="d-flex">
+<div class="d-flex justify-content-around">
+
+<div class="col-12 col-lg-4">
+
+<button id="toggleChordsButton" class="btn btn-acordes btn-sm justify-content-start mb-3" data-bs-toggle="button">Mostrar/ocultar acordes</button> 
 
 <pre id="letra" data-key="DO">
 <b> FA             SOL     DO     MI    LAm
@@ -70,6 +74,8 @@ para escuchar el perdón,
 sin que en el mundo se pueda encontrar
 una palabra de amor.
 </pre>
+</div>
+
 </div>
 
 <script src="../scripts/cancionero.js"></script>

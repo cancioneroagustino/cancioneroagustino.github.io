@@ -128,9 +128,8 @@
   --bs-btn-bg: transparent;
   --bs-btn-hover-bg: transparent;
   --bs-btn-hover-border-color: #14477A;
- 
-  --bs-btn-active-color: #FFFFFF;
-  --bs-btn-active-bg: #14477A;
+  --bs-btn-active-color: #14477A;
+  --bs-btn-active-bg: transparent;
   --bs-btn-active-border-color: #14477A;
 }
 

@@ -123,14 +123,14 @@
 .btn-acordes 
 {
    font-weight: 500;
-  --bs-btn-color: #14477A;
-  --bs-btn-border-color: #9EC2E6;
-  --bs-btn-bg: transparent;
-  --bs-btn-hover-bg: transparent;
-  --bs-btn-hover-border-color: #9EC2E6;
-  --bs-btn-active-color: #14477A;
-  --bs-btn-active-bg: transparent;
-  --bs-btn-active-border-color: #9EC2E6;
+  --bs-btn-color: #333;
+  --bs-btn-border-color: transparent;
+  --bs-btn-bg: #EEE;
+  --bs-btn-hover-bg: #EEE;
+  --bs-btn-hover-border-color: transparent;
+  --bs-btn-active-color: #333;
+  --bs-btn-active-bg: #EEE;
+  --bs-btn-active-border-color: transparent;
 }
 
 

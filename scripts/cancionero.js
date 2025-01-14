@@ -224,7 +224,7 @@ console.log(keyValue);
 
 
       var $this = $(this);
-      var keysHtml = $("<div class='transpose-keys col-9 col-sm-6 col-md-5 col-lg-4 justify-content-md-center'></div>");
+      var keysHtml = $("<div class='transpose-keys col-11 col-sm-7 col-md-5 col-lg-11 col-xl-7 justify-content-md-center'></div>");
       keysHtml.html(keyLinks.join(""));
       $("a", keysHtml).click(function(e) {
           e.preventDefault();

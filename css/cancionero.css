@@ -120,6 +120,22 @@
 }
 
 
+.btn-acordes 
+{
+   font-weight: 600;
+  --bs-btn-color: #14477A;
+  --bs-btn-border-color: #14477A;
+  --bs-btn-bg: transparent;
+  --bs-btn-hover-bg: transparent;
+  --bs-btn-hover-border-color: #14477A;
+ 
+  --bs-btn-active-color: #FFFFFF;
+  --bs-btn-active-bg: #14477A;
+  --bs-btn-active-border-color: #14477A;
+}
+
+
+
 pre {
     font-family: 'Iosevka Term Web', monospace;
     font-weight: normal;
@@ -264,5 +280,5 @@ audio{
 @media (max-width: 575.98px){html {font-size: 4vw;}}
 @media (min-width: 576px) and (max-width: 767.98px){html {font-size: 2.5vw}}
 @media (min-width: 768px) and (max-width: 991.98px){html {font-size: 1.8vw}}
-@media (min-width: 992px) and (max-width: 1199.98px){html {font-size: 1.8vw}}
+@media (min-width: 992px) and (max-width: 1199.98px){html {font-size: 1.4vw}}
 @media (min-width: 1200px){html {font-size: 14px}}

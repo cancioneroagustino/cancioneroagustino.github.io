@@ -155,14 +155,21 @@ pre {
     font-size:1rem;
 }
 .portada {
-  color: #009F98;
+  color: #FFF;
+  text-shadow: 4px 4px 6px rgba(0, 0, 0, 0.7); /* para mejorar la visibilidad */
   font-size: 3rem;
+  font-weight: bold;
   text-align: center;
   margin-top: 0;
   padding-top: 2rem;
   padding-bottom: 2rem;
   margin-top: 1rem;
   margin-bottom: 1rem;
+  background: rgba(0, 0, 0, 0.4); /* oscurece sutilmente la imagen */
+  background-image: url('../images/header.jpg');
+  background-position: center center;  
+  background-size: cover;
+
 }
 
 .seccion {

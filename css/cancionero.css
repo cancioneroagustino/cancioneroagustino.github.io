@@ -99,6 +99,11 @@
     padding: 0 !important;
 }
 
+.text-bg-primary{
+	color:#fff!important;
+	background-color: #009F97!important
+}
+
 
 .btn-primary {
   --bs-btn-bg: #14477A;
@@ -149,7 +154,7 @@ pre {
     font-size:1rem;
 }
 .portada {
-  color: #00A099;
+  color: #009F98;
   font-size: 3rem;
   text-align: center;
   margin-top: 0;
@@ -157,9 +162,6 @@ pre {
   padding-bottom: 2rem;
   margin-top: 1rem;
   margin-bottom: 1rem;
-  background-image: url('../images/header.jpg');
-  background-position: center center;  
-  background-size: cover;
 }
 
 .seccion {
@@ -171,7 +173,7 @@ pre {
 }
 
 .titulo {
-	color: #C21712;
+	color: ##009F98;
 	margin-top: 1.5rem;
 	margin-bottom: 1.5rem;
 	padding-left: 1rem;

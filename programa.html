@@ -55,6 +55,7 @@
 
     async function cargarCancion(ruta) {
       try {
+        console.log(`Cargando canción desde: ${ruta}`);
         const response = await fetch(ruta);
         if (!response.ok) {
           throw new Error('Error al cargar la canción');
@@ -85,12 +86,18 @@
             const src = script.src.replace('../', '');
             newScript.src = src;
             newScript.onload = () => {
+              console.log(`Script loaded: ${newScript.src}`);
               if (script.textContent) {
+                console.log(`Executing inline script from: ${newScript.src}`);
                 eval(script.textContent);
               }
             };
+            newScript.onerror = () => {
+              console.error(`Failed to load script: ${newScript.src}`);
+            };
           } else {
             newScript.textContent = script.textContent;
+            console.log('Executing inline script');
           }
           document.body.appendChild(newScript);
         });

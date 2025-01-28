@@ -59,20 +59,34 @@
           throw new Error('Error al cargar la canción');
         }
         const contenido = await response.text();
-        // Extraer solo el contenido dentro del <body> de la página de la canción
+        // Extraer solo el contenido dentro del <body> de la página de la canción, excluyendo el navbar
         const parser = new DOMParser();
         const doc = parser.parseFromString(contenido, 'text/html');
         const bodyContent = doc.querySelector('body').innerHTML;
-        document.getElementById('programa-container').innerHTML = bodyContent;
+        
+        // Crear un contenedor temporal para manipular el contenido
+        const tempContainer = document.createElement('div');
+        tempContainer.innerHTML = bodyContent;
+        
+        // Eliminar el navbar
+        const navbar = tempContainer.querySelector('#nav-placeholder');
+        if (navbar) {
+          navbar.remove();
+        }
+        
+        document.getElementById('programa-container').innerHTML = tempContainer.innerHTML;
+        
         // Ejecutar scripts cargados
-        const scripts = doc.querySelectorAll('script');
-        scripts.forEach((script) => {
+        const scripts = tempContainer.querySelectorAll('script');
+        scripts.forEach(script => {
           const newScript = document.createElement('script');
-          newScript.text = script.text;
+          if (script.src) {
+            newScript.src = script.src;
+          } else {
+            newScript.textContent = script.textContent;
+          }
           document.body.appendChild(newScript);
         });
-        // Ejecutar script específico de la página de la canción
-        inicializarCancion();
       } catch (error) {
         console.error('Error:', error);
         document.getElementById('programa-container').innerHTML = '<p>Error al cargar la canción. Inténtalo de nuevo más tarde.</p>';
@@ -99,14 +113,6 @@
 
     // Mostrar la primera canción al cargar la página
     mostrarCancion(currentIndex);
-
-    function inicializarCancion() {
-      // Asegurarse de que los scripts específicos de la página de la canción se ejecuten
-      $(function() {
-        $(".btn").show();
-        $("#letra").transpose();
-      });
-    }
   </script>
 </body>
 </html>

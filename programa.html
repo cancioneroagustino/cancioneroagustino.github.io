@@ -74,13 +74,15 @@
         }
 
         document.getElementById('programa-container').innerHTML = tempContainer.innerHTML;
-        
-        // Ejecutar scripts cargados
+
+        // Ajustar rutas de los scripts y ejecutarlos
         const scripts = tempContainer.querySelectorAll('script');
         scripts.forEach(script => {
           const newScript = document.createElement('script');
           if (script.src) {
-            newScript.src = script.src;
+            // Ajustar la ruta del script
+            const src = script.src.replace('../', '');
+            newScript.src = src;
             newScript.onload = () => {
               if (script.textContent) {
                 eval(script.textContent);
@@ -88,7 +90,6 @@
             };
           } else {
             newScript.textContent = script.textContent;
-            document.body.appendChild(newScript);
           }
           document.body.appendChild(newScript);
         });

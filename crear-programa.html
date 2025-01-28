@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear Programa de Misa</title>
+</head>
+<body>
+    <h1>Selecciona las Canciones para la Misa</h1>
+    
+    <form id="programa-form">
+        <h2>Agregar Canciones al Programa</h2>
+        <label for="seccion">Sección de la Misa:</label>
+        <select id="seccion">
+            <option value="entrada">Canto de Entrada</option>
+            <option value="perdon">Canto de Perdón</option>
+            <option value="gloria">Canto de Gloria</option>
+            <option value="ofertorio">Canto de Ofertorio</option>
+            <option value="comunion">Canto de Comunión</option>
+            <option value="salida">Canto de Salida</option>
+            <!-- Agrega más secciones según tus necesidades -->
+        </select>
+        
+        <label for="canto">Canción:</label>
+        <select id="canto">
+            <!-- Las opciones se llenarán dinámicamente -->
+        </select>
+        
+        <button type="button" id="agregar-cancion">Agregar Canción</button>
+    </form>
+    
+    <h2>Programa de Misa</h2>
+    <ul id="programa-lista">
+        <!-- Las canciones seleccionadas se mostrarán aquí -->
+    </ul>
+
+    <button id="crear-programa">Crear Programa</button>
+
+    <script>
+        const canciones = {
+            entrada: ['entrada1.html', 'entrada2.html'],
+            perdon: ['perdon1.html', 'perdon2.html'],
+            gloria: ['gloria1.html', 'gloria2.html'],
+            ofertorio: ['ofertorio1.html', 'ofertorio2.html'],
+            comunion: ['comunion1.html', 'comunion2.html'],
+            salida: ['salida1.html', 'salida2.html'],
+            // Agrega más secciones y canciones según sea necesario
+        };
+
+        const seccionSelect = document.getElementById('seccion');
+        const cantoSelect = document.getElementById('canto');
+        const programaLista = document.getElementById('programa-lista');
+        const programa = [];
+
+        function actualizarCanciones() {
+            const seccion = seccionSelect.value;
+            const opciones = canciones[seccion];
+            cantoSelect.innerHTML = '';
+            opciones.forEach(cancion => {
+                const option = document.createElement('option');
+                option.value = cancion;
+                option.textContent = cancion;
+                cantoSelect.appendChild(option);
+            });
+        }
+
+        seccionSelect.addEventListener('change', actualizarCanciones);
+
+        document.getElementById('agregar-cancion').addEventListener('click', function() {
+            const seccion = seccionSelect.value;
+            const cancion = cantoSelect.value;
+            programa.push({seccion, cancion});
+            const li = document.createElement('li');
+            li.textContent = `${seccion}: ${cancion}`;
+            programaLista.appendChild(li);
+        });
+
+        document.getElementById('crear-programa').addEventListener('click', function() {
+            localStorage.setItem('programaMisa', JSON.stringify(programa));
+            window.location.href = 'programa.html';
+        });
+
+        // Inicializar la lista de canciones
+        actualizarCanciones();
+    </script>
+</body>
+</html>

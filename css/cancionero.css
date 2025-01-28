@@ -165,7 +165,6 @@ pre {
   padding-bottom: 2rem;
   margin-top: 1rem;
   margin-bottom: 1rem;
-  background: rgba(0, 0, 0, 0.4); /* oscurece sutilmente la imagen */
   background-image: url('../images/header.jpg');
   background-position: center center;  
   background-size: cover;

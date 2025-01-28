@@ -117,12 +117,14 @@
 }
 
 .btn-outline-primary {
-  --bs-btn-color: #14477A;
+  --bs-btn-color: #49C8DC;
   --bs-btn-border-color: #14477A;
-  --bs-btn-hover-bg: #14477A;
-  --bs-btn-hover-border-color: #14477A;
+  --bs-btn-hover-bg: #49C8DC;
+  --bs-btn-hover-border-color: #49C8DC;
   font-weight: 600;
 }
+
+#49C8DC
 
 
 .btn-acordes 

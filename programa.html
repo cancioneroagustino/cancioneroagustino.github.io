@@ -83,7 +83,10 @@
           const newScript = document.createElement('script');
           if (script.src) {
             // Ajustar la ruta del script
-            const src = script.src.replace('../', '');
+            let src = script.src;
+            if (src.startsWith('../')) {
+              src = src.replace('../', '/');  // Ajustar esto según tu estructura de archivos
+            }
             newScript.src = src;
             newScript.onload = () => {
               console.log(`Script loaded: ${newScript.src}`);
@@ -101,6 +104,13 @@
           }
           document.body.appendChild(newScript);
         });
+
+        // Verificar si la función transpose está disponible
+        if (typeof $.fn.transpose === 'function') {
+          console.log('La función transpose está disponible.');
+        } else {
+          console.error('La función transpose no está disponible.');
+        }
 
       } catch (error) {
         console.error('Error:', error);

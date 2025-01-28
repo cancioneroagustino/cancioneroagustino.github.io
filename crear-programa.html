@@ -69,12 +69,12 @@
 
   <script>
     const canciones = {
-      Entrada: ['Abre tu jardín.html', 'Aclaró.html', 'Adeste fideles.html', 'Al caer la tarde.html', 'Alabo tu bondad.html', 'Alegre la mañana.html', 'Aleluya, cantad al Señor.html', 'Aleluya, Cristo venció a la muerte.html', 'Angeles de Dios.html', 'Caminaré.html', 'Canta Iglesia.html', 'Canta Jerusalén.html', 'Cantando la alegría de vivir.html', 'Cantemos a nuestro Dios.html', 'Canto de entrada Misa Pampina.html', 'Celebremos.html', 'Como el ciervo.html', 'Chile una mesa para todos.html', 'Corona de Adviento.html', 'Crecerá la verdad.html', 'Cristo libertador.html', 'Cueca de los ramos.html', 'Dios trino.html', 'El Señor hoy nos reúne.html', 'Entremos con gozo.html', 'Escojo la vida.html', 'Esperando.html', 'Esta es la luz de Cristo.html', 'Estamos de fiesta con Jesús.html', 'Hacia ti, morada santa.html', 'Haz cantar tu vida.html', 'Hosanna eh, hosanna ah.html', 'Hoy Señor vengo ante ti.html', 'Hoy llegamos a casa.html', 'Iglesia peregrina.html', 'Jerusalén.html', 'Jesucristo, vives en mí.html', 'Juntos cantando la alegría.html', 'Juntos como hermanos.html', 'La misa es una fiesta.html', 'Oración joven.html', 'Oye Padre.html', 'Peregrinos.html', 'Pueblo de reyes.html', 'Puedo confiar en el Señor.html', 'Quiero cantar una linda canción.html', 'Qué alegría.html', 'Señor, quién entrará.html', 'Señor, ven aquí.html', 'Si quieres ven.html', 'Somos un pueblo que camina.html', 'Sólo Cristo puede.html', 'Tres cosas tiene el amor.html', 'Tu Reino es vida.html', 'Vamos a vivir.html', 'Vamos cantando al Señor.html', 'Vayamos cristianos.html', 'Ven Señor, no tardes.html', 'Ven, Señor de las altas montañas.html', 'Venga tu Reino.html', 'Vengan a El.html', 'Vienen con alegría.html', 'Yo aclamaré.html'],
-      Perdón: ['Oh Señor ten piedad 1 (RE).html', 'Oh Señor ten piedad 2 (LA).html', 'Oh Señor ten piedad 3 (Pablo Coloma).html'],
-      Gloria: ['gloria1.html', 'gloria2.html'],
-      Ofertorio: ['ofertorio1.html', 'ofertorio2.html'],
-      Comunión: ['comunion1.html', 'comunion2.html'],
-      Salida: ['salida1.html', 'salida2.html'],
+      Entrada: {'Abre tu jardín': 'Entrada/Abre tu jardín.html', 'Aclaró': 'Entrada/Aclaró.html'},
+      Perdón: {'Oh Señor ten piedad 1 (RE)': 'Perdón/Oh Señor ten piedad 1 (RE).html', 'Oh Señor ten piedad 2 (LA)': 'Perdón/Oh Señor ten piedad 2 (LA).html'},
+      Gloria: {'Gloria 1': 'Gloria/gloria1.html', 'Gloria 2': 'Gloria/gloria2.html'},
+      Ofertorio: {'Ofertorio 1': 'Ofertorio/ofertorio1.html', 'Ofertorio 2': 'Ofertorio/ofertorio2.html'},
+      Comunión: {'Comunión 1': 'Comunión/comunion1.html', 'Comunión 2': 'Comunión/comunion2.html'},
+      Salida: {'Salida 1': 'Salida/salida1.html', 'Salida 2': 'Salida/salida2.html'}
     };
 
     const seccionSelect = document.getElementById('seccion');
@@ -86,12 +86,12 @@
       const seccion = seccionSelect.value;
       const opciones = canciones[seccion];
       cantoSelect.innerHTML = '';
-      opciones.forEach(cancion => {
+      for (const [nombreCorto, ruta] of Object.entries(opciones)) {
         const option = document.createElement('option');
-        option.value = cancion;
-        option.textContent = cancion;
+        option.value = ruta;
+        option.textContent = nombreCorto;
         cantoSelect.appendChild(option);
-      });
+      }
     }
 
     seccionSelect.addEventListener('change', actualizarCanciones);
@@ -99,9 +99,10 @@
     document.getElementById('agregar-cancion').addEventListener('click', function() {
       const seccion = seccionSelect.value;
       const cancion = cantoSelect.value;
+      const nombreCorto = cantoSelect.options[cantoSelect.selectedIndex].text;
       programa.push({seccion, cancion});
       const li = document.createElement('li');
-      li.textContent = `${seccion}: ${cancion}`;
+      li.textContent = `${seccion}: ${nombreCorto}`;
       programaLista.appendChild(li);
     });
 

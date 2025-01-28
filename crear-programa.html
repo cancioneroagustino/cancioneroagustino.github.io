@@ -1,123 +1,117 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-YES9XTRYX6"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-YES9XTRYX6');
-</script>
- <meta charset="utf-8">
-<title>Crea tu programa de misa</title>
-<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0">
-<link rel="canonical" href="https://www.cancionerocatolico.cl/crear-programa.html">
-<link rel="stylesheet" type="text/css" href="css/cancionero.css">
- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-YES9XTRYX6"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-YES9XTRYX6');
+  </script>
+  <meta charset="utf-8">
+  <title>Crea tu programa de misa</title>
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0">
+  <link rel="canonical" href="https://www.cancionerocatolico.cl/crear-programa.html">
+  <link rel="stylesheet" type="text/css" href="css/cancionero.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 </head>
 
 <body>
- 
-<div id="nav-placeholder"></div>
+  <div id="nav-placeholder"></div>
 
-<div>
-  <h1 class="seccion">Crea tu Programa de Misa</h1>
-</div>
+  <div>
+    <h1 class="seccion">Crea tu Programa de Misa</h1>
+  </div>
 
-
-<div>
-    
+  <div>
     <form id="programa-form">
-        <h2>Agregar Canciones</h2>
-        <label for="seccion">Sección de la Misa:</label>
-        <select id="seccion">
-            <option value="Entrada">Entrada</option>
-            <option value="Perdón">Perdón</option>
-            <option value="Gloria">Gloria</option>
-            <option value="Aleluya">Aleluya</option>
-            <option value="Leccional">Leccionales</option>
-            <option value="Ofertorio">Ofertorio</option>
-            <option value="Santo">Santo</option>
-            <option value="Padrenuestro">Padrenuestro</option>
-            <option value="Paz">Paz</option>
-            <option value="Cordero">Cordero</option>
-            <option value="Comunión">Comunión</option>
-            <option value="Espíritu">Espíritu Santo</option>
-            <option value="Salida">Salida</option>
-            <option value="Mariano">Marianos</option>
-            <option value="Rosario">Santo Rosario</option>
-            <option value="Matrimonio">Matrimonio</option>
-            <option value="LitEspecial">Liturgias especiales</option>
-            <option value="Agustiniano">Agustinianos</option>
-            <option value="Villancico">Villancicos</option>
-            <option value="Varios">Cantos varios</option>
-        </select>
-        
-        <label for="canto">Canción:</label>
-        <select id="canto">
-            <!-- Las opciones se llenarán dinámicamente -->
-        </select>
-        
-        <button type="button" id="agregar-cancion">Agregar Canción</button>
+      <h2>Agregar Canciones</h2>
+      <label for="seccion">Sección de la Misa:</label>
+      <select id="seccion">
+        <option value="Entrada">Entrada</option>
+        <option value="Perdón">Perdón</option>
+        <option value="Gloria">Gloria</option>
+        <option value="Aleluya">Aleluya</option>
+        <option value="Leccional">Leccionales</option>
+        <option value="Ofertorio">Ofertorio</option>
+        <option value="Santo">Santo</option>
+        <option value="Padrenuestro">Padrenuestro</option>
+        <option value="Paz">Paz</option>
+        <option value="Cordero">Cordero</option>
+        <option value="Comunión">Comunión</option>
+        <option value="Espíritu">Espíritu Santo</option>
+        <option value="Salida">Salida</option>
+        <option value="Mariano">Marianos</option>
+        <option value="Rosario">Santo Rosario</option>
+        <option value="Matrimonio">Matrimonio</option>
+        <option value="LitEspecial">Liturgias especiales</option>
+        <option value="Agustiniano">Agustinianos</option>
+        <option value="Villancico">Villancicos</option>
+        <option value="Varios">Cantos varios</option>
+      </select>
+
+      <label for="canto">Canción:</label>
+      <select id="canto">
+        <!-- Las opciones se llenarán dinámicamente -->
+      </select>
+
+      <button type="button" id="agregar-cancion">Agregar Canción</button>
     </form>
-    
+
     <h2>Programa de Misa</h2>
     <ul id="programa-lista">
-        <!-- Las canciones seleccionadas se mostrarán aquí -->
+      <!-- Las canciones seleccionadas se mostrarán aquí -->
     </ul>
 
     <button id="crear-programa">Crear Programa</button>
+  </div>
 
-</div>
+  <script>
+    const canciones = {
+      Entrada: ['Abre tu jardín.html', 'Aclaró.html', 'Adeste fideles.html', 'Al caer la tarde.html', 'Alabo tu bondad.html', 'Alegre la mañana.html', 'Aleluya, cantad al Señor.html', 'Aleluya, Cristo venció a la muerte.html', 'Angeles de Dios.html', 'Caminaré.html', 'Canta Iglesia.html', 'Canta Jerusalén.html', 'Cantando la alegría de vivir.html', 'Cantemos a nuestro Dios.html', 'Canto de entrada Misa Pampina.html', 'Celebremos.html', 'Como el ciervo.html', 'Chile una mesa para todos.html', 'Corona de Adviento.html', 'Crecerá la verdad.html', 'Cristo libertador.html', 'Cueca de los ramos.html', 'Dios trino.html', 'El Señor hoy nos reúne.html', 'Entremos con gozo.html', 'Escojo la vida.html', 'Esperando.html', 'Esta es la luz de Cristo.html', 'Estamos de fiesta con Jesús.html', 'Hacia ti, morada santa.html', 'Haz cantar tu vida.html', 'Hosanna eh, hosanna ah.html', 'Hoy Señor vengo ante ti.html', 'Hoy llegamos a casa.html', 'Iglesia peregrina.html', 'Jerusalén.html', 'Jesucristo, vives en mí.html', 'Juntos cantando la alegría.html', 'Juntos como hermanos.html', 'La misa es una fiesta.html', 'Oración joven.html', 'Oye Padre.html', 'Peregrinos.html', 'Pueblo de reyes.html', 'Puedo confiar en el Señor.html', 'Quiero cantar una linda canción.html', 'Qué alegría.html', 'Señor, quién entrará.html', 'Señor, ven aquí.html', 'Si quieres ven.html', 'Somos un pueblo que camina.html', 'Sólo Cristo puede.html', 'Tres cosas tiene el amor.html', 'Tu Reino es vida.html', 'Vamos a vivir.html', 'Vamos cantando al Señor.html', 'Vayamos cristianos.html', 'Ven Señor, no tardes.html', 'Ven, Señor de las altas montañas.html', 'Venga tu Reino.html', 'Vengan a El.html', 'Vienen con alegría.html', 'Yo aclamaré.html'],
+      Perdón: ['Oh Señor ten piedad 1 (RE).html', 'Oh Señor ten piedad 2 (LA).html', 'Oh Señor ten piedad 3 (Pablo Coloma).html'],
+      Gloria: ['gloria1.html', 'gloria2.html'],
+      Ofertorio: ['ofertorio1.html', 'ofertorio2.html'],
+      Comunión: ['comunion1.html', 'comunion2.html'],
+      Salida: ['salida1.html', 'salida2.html'],
+    };
 
-    <script>
-        const canciones = {
-            Entrada: ['Abre tu jardín.html', 'Aclaró.html', 'Adeste fideles.html', 'Al caer la tarde.html', 'Alabo tu bondad.html', 'Alegre la mañana.html', 'Aleluya, cantad al Señor.html', 'Aleluya, Cristo venció a la muerte.html', 'Angeles de Dios.html', 'Caminaré.html', 'Canta Iglesia.html', 'Canta Jerusalén.html', 'Cantando la alegría de vivir.html', 'Cantemos a nuestro Dios.html', 'Canto de entrada Misa Pampina.html', 'Celebremos.html', 'Como el ciervo.html', 'Chile una mesa para todos.html', 'Corona de Adviento.html', 'Crecerá la verdad.html', 'Cristo libertador.html', 'Cueca de los ramos.html', 'Dios trino.html', 'El Señor hoy nos reúne.html', 'Entremos con gozo.html', 'Escojo la vida.html', 'Esperando.html', 'Esta es la luz de Cristo.html', 'Estamos de fiesta con Jesús.html', 'Hacia ti, morada santa.html', 'Haz cantar tu vida.html', 'Hosanna eh, hosanna ah.html', 'Hoy Señor vengo ante ti.html', 'Hoy llegamos a casa.html', 'Iglesia peregrina.html', 'Jerusalén.html', 'Jesucristo, vives en mí.html', 'Juntos cantando la alegría.html', 'Juntos como hermanos.html', 'La misa es una fiesta.html', 'Oración joven.html', 'Oye Padre.html', 'Peregrinos.html', 'Pueblo de reyes.html', 'Puedo confiar en el Señor.html', 'Quiero cantar una linda canción.html', 'Qué alegría.html', 'Señor, quién entrará.html', 'Señor, ven aquí.html', 'Si quieres ven.html', 'Somos un pueblo que camina.html', 'Sólo Cristo puede.html', 'Tres cosas tiene el amor.html', 'Tu Reino es vida.html', 'Vamos a vivir.html', 'Vamos cantando al Señor.html', 'Vayamos cristianos.html', 'Ven Señor, no tardes.html', 'Ven, Señor de las altas montañas.html', 'Venga tu Reino.html', 'Vengan a El.html', 'Vienen con alegría.html', 'Yo aclamaré.html'],
-            Perdón: ['Oh Señor ten piedad 1 (RE).html', 'Oh Señor ten piedad 2 (LA).html', 'Oh Señor ten piedad 3 (Pablo Coloma).html', '.html', '.html', '.html', '.html', '.html', '.html', '.html', '.html', '.html', '.html', '.html', '.html', '.html', '.html', '.html', '.html', '.html', '.html', '.html', '.html', '.html', '.html', '.html'],
-            Gloria: ['gloria1.html', 'gloria2.html'],
-            ofertorio: ['ofertorio1.html', 'ofertorio2.html'],
-            comunion: ['comunion1.html', 'comunion2.html'],
-            salida: ['salida1.html', 'salida2.html'],
-         
-        };
+    const seccionSelect = document.getElementById('seccion');
+    const cantoSelect = document.getElementById('canto');
+    const programaLista = document.getElementById('programa-lista');
+    const programa = [];
 
-        const seccionSelect = document.getElementById('seccion');
-        const cantoSelect = document.getElementById('canto');
-        const programaLista = document.getElementById('programa-lista');
-        const programa = [];
+    function actualizarCanciones() {
+      const seccion = seccionSelect.value;
+      const opciones = canciones[seccion];
+      cantoSelect.innerHTML = '';
+      opciones.forEach(cancion => {
+        const option = document.createElement('option');
+        option.value = cancion;
+        option.textContent = cancion;
+        cantoSelect.appendChild(option);
+      });
+    }
 
-        function actualizarCanciones() {
-            const seccion = seccionSelect.value;
-            const opciones = canciones[seccion];
-            cantoSelect.innerHTML = '';
-            opciones.forEach(cancion => {
-                const option = document.createElement('option');
-                option.value = cancion;
-                option.textContent = cancion;
-                cantoSelect.appendChild(option);
-            });
-        }
+    seccionSelect.addEventListener('change', actualizarCanciones);
 
-        seccionSelect.addEventListener('change', actualizarCanciones);
+    document.getElementById('agregar-cancion').addEventListener('click', function() {
+      const seccion = seccionSelect.value;
+      const cancion = cantoSelect.value;
+      programa.push({seccion, cancion});
+      const li = document.createElement('li');
+      li.textContent = `${seccion}: ${cancion}`;
+      programaLista.appendChild(li);
+    });
 
-        document.getElementById('agregar-cancion').addEventListener('click', function() {
-            const seccion = seccionSelect.value;
-            const cancion = cantoSelect.value;
-            programa.push({seccion, cancion});
-            const li = document.createElement('li');
-            li.textContent = `${seccion}: ${cancion}`;
-            programaLista.appendChild(li);
-        });
+    document.getElementById('crear-programa').addEventListener('click', function() {
+      localStorage.setItem('programaMisa', JSON.stringify(programa));
+      window.location.href = 'programa.html';
+    });
 
-        document.getElementById('crear-programa').addEventListener('click', function() {
-            localStorage.setItem('programaMisa', JSON.stringify(programa));
-            window.location.href = 'programa.html';
-        });
-
-        // Inicializar la lista de canciones
-        actualizarCanciones();
-    </script>
+    // Inicializar la lista de canciones
+    actualizarCanciones();
+  </script>
 </body>
 </html>

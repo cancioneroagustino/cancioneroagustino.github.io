@@ -106,7 +106,7 @@
 
 
 .btn-primary {
-  --bs-btn-bg: #14477A;
+  --bs-btn-bg: #0E7261;
   --bs-btn-border-color: #14477A;
   --bs-btn-hover-bg: #14477A;
   --bs-btn-hover-border-color: #14477A;
@@ -117,8 +117,9 @@
 }
 
 .btn-outline-primary {
-  --bs-btn-color: #49C8DC;
-  --bs-btn-border-color: #14477A;
+  --bs-btn-color: #000;
+  --bs-btn-bg: #f8f9f9;
+  --bs-btn-border-color: #49C8DC;
   --bs-btn-hover-bg: #49C8DC;
   --bs-btn-hover-border-color: #49C8DC;
   font-weight: 600;
@@ -165,7 +166,7 @@ pre {
 }
 
 .seccion {
-	color: #C21712;
+	color: #009F98;
 	text-align: center;
 	font-size: 2rem;
 	margin-top: 1rem;

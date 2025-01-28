@@ -59,7 +59,20 @@
           throw new Error('Error al cargar la canción');
         }
         const contenido = await response.text();
-        document.getElementById('programa-container').innerHTML = contenido;
+        // Extraer solo el contenido dentro del <body> de la página de la canción
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(contenido, 'text/html');
+        const bodyContent = doc.querySelector('body').innerHTML;
+        document.getElementById('programa-container').innerHTML = bodyContent;
+        // Ejecutar scripts cargados
+        const scripts = doc.querySelectorAll('script');
+        scripts.forEach((script) => {
+          const newScript = document.createElement('script');
+          newScript.text = script.text;
+          document.body.appendChild(newScript);
+        });
+        // Ejecutar script específico de la página de la canción
+        inicializarCancion();
       } catch (error) {
         console.error('Error:', error);
         document.getElementById('programa-container').innerHTML = '<p>Error al cargar la canción. Inténtalo de nuevo más tarde.</p>';
@@ -86,6 +99,14 @@
 
     // Mostrar la primera canción al cargar la página
     mostrarCancion(currentIndex);
+
+    function inicializarCancion() {
+      // Asegurarse de que los scripts específicos de la página de la canción se ejecuten
+      $(function() {
+        $(".btn").show();
+        $("#letra").transpose();
+      });
+    }
   </script>
 </body>
 </html>

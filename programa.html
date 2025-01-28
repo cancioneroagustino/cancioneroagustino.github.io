@@ -15,6 +15,14 @@
   <link rel="canonical" href="https://www.cancionerocatolico.cl/programa.html">
   <link rel="stylesheet" type="text/css" href="css/cancionero.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  <style>
+    .navigation-buttons {
+      margin-bottom: 20px;
+    }
+    .navigation-buttons button {
+      margin-right: 10px;
+    }
+  </style>
 </head>
 
 <body>
@@ -25,12 +33,14 @@
     });
   </script> 
 
-  <button id="anterior">Anterior</button>
-  <button id="siguiente">Siguiente</button>
-
   <h1 class="seccion">Programa de Misa</h1>
-  <div id="programa-container"></div>
 
+  <div class="navigation-buttons">
+    <button id="anterior">Anterior</button>
+    <button id="siguiente">Siguiente</button>
+  </div>
+
+  <div id="programa-container"></div>
 
   <script>
     const programa = JSON.parse(localStorage.getItem('programaMisa'));
@@ -42,9 +52,22 @@
     const canciones = programa.map(item => item.cancion);
     let currentIndex = 0;
 
+    async function cargarCancion(ruta) {
+      try {
+        const response = await fetch(ruta);
+        if (!response.ok) {
+          throw new Error('Error al cargar la canción');
+        }
+        const contenido = await response.text();
+        document.getElementById('programa-container').innerHTML = contenido;
+      } catch (error) {
+        console.error('Error:', error);
+        document.getElementById('programa-container').innerHTML = '<p>Error al cargar la canción. Inténtalo de nuevo más tarde.</p>';
+      }
+    }
+
     function mostrarCancion(index) {
-      const programaContainer = document.getElementById('programa-container');
-      programaContainer.innerHTML = `<iframe src="${canciones[index]}" width="100%" height="500px"></iframe>`;
+      cargarCancion(canciones[index]);
     }
 
     document.getElementById('anterior').addEventListener('click', function() {

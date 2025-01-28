@@ -4,7 +4,7 @@
 	font-weight: 700;
 	font-stretch: normal;
 	font-style: normal;
-	src: url("https://fjcerdav.github.io/fonts/iosevka-term-bold.woff2") format('woff2');
+	src: url("https://www.cancionerocatolico.cl/fonts/iosevka-term-bold.woff2") format('woff2');
 }
 
 @font-face {
@@ -13,7 +13,7 @@
 	font-weight: 500;
 	font-stretch: normal;
 	font-style: normal;
-	src: url("https://fjcerdav.github.io/fonts/iosevka-term-medium.woff2") format('woff2');
+	src: url("https://www.cancionerocatolico.cl/fonts/iosevka-term-medium.woff2") format('woff2');
 }
 
 @font-face {
@@ -22,13 +22,13 @@
 	font-weight: 400;
 	font-stretch: normal;
 	font-style: normal;
-	src: url("https://fjcerdav.github.io/fonts/iosevka-term-regular.woff2") format('woff2');
+	src: url("https://www.cancionerocatolico.cl/fonts/iosevka-term-regular.woff2") format('woff2');
 }
 
 @font-face {
     font-family: 'Montserrat';
-    src: url("https://fjcerdav.github.io/fonts/Montserrat-SemiBoldItalic.woff2") format('woff2'),
-        url("https://fjcerdav.github.io/fonts/Montserrat-SemiBoldItalic.woff") format('woff');
+    src: url("https://www.cancionerocatolico.cl/fonts/Montserrat-SemiBoldItalic.woff2") format('woff2'),
+        url("https://www.cancionerocatolico.cl/fonts/Montserrat-SemiBoldItalic.woff") format('woff');
     font-weight: 600;
     font-style: italic;
     font-display: swap;
@@ -36,8 +36,8 @@
 
 @font-face {
     font-family: 'Montserrat';
-    src: url("https://fjcerdav.github.io/fonts/Montserrat-Medium.woff2") format('woff2'),
-        url("https://fjcerdav.github.io/fonts/Montserrat-Medium.woff") format('woff');
+    src: url("https://www.cancionerocatolico.cl/fonts/Montserrat-Medium.woff2") format('woff2'),
+        url("https://www.cancionerocatolico.cl/fonts/Montserrat-Medium.woff") format('woff');
     font-weight: 500;
     font-style: normal;
     font-display: swap;
@@ -45,8 +45,8 @@
 
 @font-face {
     font-family: 'Montserrat';
-    src: url("https://fjcerdav.github.io/fonts/Montserrat-Bold.woff2") format('woff2'),
-        url("https://fjcerdav.github.io/fonts/Montserrat-Bold.woff") format('woff');
+    src: url("https://www.cancionerocatolico.cl/fonts/Montserrat-Bold.woff2") format('woff2'),
+        url("https://www.cancionerocatolico.cl/fonts/Montserrat-Bold.woff") format('woff');
     font-weight: bold;
     font-style: normal;
     font-display: swap;

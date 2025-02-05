@@ -140,6 +140,16 @@
 }
 
 
+.navigation-buttons {
+      margin-bottom: 20px;
+      margin-top: 20px;
+    }
+    
+.navigation-buttons button {
+      margin-right: 10px;
+      margin-left: 10px;
+    }
+
 
 pre {
     font-family: 'Iosevka Term Web', monospace;

@@ -135,8 +135,17 @@ const canciones = {
     document.getElementById('compartir-programa').addEventListener('click', function() {
       const query = programa.map(item => `${encodeURIComponent(item.seccion)}=${encodeURIComponent(item.cancion)}`).join('&');
       const url = `${window.location.origin}${window.location.pathname}?${query}`;
-      prompt("Comparte este enlace para compartir tu programa de misa:", url);
+      copiarAlPortapapeles(url);
+      alert("El enlace ha sido copiado al portapapeles.");
     });
+
+    function copiarAlPortapapeles(texto) {
+      navigator.clipboard.writeText(texto).then(function() {
+        console.log('Texto copiado al portapapeles');
+      }, function(err) {
+        console.error('No se pudo copiar el texto: ', err);
+      });
+    }
 
     function cargarProgramaDesdeURL() {
       const params = new URLSearchParams(window.location.search);

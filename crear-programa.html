@@ -98,7 +98,7 @@ const canciones = {
       Varios: {'Canción a Alberto Hurtado':'Varios/Canción a Alberto Hurtado.html', 'Himno a San José':'Varios/Himno a San José.html', 'Himno a Santa Teresa de Los Andes':'Varios/Himno a Santa Teresa de Los Andes.html', 'Himno del Jubileo 2025: Peregrinos de esperanza':'Varios/Himno del Jubileo 2025.html', 'Mensajero de la vida':'Varios/Mensajero de la vida.html'},
     };
 
-    const seccionSelect = document.getElementById('seccion');
+        const seccionSelect = document.getElementById('seccion');
     const cantoSelect = document.getElementById('canto');
     const programaLista = document.getElementById('programa-lista');
     const programa = [];
@@ -121,10 +121,8 @@ const canciones = {
       const seccion = seccionSelect.value;
       const cancion = cantoSelect.value;
       const nombreCorto = cantoSelect.options[cantoSelect.selectedIndex].text;
-      programa.push({seccion, cancion});
-      const li = document.createElement('li');
-      li.textContent = `${seccion}: ${nombreCorto}`;
-      programaLista.appendChild(li);
+      programa.push({seccion, cancion, nombreCorto});
+      actualizarProgramaLista();
     });
 
     document.getElementById('crear-programa').addEventListener('click', function() {
@@ -170,7 +168,6 @@ const canciones = {
         li.appendChild(button);
         programaLista.appendChild(li);
       });
-
     }
 
     // Inicializar la lista de canciones

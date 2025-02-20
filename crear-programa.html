@@ -150,12 +150,27 @@ const canciones = {
     function cargarProgramaDesdeURL() {
       const params = new URLSearchParams(window.location.search);
       params.forEach((cancion, seccion) => {
-        programa.push({seccion, cancion});
-        const nombreCorto = cancion;  // En este caso, no tenemos el nombre corto real, pero se puede ajustar si es necesario.
+        programa.push({seccion, cancion, nombreCorto: cancion});
+      });
+      actualizarProgramaLista();
+    }
+
+    function actualizarProgramaLista() {
+      programaLista.innerHTML = '';
+      programa.forEach((item, index) => {
         const li = document.createElement('li');
-        li.textContent = `${seccion}: ${nombreCorto}`;
+        li.textContent = `${item.seccion}: ${item.nombreCorto}`;
+        const button = document.createElement('button');
+        button.textContent = 'Quitar';
+        button.className = 'btn btn-outline-danger btn-sm ml-2';
+        button.addEventListener('click', () => {
+          programa.splice(index, 1);
+          actualizarProgramaLista();
+        });
+        li.appendChild(button);
         programaLista.appendChild(li);
       });
+
     }
 
     // Inicializar la lista de canciones

@@ -242,6 +242,12 @@ h2 {
     color:#2159D6;
 }
 
+.cancion-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
 
 span.c {
     color:#000055;

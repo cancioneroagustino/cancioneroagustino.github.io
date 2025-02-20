@@ -98,7 +98,7 @@ const canciones = {
       Varios: {'Canción a Alberto Hurtado':'Varios/Canción a Alberto Hurtado.html', 'Himno a San José':'Varios/Himno a San José.html', 'Himno a Santa Teresa de Los Andes':'Varios/Himno a Santa Teresa de Los Andes.html', 'Himno del Jubileo 2025: Peregrinos de esperanza':'Varios/Himno del Jubileo 2025.html', 'Mensajero de la vida':'Varios/Mensajero de la vida.html'},
     };
 
-        const seccionSelect = document.getElementById('seccion');
+    const seccionSelect = document.getElementById('seccion');
     const cantoSelect = document.getElementById('canto');
     const programaLista = document.getElementById('programa-lista');
     const programa = [];
@@ -157,10 +157,11 @@ const canciones = {
       programaLista.innerHTML = '';
       programa.forEach((item, index) => {
         const li = document.createElement('li');
-        li.textContent = `${item.seccion}: ${item.nombreCorto}`;
+        li.className = 'cancion-item';
+        li.innerHTML = `<span>${item.seccion}: ${item.nombreCorto}</span>`;
         const button = document.createElement('button');
         button.textContent = 'Quitar';
-        button.className = 'btn btn-outline-danger btn-sm ml-2';
+        button.className = 'btn btn-outline-danger btn-sm';
         button.addEventListener('click', () => {
           programa.splice(index, 1);
           actualizarProgramaLista();

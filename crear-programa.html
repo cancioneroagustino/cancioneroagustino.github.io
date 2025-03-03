@@ -78,7 +78,8 @@ $(function(){
   </div>
 
   <script>
-const canciones = {
+  $(document).ready(function() {
+    const canciones = {
       Entrada: {'Abre tu jardín': 'Entrada/Abre tu jardín.html', 'Aclaró': 'Entrada/Aclaró.html', 'Adeste fideles': 'Entrada/Adeste fideles.html', 'Al caer la tarde': 'Entrada/Al caer la tarde.html', 'Alabo tu bondad': 'Entrada/Alabo tu bondad.html', 'Alegre la mañana': 'Entrada/Alegre la mañana.html', 'Aleluya, cantad al Señor': 'Entrada/Aleluya, cantad al Señor.html', 'Aleluya, Cristo venció a la muerte': 'Entrada/Aleluya, Cristo venció a la muerte.html', 'Angeles de Dios': 'Entrada/Angeles de Dios.html', 'Caminaré': 'Entrada/Caminaré.html', 'Canta Iglesia': 'Entrada/Canta Iglesia.html', 'Canta Jerusalén': 'Entrada/Canta Jerusalén.html', 'Cantando la alegría de vivir': 'Entrada/Cantando la alegría de vivir.html', 'Cantemos a nuestro Dios': 'Entrada/Cantemos a nuestro Dios.html', 'Canto de entrada Misa Pampina': 'Entrada/Canto de entrada Misa Pampina.html', 'Celebremos': 'Entrada/Celebremos.html', 'Como el ciervo': 'Entrada/Como el ciervo.html', 'Chile una mesa para todos': 'Entrada/Chile una mesa para todos.html', 'Corona de Adviento': 'Entrada/Corona de Adviento.html', 'Crecerá la verdad': 'Entrada/Crecerá la verdad.html', 'Cristo libertador': 'Entrada/Cristo libertador.html', 'Cueca de los ramos': 'Entrada/Cueca de los ramos.html', 'Dios trino': 'Entrada/Dios trino.html', 'El Señor hoy nos reúne': 'Entrada/El Señor hoy nos reúne.html', 'Entremos con gozo': 'Entrada/Entremos con gozo.html', 'Escojo la vida': 'Entrada/Escojo la vida.html', 'Esperando': 'Entrada/Esperando.html', 'Esta es la luz de Cristo': 'Entrada/Esta es la luz de Cristo.html', 'Estamos de fiesta con Jesús': 'Entrada/Estamos de fiesta con Jesús.html', 'Hacia ti, morada santa': 'Entrada/Hacia ti, morada santa.html', 'Haz cantar tu vida': 'Entrada/Haz cantar tu vida.html', 'Hosanna eh, hosanna ah': 'Entrada/Hosanna eh, hosanna ah.html', 'Hoy Señor vengo ante Ti': 'Entrada/Hoy Señor vengo ante Ti.html', 'Hoy llegamos a casa': 'Entrada/Hoy llegamos a casa.html', 'Iglesia peregrina': 'Entrada/Iglesia peregrina.html', 'Jerusalén': 'Entrada/Jerusalén.html', 'Jesucristo, vives en mí': 'Entrada/Jesucristo, vives en mí.html', 'Juntos cantando la alegría': 'Entrada/Juntos cantando la alegría.html', 'Juntos como hermanos': 'Entrada/Juntos como hermanos.html', 'La misa es una fiesta': 'Entrada/La misa es una fiesta.html', 'Oración joven': 'Entrada/Oración joven.html', 'Oye Padre': 'Entrada/Oye Padre.html', 'Peregrino': 'Entrada/Peregrino.html', 'Pueblo de reyes': 'Entrada/Pueblo de reyes.html', 'Puedo confiar en el Señor': 'Entrada/Puedo confiar en el Señor.html', 'Quiero cantar una linda canción': 'Entrada/Quiero cantar una linda canción.html', 'Qué alegría cuando me dijeron': 'Entrada/Qué alegría.html', 'Señor, quién entrará': 'Entrada/Señor, quién entrará.html', 'Señor, ven aquí': 'Entrada/Señor, ven aquí.html', 'Si quieres ven': 'Entrada/Si quieres ven.html', 'Somos un pueblo que camina': 'Entrada/Somos un pueblo que camina.html', 'Sólo Cristo puede': 'Entrada/Sólo Cristo puede.html', 'Tres cosas tiene el amor': 'Entrada/Tres cosas tiene el amor.html', 'Tu Reino es vida': 'Entrada/Tu Reino es vida.html', 'Vamos a vivir': 'Entrada/Vamos a vivir.html', 'Vamos cantando al Señor': 'Entrada/Vamos cantando al Señor.html', 'Vayamos cristianos': 'Entrada/Vayamos cristianos.html', 'Ven Señor, no tardes': 'Entrada/Ven Señor, no tardes.html', 'Ven, Señor de las altas montañas': 'Entrada/Ven, Señor de las altas montañas.html', 'Venga tu Reino': 'Entrada/Venga tu Reino.html', 'Vengan a El': 'Entrada/Vengan a El.html', 'Vienen con alegría': 'Entrada/Vienen con alegría.html', 'Yo aclamaré': 'Entrada/Yo aclamaré.html'},
       Perdón: {'Oh Señor ten piedad 1 (RE)': 'Perdón/Oh Señor ten piedad 1 (RE).html', 'Oh Señor ten piedad 2 (LA)': 'Perdón/Oh Señor ten piedad 2 (LA).html', 'Oh Señor ten piedad 3 (Pablo Coloma)': 'Perdón/Oh Señor ten piedad 3 (Pablo Coloma).html', 'Oh Señor ten piedad 4 (Fernando Leiva)': 'Perdón/Oh Señor ten piedad 4 (Fernando Leiva).html', 'Señor ten piedad 1 (RE)': 'Perdón/Señor ten piedad 1 (RE).html', 'Señor ten piedad 2 (RE)': 'Perdón/Señor ten piedad 2 (RE).html', 'Señor ten piedad 3 (REm)': 'Perdón/Señor ten piedad 3 (REm).html', 'Señor ten piedad 4 (REm)': 'Perdón/Señor ten piedad 4 (REm).html', 'Señor ten piedad 5 (tan, tan, tan)': 'Perdón/Señor ten piedad 5 (tan, tan, tan).html', 'Señor ten piedad 6 (C. Fones)': 'Perdón/Señor ten piedad 6 (C. Fones).html', 'Señor ten piedad 7 (folclórico)': 'Perdón/Señor ten piedad 7 (folclórico).html', 'Señor ten piedad 8 (Misión País)': 'Perdón/Señor ten piedad 8 (Misión País).html', 'Señor ten piedad 9 (M. Sagreras)': 'Perdón/Señor ten piedad 9 (M. Sagreras).html', 'Señor ten piedad 10 (Tomás Aragüés)': 'Perdón/Señor ten piedad 10 (Tomás Aragüés).html', 'Canción del perdón': 'Perdón/Canción del perdón.html', 'Frente a Ti estoy, Señor': 'Perdón/Frente a Ti estoy, Señor.html', 'Hijo pródigo': 'Perdón/Hijo pródigo.html', 'Hoy perdóname': 'Perdón/Hoy perdóname.html', 'Perdón mi Dios': 'Perdón/Perdón mi Dios.html', 'Perdón, oh Dios': 'Perdón/Perdón, oh Dios.html', 'Perdón, oh Dios mío': 'Perdón/Perdón, oh Dios mío.html', 'Perdón Señor, piedad de mí': 'Perdón/Perdón Señor, piedad de mí.html', 'Perdona a tu pueblo, Señor': 'Perdón/Perdona a tu pueblo, Señor.html', 'Piedad': 'Perdón/Piedad.html', 'Ten piedad de mí, oh Dios': 'Perdón/Ten piedad de mí, oh Dios.html', 'Ten piedad de mí, Señor': 'Perdón/Ten piedad de mí, Señor.html', 'Tú, que siempre nos perdonas': 'Perdón/Tú, que siempre nos perdonas.html', 'Una vez más rezaré': 'Perdón/Una vez más rezaré.html'},
       Gloria: {'Gloria (Misa rítmica)': 'gloria/Gloria (Misa rítmica).html', 'Gloria (C. Fones)': 'gloria/Gloria (C. Fones).html', 'Gloria (Ma José Bravo y C. Fones)': 'gloria/Gloria (Ma Jose Bravo y C. Fones).html', 'Gloria Misión País - Marcelo Cid': 'gloria/Gloria Mision Pais - Marcelo Cid.html', 'Gloria (Nebreda)': 'gloria/Gloria (Nebreda).html', 'Gloria folclórico': 'gloria/Gloria folclórico.html', 'Gloria pascual (Gen verde)': 'gloria/Gloria pascual (Gen verde).html'},
@@ -104,83 +105,84 @@ const canciones = {
       Varios: {'Canción a Alberto Hurtado':'Varios/Canción a Alberto Hurtado.html', 'Himno a San José':'Varios/Himno a San José.html', 'Himno a Santa Teresa de Los Andes':'Varios/Himno a Santa Teresa de Los Andes.html', 'Himno del Jubileo 2025: Peregrinos de esperanza':'Varios/Himno del Jubileo 2025.html', 'Mensajero de la vida':'Varios/Mensajero de la vida.html'},
     };
 
-    const seccionSelect = document.getElementById('seccion');
-    const cantoSelect = document.getElementById('canto');
-    const programaLista = document.getElementById('programa-lista');
-    const programa = [];
+const seccionSelect = document.getElementById('seccion');
+  const cantoSelect = document.getElementById('canto');
+  const programaLista = document.getElementById('programa-lista');
+  const programa = [];
 
-    function actualizarCanciones() {
-      const seccion = seccionSelect.value;
-      const opciones = canciones[seccion];
-      cantoSelect.innerHTML = '';
-      for (const [nombreCorto, ruta] of Object.entries(opciones)) {
-        const option = document.createElement('option');
-        option.value = ruta;
-        option.textContent = nombreCorto;
-        cantoSelect.appendChild(option);
-      }
+  function actualizarCanciones() {
+    const seccion = seccionSelect.value;
+    const opciones = canciones[seccion];
+    cantoSelect.innerHTML = '';
+    for (const [nombreCorto, ruta] of Object.entries(opciones)) {
+      const option = document.createElement('option');
+      option.value = ruta;
+      option.textContent = nombreCorto;
+      cantoSelect.appendChild(option);
     }
+  }
 
-    seccionSelect.addEventListener('change', actualizarCanciones);
+  seccionSelect.addEventListener('change', actualizarCanciones);
 
-    document.getElementById('agregar-cancion').addEventListener('click', function() {
-      const seccion = seccionSelect.value;
-      const cancion = cantoSelect.value;
-      const nombreCorto = cantoSelect.options[cantoSelect.selectedIndex].text;
-      programa.push({seccion, cancion, nombreCorto});
-      actualizarProgramaLista();
+  document.getElementById('agregar-cancion').addEventListener('click', function() {
+    const seccion = seccionSelect.value;
+    const cancion = cantoSelect.value;
+    const nombreCorto = cantoSelect.options[cantoSelect.selectedIndex].text;
+    programa.push({seccion, cancion, nombreCorto});
+    actualizarProgramaLista();
+  });
+
+  document.getElementById('crear-programa').addEventListener('click', function() {
+    localStorage.setItem('programaMisa', JSON.stringify(programa));
+    window.location.href = 'programa.html';
+  });
+
+  document.getElementById('compartir-programa').addEventListener('click', function() {
+    const query = programa.map(item => `${encodeURIComponent(item.seccion)}=${encodeURIComponent(item.cancion)}`).join('&');
+    const url = `${window.location.origin}${window.location.pathname}?${query}`;
+    copiarAlPortapapeles(url);
+    alert("El enlace ha sido copiado al portapapeles.");
+  });
+
+  function copiarAlPortapapeles(texto) {
+    navigator.clipboard.writeText(texto).then(function() {
+      console.log('Texto copiado al portapapeles');
+    }, function(err) {
+      console.error('No se pudo copiar el texto: ', err);
     });
+  }
 
-    document.getElementById('crear-programa').addEventListener('click', function() {
-      localStorage.setItem('programaMisa', JSON.stringify(programa));
-      window.location.href = 'programa.html';
+  function cargarProgramaDesdeURL() {
+    const params = new URLSearchParams(window.location.search);
+    params.forEach((cancion, seccion) => {
+      programa.push({seccion, cancion, nombreCorto: cancion});
     });
+    actualizarProgramaLista();
+  }
 
-    document.getElementById('compartir-programa').addEventListener('click', function() {
-      const query = programa.map(item => `${encodeURIComponent(item.seccion)}=${encodeURIComponent(item.cancion)}`).join('&');
-      const url = `${window.location.origin}${window.location.pathname}?${query}`;
-      copiarAlPortapapeles(url);
-      alert("El enlace ha sido copiado al portapapeles.");
+  function actualizarProgramaLista() {
+    programaLista.innerHTML = '';
+    programa.forEach((item, index) => {
+      const li = document.createElement('li');
+      li.className = 'cancion-item';
+      li.innerHTML = `<span>${item.seccion}: ${item.nombreCorto}</span>`;
+      const button = document.createElement('button');
+      button.textContent = 'Quitar';
+      button.className = 'btn btn-outline-danger btn-sm';
+      button.addEventListener('click', () => {
+        programa.splice(index, 1);
+        actualizarProgramaLista();
+      });
+      li.appendChild(button);
+      programaLista.appendChild(li);
     });
+  }
 
-    function copiarAlPortapapeles(texto) {
-      navigator.clipboard.writeText(texto).then(function() {
-        console.log('Texto copiado al portapapeles');
-      }, function(err) {
-        console.error('No se pudo copiar el texto: ', err);
-      });
-    }
-
-    function cargarProgramaDesdeURL() {
-      const params = new URLSearchParams(window.location.search);
-      params.forEach((cancion, seccion) => {
-        programa.push({seccion, cancion, nombreCorto: cancion});
-      });
-      actualizarProgramaLista();
-    }
-
-    function actualizarProgramaLista() {
-      programaLista.innerHTML = '';
-      programa.forEach((item, index) => {
-        const li = document.createElement('li');
-        li.className = 'cancion-item';
-        li.innerHTML = `<span>${item.seccion}: ${item.nombreCorto}</span>`;
-        const button = document.createElement('button');
-        button.textContent = 'Quitar';
-        button.className = 'btn btn-outline-danger btn-sm';
-        button.addEventListener('click', () => {
-          programa.splice(index, 1);
-          actualizarProgramaLista();
-        });
-        li.appendChild(button);
-        programaLista.appendChild(li);
-      });
-    }
-
-    // Inicializar la lista de canciones
-    actualizarCanciones();
-    // Cargar programa desde la URL si existen parámetros
-    cargarProgramaDesdeURL();
-  </script>
+  // Inicializar la lista de canciones
+  actualizarCanciones();
+  // Cargar programa desde la URL si existen parámetros
+  cargarProgramaDesdeURL();
+});
+</script>
 </body>
 </html>

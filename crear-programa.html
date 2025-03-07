@@ -181,7 +181,7 @@
         });
 
         const removeButton = document.createElement('button');
-        removeButton.textContent = 'Quitar';
+        removeButton.innerHTML = '&times;';
         removeButton.className = 'btn btn-outline-danger btn-sm';
         removeButton.addEventListener('click', () => {
           programa.splice(index, 1);

@@ -249,6 +249,10 @@ h2 {
     margin-bottom: 0.5rem;
 }
 
+.cancion-item .btn-group {
+    gap: 5px;
+}
+
 
 span.c {
     color:#000055;

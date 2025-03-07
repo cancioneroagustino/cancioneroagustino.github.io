@@ -160,14 +160,37 @@
         const li = document.createElement('li');
         li.className = 'cancion-item';
         li.innerHTML = `<span>${item.seccion}: ${item.nombreCorto}</span>`;
-        const button = document.createElement('button');
-        button.textContent = 'Quitar';
-        button.className = 'btn btn-outline-danger btn-sm';
-        button.addEventListener('click', () => {
+        const upButton = document.createElement('button');
+        upButton.textContent = '↑';
+        upButton.className = 'btn btn-outline-secondary btn-sm';
+        upButton.addEventListener('click', () => {
+          if (index > 0) {
+            [programa[index], programa[index - 1]] = [programa[index - 1], programa[index]];
+            actualizarProgramaLista();
+          }
+        });
+
+        const downButton = document.createElement('button');
+        downButton.textContent = '↓';
+        downButton.className = 'btn btn-outline-secondary btn-sm';
+        downButton.addEventListener('click', () => {
+          if (index < programa.length - 1) {
+            [programa[index], programa[index + 1]] = [programa[index + 1], programa[index]];
+            actualizarProgramaLista();
+          }
+        });
+
+        const removeButton = document.createElement('button');
+        removeButton.textContent = 'Quitar';
+        removeButton.className = 'btn btn-outline-danger btn-sm';
+        removeButton.addEventListener('click', () => {
           programa.splice(index, 1);
           actualizarProgramaLista();
         });
-        li.appendChild(button);
+
+        li.appendChild(upButton);
+        li.appendChild(downButton);
+        li.appendChild(removeButton);
         programaLista.appendChild(li);
       });
     }

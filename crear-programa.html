@@ -160,9 +160,13 @@
         const li = document.createElement('li');
         li.className = 'cancion-item';
         li.innerHTML = `<span>${item.seccion}: ${item.nombreCorto}</span>`;
+        
+        const buttonGroup = document.createElement('div');
+        buttonGroup.className = 'd-flex justify-content-end';
+        
         const upButton = document.createElement('button');
         upButton.textContent = '↑';
-        upButton.className = 'btn btn-outline-info btn-sm';
+        upButton.className = 'btn btn-outline-secondary btn-sm';
         upButton.addEventListener('click', () => {
           if (index > 0) {
             [programa[index], programa[index - 1]] = [programa[index - 1], programa[index]];
@@ -172,7 +176,7 @@
 
         const downButton = document.createElement('button');
         downButton.textContent = '↓';
-        downButton.className = 'btn btn-outline-info btn-sm';
+        downButton.className = 'btn btn-outline-secondary btn-sm';
         downButton.addEventListener('click', () => {
           if (index < programa.length - 1) {
             [programa[index], programa[index + 1]] = [programa[index + 1], programa[index]];
@@ -188,9 +192,11 @@
           actualizarProgramaLista();
         });
 
-        li.appendChild(upButton);
-        li.appendChild(downButton);
-        li.appendChild(removeButton);
+        buttonGroup.appendChild(upButton);
+        buttonGroup.appendChild(downButton);
+        buttonGroup.appendChild(removeButton);
+        
+        li.appendChild(buttonGroup);
         programaLista.appendChild(li);
       });
     }

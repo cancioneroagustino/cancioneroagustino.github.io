@@ -162,7 +162,7 @@
         li.innerHTML = `<span>${item.seccion}: ${item.nombreCorto}</span>`;
         const upButton = document.createElement('button');
         upButton.textContent = '↑';
-        upButton.className = 'btn btn-outline-secondary btn-sm';
+        upButton.className = 'btn btn-outline-info btn-sm';
         upButton.addEventListener('click', () => {
           if (index > 0) {
             [programa[index], programa[index - 1]] = [programa[index - 1], programa[index]];
@@ -172,7 +172,7 @@
 
         const downButton = document.createElement('button');
         downButton.textContent = '↓';
-        downButton.className = 'btn btn-outline-secondary btn-sm';
+        downButton.className = 'btn btn-outline-info btn-sm';
         downButton.addEventListener('click', () => {
           if (index < programa.length - 1) {
             [programa[index], programa[index + 1]] = [programa[index + 1], programa[index]];

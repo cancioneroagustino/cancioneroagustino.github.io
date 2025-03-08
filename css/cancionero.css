@@ -245,7 +245,7 @@ h2 {
 .cancion-item {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: left;
     margin-bottom: 0.5rem;
 }
 

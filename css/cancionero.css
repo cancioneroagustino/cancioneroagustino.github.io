@@ -247,6 +247,7 @@ h2 {
     justify-content: space-between;
     align-items: left;
     margin-bottom: 0.5rem;
+				padding-left: 5px;
 }
 
 .cancion-item .btn-group {

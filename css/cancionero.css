@@ -245,9 +245,8 @@ h2 {
 .cancion-item {
     display: flex;
     justify-content: space-between;
-    align-items: left;
+    align-items: center;
     margin-bottom: 0.5rem;
-				padding-left: 5px;
 }
 
 .cancion-item .btn-group {

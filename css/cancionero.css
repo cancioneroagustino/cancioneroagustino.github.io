@@ -254,6 +254,9 @@ h2 {
     gap: 5px;
 }
 
+#programa-lista {
+      padding-left: 10 px;
+    }
 
 span.c {
     color:#000055;

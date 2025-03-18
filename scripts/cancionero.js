@@ -20,9 +20,6 @@
     toggleChords();
   });
 
-
-
-
   $.fn.transpose = function(options) {
     var opts = $.extend({}, $.fn.transpose.defaults, options);
     
@@ -63,7 +60,6 @@
         var ind = 2;
         console.log("getChordRoot: "+input);
         if(input.substring(0,2)=="SO"){
-            //alert("Nota sol");
             ind=3;}
         if (input.length > ind && (input.charAt(ind) == "b" || input.charAt(ind) == "#"))
             return input.substr(0, ind+1);
@@ -74,7 +70,7 @@
     var getNewKey = function (oldKey, delta, targetKey) {
         console.log("oldKey: "+oldKey + " - delta: " + delta);
         var keyValue = getKeyByName(oldKey).value + delta;
-console.log(keyValue);
+        console.log(keyValue);
         if (keyValue > 11) {
             keyValue -= 12;
         } else if (keyValue < 0) {
@@ -84,7 +80,6 @@ console.log(keyValue);
         var i=0;
         if (keyValue == 0 || keyValue == 2 || keyValue == 5 || keyValue == 7 || keyValue == 10) {
             // Return the Flat or Sharp Key
-            //console.log("targetKey: "+targetKey.name);
             switch(targetKey.name) {
               case "LA":
               case "LA#":
@@ -164,12 +159,6 @@ console.log(keyValue);
         var newChord = newChordRoot.name + oldChord.substr(oldChordRoot.length);
         console.log("newChord: "+newChord);
         el.text(newChord);
-
-        var sib = el[0].nextSibling;
-        if (sib && sib.nodeType == 3 && sib.nodeValue.length > 0 && sib.nodeValue.charAt(0) != "/") {
-            var wsLength = getNewWhiteSpaceLength(oldChord.length, newChord.length, sib.nodeValue.length);
-            sib.nodeValue = makeString(" ", wsLength);
-        }
     };
 
     var getNewWhiteSpaceLength = function (a, b, c) {
@@ -187,17 +176,14 @@ console.log(keyValue);
         return o.join("");
     }
     
-    
     // Función para determinar si una línea es de acordes
     var isChordLine = function(line) {
         return /(\bDO|\bRE|\bMI|\bFA|\bSOL|\bLA|\bSI)[b#]?/.test(line);
     };
 
-
     var wrapChords = function (input) {
         return input.replace(opts.chordReplaceRegex, "<span class='c'>$1</span>");
     };
-    
     
     return $(this).each(function() {
     
@@ -221,7 +207,6 @@ console.log(keyValue);
           else
               keyLinks.push("<a href='#'>" + key.name + "</a>");
       });
-
 
       var $this = $(this);
       var keysHtml = $("<div class='transpose-keys col-11 col-sm-7 col-md-5 col-lg-11 col-xl-7 justify-content-md-center'></div>");
@@ -252,6 +237,7 @@ console.log(keyValue);
       $(this).html(output.join("\n"));
     });
   };
+
 
 
   $.fn.transpose.defaults = {

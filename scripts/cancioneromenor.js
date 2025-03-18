@@ -159,12 +159,6 @@ console.log(keyValue);
         var newChord = newChordRoot.name + oldChord.substr(oldChordRoot.length);
         console.log("newChord: "+newChord);
         el.text(newChord);
-
-        var sib = el[0].nextSibling;
-        if (sib && sib.nodeType == 3 && sib.nodeValue.length > 0 && sib.nodeValue.charAt(0) != "/") {
-            var wsLength = getNewWhiteSpaceLength(oldChord.length, newChord.length, sib.nodeValue.length);
-            sib.nodeValue = makeString(" ", wsLength);
-        }
     };
 
     var getNewWhiteSpaceLength = function (a, b, c) {
@@ -182,16 +176,14 @@ console.log(keyValue);
         return o.join("");
     }
     
-
     // Función para determinar si una línea es de acordes
     var isChordLine = function(line) {
         return /(\bDO|\bRE|\bMI|\bFA|\bSOL|\bLA|\bSI)[b#]?/.test(line);
     };
-    
+
     var wrapChords = function (input) {
         return input.replace(opts.chordReplaceRegex, "<span class='c'>$1</span>");
     };
-    
     
     return $(this).each(function() {
     
@@ -216,7 +208,6 @@ console.log(keyValue);
               keyLinks.push("<a href='#'>" + key.name + "</a>");
       });
 
-
       var $this = $(this);
       var keysHtml = $("<div class='transpose-keys col-11 col-sm-7 col-md-5 col-lg-11 col-xl-7 justify-content-md-center'></div>");
       keysHtml.html(keyLinks.join(""));
@@ -234,7 +225,7 @@ console.log(keyValue);
       var lines = $(this).html().split("\n");
       var line, tmp = "";
 
-       for (var i = 0; i < lines.length; i++) {
+      for (var i = 0; i < lines.length; i++) {
           line = lines[i];
 
           if (isChordLine(line))
@@ -245,8 +236,8 @@ console.log(keyValue);
 
       $(this).html(output.join("\n"));
     });
-
   };
+
 
 
   $.fn.transpose.defaults = {

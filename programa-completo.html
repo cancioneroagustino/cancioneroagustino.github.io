@@ -39,7 +39,6 @@
 
     async function cargarCancion(ruta) {
       try {
-        console.log(`Cargando canción desde: ${ruta}`);
         const response = await fetch(ruta);
         if (!response.ok) {
           throw new Error('Error al cargar la canción');
@@ -47,18 +46,10 @@
         const contenido = await response.text();
         const parser = new DOMParser();
         const doc = parser.parseFromString(contenido, 'text/html');
-        const bodyContent = doc.querySelector('body').innerHTML;
+        const preContent = doc.querySelector('pre').innerHTML;
+        const title = doc.querySelector('title').innerText;
 
-        const tempContainer = document.createElement('div');
-        tempContainer.innerHTML = bodyContent;
-
-        const navbar = tempContainer.querySelector('#nav-placeholder');
-        if (navbar) {
-          navbar.remove();
-        }
-
-        return tempContainer.innerHTML;
-
+        return `<h2>${title}</h2><pre>${preContent}</pre>`;
       } catch (error) {
         console.error('Error:', error);
         return '<p>Error al cargar la canción. Inténtalo de nuevo más tarde.</p>';

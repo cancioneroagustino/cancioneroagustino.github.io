@@ -47,9 +47,7 @@
       const lines = contenido.split('\n');
       let output = '';
       for (let line of lines) {
-        if (isChordLine(line)) {
-          output += `<span class='c' style='display:none;'>${line}</span>\n`;
-        } else {
+        if (!isChordLine(line)) {
           output += `<span>${line}</span>\n`;
         }
       }

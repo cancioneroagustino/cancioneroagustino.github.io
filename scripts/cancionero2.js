@@ -7,11 +7,8 @@
 
   // Función para ocultar/mostrar acordes
   function toggleChords() {
-    $('#letra span').each(function() {
-      var lineText = $(this).text();
-      if (isChordLine(lineText)) {
-        $(this).toggle(); // Alterna la visibilidad del elemento
-      }
+    $('#letra span.c').each(function() {
+      $(this).toggle(); // Alterna la visibilidad del elemento
     });
   }
 
@@ -229,7 +226,7 @@
           line = lines[i];
 
           if (isChordLine(line))
-              output.push("<span style='display:none;'>" + wrapChords(line) + "</span>");
+              output.push("<span class='c' style='display:none;'>" + wrapChords(line) + "</span>");
           else
               output.push("<span>" + line + "</span>");
       };
@@ -249,3 +246,4 @@
   });    
     
 })(jQuery);
+

@@ -267,6 +267,11 @@ h2 {
       padding-left: 2vw;
     }
 
+.cancion-content h2 {
+      margin-left: 10px;
+}
+
+
 span.c {
     color:#000055;
 }

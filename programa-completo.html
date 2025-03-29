@@ -27,7 +27,7 @@
     });
   </script> 
 
-  <div id="programa-completo-container" class="col-12 col-lg-8 col-xl-6 mx-auto"></div>
+  <div id="programa-completo-container"></div>
 
   <script>
     const programa = JSON.parse(localStorage.getItem('programaMisa'));
@@ -50,7 +50,7 @@
         const preContent = doc.querySelector('pre').innerHTML;
         const title = doc.querySelector('title').innerText;
 
-        return `<h2>${title}</h2><pre>${preContent}</pre>`;
+        return `<h2>${title}</h2><pre id="letra">${preContent}</pre>`;
       } catch (error) {
         console.error('Error:', error);
         return '<p>Error al cargar la canción. Inténtalo de nuevo más tarde.</p>';

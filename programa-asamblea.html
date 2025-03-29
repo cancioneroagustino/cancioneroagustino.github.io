@@ -58,9 +58,10 @@
 
     async function cargarCancion(ruta) {
       try {
+        console.log(`Cargando canción desde: ${ruta}`);
         const response = await fetch(ruta);
         if (!response.ok) {
-          throw new Error('Error al cargar la canción');
+          throw new Error(`Error al cargar la canción desde ${ruta}`);
         }
         const contenido = await response.text();
         const parser = new DOMParser();
@@ -78,12 +79,14 @@
     async function mostrarProgramaCompleto() {
       const programaContainer = document.getElementById('programa-completo-container');
       try {
+        console.log('Cargando listado de canciones desde canciones.json');
         const response = await fetch('canciones.json');
         if (!response.ok) {
           throw new Error('Error al cargar el listado de canciones');
         }
         const data = await response.json();
         const canciones = data.songs;
+        console.log('Listado de canciones cargado:', canciones);
         for (const cancion of canciones) {
           const contenidoCancion = await cargarCancion(cancion);
           const divCancion = document.createElement('div');

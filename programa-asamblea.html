@@ -29,6 +29,7 @@
   <div id="programa-completo-container" class="d-flex justify-content-center text-center mt-5"></div>
 
   <script>
+
     // Función para determinar si una línea es de acordes
     function isChordLine(line) {
       return /(\bDO|\bRE|\bMI|\bFA|\bSOL|\bLA|\bSI)[b#]?/.test(line);
@@ -38,18 +39,8 @@
     function procesarCancion(contenido) {
       const lines = contenido.split('\n');
       let output = '';
-      let isPre = false;
-      
       for (let line of lines) {
-        if (line.includes('<pre>')) {
-          isPre = true;
-          continue;
-        }
-        if (line.includes('</pre>')) {
-          isPre = false;
-          continue;
-        }
-        if (isPre && !isChordLine(line)) {
+        if (!isChordLine(line)) {
           output += `<span>${line}</span>\n`;
         }
       }
@@ -58,18 +49,18 @@
 
     async function cargarCancion(ruta) {
       try {
-        console.log(`Cargando canción desde: ${ruta}`);
         const response = await fetch(ruta);
         if (!response.ok) {
-          throw new Error(`Error al cargar la canción desde ${ruta}`);
+          throw new Error('Error al cargar la canción');
         }
         const contenido = await response.text();
         const parser = new DOMParser();
         const doc = parser.parseFromString(contenido, 'text/html');
         const preContent = doc.querySelector('pre').innerHTML;
+        const title = doc.querySelector('title').innerText;
 
         const contenidoProcesado = procesarCancion(preContent);
-        return `<pre>${contenidoProcesado}</pre>`;
+        return `<h2>${title}</h2><pre>${contenidoProcesado}</pre>`;
       } catch (error) {
         console.error('Error:', error);
         return '<p>Error al cargar la canción. Inténtalo de nuevo más tarde.</p>';

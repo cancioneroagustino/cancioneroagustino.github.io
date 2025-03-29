@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex">
+  <title>Extraer Lista de Canciones</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+</head>
+<body class="container">
+  <h1 class="my-4">Extraer Lista de Canciones</h1>
+  
+  <form id="extract-form">
+    <div class="form-group">
+      <label for="url-input">Pega aquí el enlace:</label>
+      <input type="text" class="form-control" id="url-input" placeholder="https://www.cancionerocatolico.cl/crear-programa-2.html?Entrada=...">
+    </div>
+    <button type="submit" class="btn btn-primary">Extraer Listado</button>
+  </form>
+  
+  <h2 class="my-4">Listado de Canciones</h2>
+  <pre id="output" class="bg-light p-3"></pre>
+  
+  <script>
+    $(document).ready(function() {
+      $('#extract-form').on('submit', function(event) {
+        event.preventDefault();
+        
+        const url = $('#url-input').val();
+        const params = new URL(url).searchParams;
+        const songs = {};
+        
+        for (const [key, value] of params.entries()) {
+          songs[key] = decodeURIComponent(value);
+        }
+        
+        const output = JSON.stringify({ songs }, null, 2);
+        $('#output').text(output);
+      });
+    });
+  </script>
+</body>
+</html>

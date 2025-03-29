@@ -16,7 +16,6 @@
   <link rel="canonical" href="https://www.cancionerocatolico.cl/programa-completo.html">
   <link rel="stylesheet" type="text/css" href="css/cancionero.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-  <script src="scripts/cancionero2.js"></script>
 </head>
 
 <body>
@@ -29,7 +28,7 @@
 
   <div id="programa-completo-container" class="col-12 col-lg-8 col-xl-6"></div>
 
-<script>
+  <script>
     const programa = JSON.parse(localStorage.getItem('programaMisa'));
     if (!programa) {
       alert('No hay un programa de misa guardado.');
@@ -37,6 +36,25 @@
     }
 
     const canciones = programa.map(item => item.cancion);
+
+    // Función para determinar si una línea es de acordes
+    function isChordLine(line) {
+      return /(\bDO|\bRE|\bMI|\bFA|\bSOL|\bLA|\bSI)[b#]?/.test(line);
+    }
+
+    // Función para procesar el contenido de la canción
+    function procesarCancion(contenido) {
+      const lines = contenido.split('\n');
+      let output = '';
+      for (let line of lines) {
+        if (isChordLine(line)) {
+          output += `<span class='c' style='display:none;'>${line}</span>\n`;
+        } else {
+          output += `<span>${line}</span>\n`;
+        }
+      }
+      return output;
+    }
 
     async function cargarCancion(ruta) {
       try {
@@ -50,24 +68,8 @@
         const preContent = doc.querySelector('pre').innerHTML;
         const title = doc.querySelector('title').innerText;
 
-        const cancionHtml = `<h2>${title}</h2><pre>${preContent}</pre>`;
-        const tempDiv = document.createElement('div');
-        tempDiv.innerHTML = cancionHtml;
-
-        $(tempDiv).find('pre').each(function() {
-          const lines = $(this).html().split('\n');
-          let output = '';
-          for (let line of lines) {
-            if (/(\bDO|\bRE|\bMI|\bFA|\bSOL|\bLA|\bSI)[b#]?/.test(line)) {
-              output += `<span class='c' style='display:none;'>${line}</span>\n`;
-            } else {
-              output += `<span>${line}</span>\n`;
-            }
-          }
-          $(this).html(output);
-        });
-
-        return tempDiv.innerHTML;
+        const contenidoProcesado = procesarCancion(preContent);
+        return `<h2>${title}</h2><pre>${contenidoProcesado}</pre>`;
       } catch (error) {
         console.error('Error:', error);
         return '<p>Error al cargar la canción. Inténtalo de nuevo más tarde.</p>';

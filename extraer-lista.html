@@ -29,13 +29,10 @@
         
         const url = $('#url-input').val();
         const params = new URL(url).searchParams;
-        const songs = {};
+        const songs = [];
         
         for (const [key, value] of params.entries()) {
-          if (!songs[key]) {
-            songs[key] = [];
-          }
-          songs[key].push(decodeURIComponent(value));
+          songs.push({ title: key, path: decodeURIComponent(value) });
         }
         
         const output = JSON.stringify({ songs }, null, 2);

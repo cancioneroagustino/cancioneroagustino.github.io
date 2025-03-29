@@ -72,7 +72,8 @@ $(function(){
       <!-- Las canciones seleccionadas se mostrarán aquí -->
     </ul>
 
-    <button id="crear-programa" class="btn btn-outline-primary mb-5">Ir al Programa</button>
+    <button id="crear-programa" class="btn btn-outline-primary mb-5">Ir al Programa (con acordes)</button>
+    <button id="programa-asamblea" class="btn btn-outline-primary mb-5">Ir al Programa (sólo texto)</button>
     <button id="compartir-programa" class="btn btn-outline-primary mb-5">Compartir listado</button>
   </div>
 
@@ -134,6 +135,11 @@ $(function(){
     document.getElementById('crear-programa').addEventListener('click', function() {
       localStorage.setItem('programaMisa', JSON.stringify(programa));
       window.location.href = 'programa.html';
+    });
+
+    document.getElementById('programa-asamblea').addEventListener('click', function() {
+      localStorage.setItem('programaMisa', JSON.stringify(programa));
+      window.location.href = 'programa-completo.html';
     });
 
     document.getElementById('compartir-programa').addEventListener('click', function() {

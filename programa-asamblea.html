@@ -58,7 +58,7 @@
         const preContent = doc.querySelector('pre').innerHTML;
 
         const contenidoProcesado = procesarCancion(preContent);
-        return `<pre>${contenidoProcesado}</pre>`;
+        return `<h2>${title}</h2><pre>${contenidoProcesado}</pre>`;
       } catch (error) {
         console.error('Error:', error);
         return '<p>Error al cargar la canción. Inténtalo de nuevo más tarde.</p>';

@@ -1,6 +1,24 @@
 {
-  "songs": {
-    "Entrada": "Entrada/Cristo libertador.html",
-    "Cordero": "Cordero/Cordero de Dios DO (1).html"
-  }
+  "songs": [
+    {
+      "title": "Entrada",
+      "path": "Entrada/Abre tu jardín.html"
+    },
+    {
+      "title": "Gloria",
+      "path": "gloria/Gloria (Misa rítmica).html"
+    },
+    {
+      "title": "Comunión",
+      "path": "Comunión/A todos doy.html"
+    },
+    {
+      "title": "Aleluya",
+      "path": "Aleluya/Aleluya gregoriano.html"
+    },
+    {
+      "title": "Comunión",
+      "path": "Comunión/Aquí hay un muchacho.html"
+    }
+  ]
 }

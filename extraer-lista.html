@@ -32,7 +32,7 @@
         const songs = [];
         
         for (const [key, value] of params.entries()) {
-          songs.push({ title: key, path: decodeURIComponent(value) });
+          songs.push(decodeURIComponent(value));
         }
         
         const output = JSON.stringify({ songs }, null, 2);

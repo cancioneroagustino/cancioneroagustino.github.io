@@ -1,24 +1,9 @@
 {
   "songs": [
-    {
-      "title": "Entrada",
-      "path": "Entrada/Abre tu jardín.html"
-    },
-    {
-      "title": "Gloria",
-      "path": "gloria/Gloria (Misa rítmica).html"
-    },
-    {
-      "title": "Comunión",
-      "path": "Comunión/A todos doy.html"
-    },
-    {
-      "title": "Aleluya",
-      "path": "Aleluya/Aleluya gregoriano.html"
-    },
-    {
-      "title": "Comunión",
-      "path": "Comunión/Aquí hay un muchacho.html"
-    }
+    "Entrada/Abre tu jardín.html",
+    "gloria/Gloria (Misa rítmica).html",
+    "Comunión/A todos doy.html",
+    "Aleluya/Aleluya gregoriano.html",
+    "Comunión/Aquí hay un muchacho.html"
   ]
 }

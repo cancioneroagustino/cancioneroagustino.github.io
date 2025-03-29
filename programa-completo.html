@@ -27,9 +27,9 @@
     });
   </script> 
 
-  <div id="programa-completo-container" class="col-12 col-md-10 col-lg-8 col-xl-6"></div>
+  <div id="programa-completo-container" class="col-12 col-lg-8 col-xl-6"></div>
 
-  <script>
+<script>
     const programa = JSON.parse(localStorage.getItem('programaMisa'));
     if (!programa) {
       alert('No hay un programa de misa guardado.');
@@ -50,7 +50,24 @@
         const preContent = doc.querySelector('pre').innerHTML;
         const title = doc.querySelector('title').innerText;
 
-        return `<h2>${title}</h2><pre id="letra">${preContent}</pre>`;
+        const cancionHtml = `<h2>${title}</h2><pre>${preContent}</pre>`;
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = cancionHtml;
+
+        $(tempDiv).find('pre').each(function() {
+          const lines = $(this).html().split('\n');
+          let output = '';
+          for (let line of lines) {
+            if (/(\bDO|\bRE|\bMI|\bFA|\bSOL|\bLA|\bSI)[b#]?/.test(line)) {
+              output += `<span class='c' style='display:none;'>${line}</span>\n`;
+            } else {
+              output += `<span>${line}</span>\n`;
+            }
+          }
+          $(this).html(output);
+        });
+
+        return tempDiv.innerHTML;
       } catch (error) {
         console.error('Error:', error);
         return '<p>Error al cargar la canción. Inténtalo de nuevo más tarde.</p>';

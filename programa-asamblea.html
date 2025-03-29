@@ -13,7 +13,7 @@
   <title>Programa Completo de Misa - Cancionero Católico</title>
   <meta name="robots" content="noindex">
   <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, minimum-scale=1.0">
-  <link rel="canonical" href="https://www.cancionerocatolico.cl/programa-asamblea.html">
+  <link rel="canonical" href="https://www.cancionerocatolico.cl/programa-completo.html">
   <link rel="stylesheet" type="text/css" href="css/cancionero.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 </head>
@@ -46,18 +46,22 @@
       return output;
     }
 
-    async function cargarCancion(ruta, titulo) {
+    async function cargarCancion(ruta) {
       try {
         const response = await fetch(ruta);
         if (!response.ok) {
           throw new Error('Error al cargar la canción');
         }
         const contenido = await response.text();
-        const contenidoProcesado = procesarCancion(contenido);
-        return `<h2>${titulo}</h2><pre>${contenidoProcesado}</pre>`;
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(contenido, 'text/html');
+        const preContent = doc.querySelector('pre').innerHTML;
+
+        const contenidoProcesado = procesarCancion(preContent);
+        return `<pre>${contenidoProcesado}</pre>`;
       } catch (error) {
         console.error('Error:', error);
-        return `<p>Error al cargar la canción "${titulo}". Inténtalo de nuevo más tarde.</p>`;
+        return '<p>Error al cargar la canción. Inténtalo de nuevo más tarde.</p>';
       }
     }
 
@@ -70,8 +74,8 @@
         }
         const data = await response.json();
         const canciones = data.songs;
-        for (const [titulo, ruta] of Object.entries(canciones)) {
-          const contenidoCancion = await cargarCancion(ruta, titulo);
+        for (const cancion of canciones) {
+          const contenidoCancion = await cargarCancion(cancion);
           const divCancion = document.createElement('div');
           divCancion.className = 'cancion-content';
           divCancion.innerHTML = contenidoCancion;

@@ -329,3 +329,12 @@ audio{
 @media (min-width: 768px) and (max-width: 991.98px){html {font-size: 1.8vw}}
 @media (min-width: 992px) and (max-width: 1199.98px){html {font-size: 1.4vw}}
 @media (min-width: 1200px){html {font-size: 14px}}
+
+
+/* CSS para manejar columnas en modo landscape */
+@media only screen and (orientation: landscape) {
+  .long-song {
+    column-count: 2;
+    column-gap: 2em;
+  }
+}

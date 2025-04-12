@@ -175,20 +175,6 @@ pre {
 }
 
 
-.parrafo {
-    font-family: 'Iosevka Term Web', monospace;
-    font-weight: normal;
-    font-variant: normal;
-    vertical-align: baseline;
-    line-height: 105%;
-    padding-left: .5rem;
-    padding-right: .2rem;
-    padding-top: 1.5rem;
-    padding-bottom: 3rem;
-    overflow: hidden;
-    font-size:1rem;
-}
-
 
 .portada {
   color: #FFF;

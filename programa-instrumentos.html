@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-YES9XTRYX6"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-YES9XTRYX6');
+  </script>
+  <meta charset="utf-8">
+  <title>Programa Completo de Misa - Cancionero Católico</title>
+  <meta name="robots" content="noindex">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, minimum-scale=1.0">
+  <link rel="canonical" href="https://www.cancionerocatolico.cl/programa-instrumentos.html">
+  <link rel="stylesheet" type="text/css" href="css/cancionero.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+</head>
+
+<body>
+  <div id="nav-placeholder"></div>
+  <script>
+    $(function(){
+      $("#nav-placeholder").load("navbar.html");
+    });
+  </script> 
+
+    <div id="programa-completo-container" class="d-flex justify-content-center text-center mt-5"></div>
+
+  <script>
+    // Función para procesar el contenido de la canción (incluyendo acordes)
+    function procesarCancion(contenido) {
+      const lines = contenido.split('\n');
+      let output = '';
+      let isPre = false;
+      
+      for (let line of lines) {
+        if (line.includes('<pre>')) {
+          isPre = true;
+          continue;
+        }
+        if (line.includes('</pre>')) {
+          isPre = false;
+          continue;
+        }
+        if (isPre) {
+          output += `<span>${line}</span>\n`;
+        }
+      }
+      return output;
+    }
+
+    async function cargarCancion(ruta) {
+      try {
+        console.log(`Cargando canción desde: ${ruta}`);
+        const response = await fetch(ruta);
+        if (!response.ok) {
+          throw new Error(`Error al cargar la canción desde ${ruta}`);
+        }
+        const contenido = await response.text();
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(contenido, 'text/html');
+        const preContent = doc.querySelector('pre').innerHTML;
+
+        const contenidoProcesado = procesarCancion(preContent);
+        return `<pre>${contenidoProcesado}</pre>`;
+      } catch (error) {
+        console.error('Error:', error);
+        return '<p>Error al cargar la canción. Inténtalo de nuevo más tarde.</p>';
+      }
+    }
+
+    async function mostrarProgramaCompleto() {
+      const programaContainer = document.getElementById('programa-completo-container');
+      try {
+        console.log('Cargando listado de canciones desde canciones.json');
+        const response = await fetch('canciones.json');
+        if (!response.ok) {
+          throw new Error('Error al cargar el listado de canciones');
+        }
+        const data = await response.json();
+        const canciones = data.songs;
+        console.log('Listado de canciones cargado:', canciones);
+        for (const cancion of canciones) {
+          const contenidoCancion = await cargarCancion(cancion);
+          const divCancion = document.createElement('div');
+          divCancion.className = 'cancion-content';
+          divCancion.innerHTML = contenidoCancion;
+          programaContainer.appendChild(divCancion);
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        programaContainer.innerHTML = '<p>Error al cargar el listado de canciones. Inténtalo de nuevo más tarde.</p>';
+      }
+    }
+
+    mostrarProgramaCompleto();
+  </script>
+</body>
+</html>

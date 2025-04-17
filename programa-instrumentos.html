@@ -29,20 +29,42 @@
     <div id="programa-completo-container" class="d-flex justify-content-start text-center mt-5"></div>
 
 <script>
+    // Función para procesar el contenido de la canción (incluyendo acordes)
+    function procesarCancion(contenido) {
+      const lines = contenido.split('\n');
+      let output = '';
+      let isPre = false;
+      
+      for (let line of lines) {
+        if (line.includes('<pre>')) {
+          isPre = true;
+          continue;
+        }
+        if (line.includes('</pre>')) {
+          isPre = false;
+          continue;
+        }
+        if (isPre) {
+          output += `<span>${line}</span>\n`;
+        }
+      }
+      return output;
+    }
+
     async function cargarCancion(ruta) {
       try {
+        console.log(`Cargando canción desde: ${ruta}`);
         const response = await fetch(ruta);
         if (!response.ok) {
-          throw new Error('Error al cargar la canción');
+          throw new Error(`Error al cargar la canción desde ${ruta}`);
         }
         const contenido = await response.text();
         const parser = new DOMParser();
         const doc = parser.parseFromString(contenido, 'text/html');
         const preContent = doc.querySelector('pre').innerHTML;
-        const title = doc.querySelector('title').innerText;
 
         const contenidoProcesado = procesarCancion(preContent);
-        return `<h2>${title}</h2><pre>${contenidoProcesado}</pre></div>`;
+        return `<pre>${contenidoProcesado}</pre>`;
       } catch (error) {
         console.error('Error:', error);
         return '<p>Error al cargar la canción. Inténtalo de nuevo más tarde.</p>';

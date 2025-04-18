@@ -60,7 +60,7 @@
         const title = doc.querySelector('title').innerText;
 
         const contenidoProcesado = procesarCancion(preContent);
-        return `<h2>${title}</h2><pre>${contenidoProcesado}</pre></div>`;
+        return `<h2>${title}</h2><pre class="lh-sm">${contenidoProcesado}</pre></div>`;
       } catch (error) {
         console.error('Error:', error);
         return '<p>Error al cargar la canción. Inténtalo de nuevo más tarde.</p>';

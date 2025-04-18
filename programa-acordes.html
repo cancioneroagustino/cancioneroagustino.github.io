@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-YES9XTRYX6"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-YES9XTRYX6');
+  </script>
+  <meta charset="utf-8">
+  <title>Programa de misa - Cancionero Católico</title>
+  <meta name="robots" content="noindex">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, minimum-scale=1.0">
+  <link rel="canonical" href="https://www.cancionerocatolico.cl/programa-acordes.html">
+  <link rel="stylesheet" type="text/css" href="css/cancionero.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+</head>
+
+<body>
+  <div id="nav-placeholder"></div>
+  <script>
+    $(function(){
+      $("#nav-placeholder").load("navbar.html");
+    });
+  </script> 
+
+  <div id="programa-completo-container" class="d-flex justify-content-center mt-5"></div>
+
+    <script>
+    const programa = JSON.parse(localStorage.getItem('programaMisa'));
+    if (!programa) {
+      alert('No hay un programa de misa guardado.');
+      window.location.href = 'crear-programa.html';
+    }
+
+    const canciones = programa.map(item => item.cancion);
+
+
+    async function cargarCancion(ruta) {
+      try {
+        const response = await fetch(ruta);
+        if (!response.ok) {
+          throw new Error('Error al cargar la canción');
+        }
+        const contenido = await response.text();
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(contenido, 'text/html');
+        const preContent = doc.querySelector('pre').innerHTML;
+        const title = doc.querySelector('title').innerText;
+
+        return `<h2>${title}</h2><pre>${preContent}</pre></div>`;
+      } catch (error) {
+        console.error('Error:', error);
+        return '<p>Error al cargar la canción. Inténtalo de nuevo más tarde.</p>';
+      }
+    }
+
+    async function mostrarProgramaCompleto() {
+      const programaContainer = document.getElementById('programa-completo-container');
+      for (const cancion of canciones) {
+        const contenidoCancion = await cargarCancion(cancion);
+        const divCancion = document.createElement('div');
+        divCancion.className = 'cancion-content';
+        divCancion.innerHTML = contenidoCancion;
+        programaContainer.appendChild(divCancion);
+      }
+    }
+
+    mostrarProgramaCompleto();
+</body>
+</html>

@@ -27,22 +27,18 @@
   </script> 
 
     <div id="programa-completo-container" class="d-flex justify-content-center mt-5"></div>
-  <script>
-
-    // Función para procesar el contenido de la canción
-    function procesarCancion(contenido) {
-      const lines = contenido.split('\n');
-      let output = '';
-      for (let line of lines) {
-        if (!isChordLine(line)) {
-          output += `<span>${line}</span>\n`;
-        }
-      }
-      return output;
+   <script>
+    const programa = JSON.parse(localStorage.getItem('programaMisa'));
+    if (!programa) {
+      alert('No hay un programa de misa guardado.');
+      window.location.href = 'crear-programa.html';
     }
+
+    const canciones = programa.map(item => item.cancion);
 
     async function cargarCancion(ruta) {
       try {
+        console.log(`Cargando canción desde: ${ruta}`);
         const response = await fetch(ruta);
         if (!response.ok) {
           throw new Error('Error al cargar la canción');
@@ -50,11 +46,18 @@
         const contenido = await response.text();
         const parser = new DOMParser();
         const doc = parser.parseFromString(contenido, 'text/html');
-        const preContent = doc.querySelector('pre').innerHTML;
-        const title = doc.querySelector('title').innerText;
+        const bodyContent = doc.querySelector('body').innerHTML;
 
-        const contenidoProcesado = procesarCancion(preContent);
-        return `<h2>${title}</h2><pre>${contenidoProcesado}</pre></div>`;
+        const tempContainer = document.createElement('div');
+        tempContainer.innerHTML = bodyContent;
+
+        const navbar = tempContainer.querySelector('#nav-placeholder');
+        if (navbar) {
+          navbar.remove();
+        }
+
+        return tempContainer.innerHTML;
+
       } catch (error) {
         console.error('Error:', error);
         return '<p>Error al cargar la canción. Inténtalo de nuevo más tarde.</p>';
@@ -63,25 +66,12 @@
 
     async function mostrarProgramaCompleto() {
       const programaContainer = document.getElementById('programa-completo-container');
-      try {
-        console.log('Cargando listado de canciones desde canciones.json');
-        const response = await fetch('canciones.json');
-        if (!response.ok) {
-          throw new Error('Error al cargar el listado de canciones');
-        }
-        const data = await response.json();
-        const canciones = data.songs;
-        console.log('Listado de canciones cargado:', canciones);
-        for (const cancion of canciones) {
-          const contenidoCancion = await cargarCancion(cancion);
-          const divCancion = document.createElement('div');
-          divCancion.className = 'cancion-content';
-          divCancion.innerHTML = contenidoCancion;
-          programaContainer.appendChild(divCancion);
-        }
-      } catch (error) {
-        console.error('Error:', error);
-        programaContainer.innerHTML = '<p>Error al cargar el listado de canciones. Inténtalo de nuevo más tarde.</p>';
+      for (const cancion of canciones) {
+        const contenidoCancion = await cargarCancion(cancion);
+        const divCancion = document.createElement('div');
+        divCancion.className = 'cancion-content';
+        divCancion.innerHTML = contenidoCancion;
+        programaContainer.appendChild(divCancion);
       }
     }
 

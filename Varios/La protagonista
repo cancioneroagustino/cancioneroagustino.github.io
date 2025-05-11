@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-YES9XTRYX6"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-YES9XTRYX6');
+</script>
+
+<title>La protagonista</title>
+<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1">
+<link rel="canonical" href="https://www.cancionerocatolico.cl/Comunión/.html">
+<link rel="stylesheet" type="text/css" 
+href="../css/cancionero.css" >
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+</head>
+
+<body>
+  
+<div id="nav-placeholder"></div>
+<script>
+$(function(){
+  $("#nav-placeholder").load("../navbar.html");
+});
+</script>
+
+<div class="titulo">
+  <h1>La protagonista</h1>
+</div>
+
+
+<div class="d-flex">
+
+<pre id="letra" data-key="DO">
+
+</pre>
+
+Cejillo primer espacio
+ 
+DO
+Consuelo en su palabra,
+             FA
+fuente de ternura y de comprensión,
+      SOL
+con solo una mirada
+                DO
+enciende y traspasa el corazón. 
+LAm
+No busca reconocimiento,
+               FA               SOL
+pero es protagonista de esta canción.
+    FA
+Su abrazo se abre al cielo
+             LAm     FA            SOL
+y verla sonreír me enciende el corazón.
+<b> 
+               DO
+Y yo le canto: madre,
+                   FA
+no hay un amor tan grande,
+           SOL
+su corazón va a otro compás,
+           DO
+late un te quiero hasta el final.
+DO                  FA
+Madre, mujer incomparable,
+      SOL
+su presencia llena la vida
+              DO
+colmándola de luz y alegría.</b>
+
+            FA                    SOL
+//Y a ti, María, te presento a mi madre,
+              MI                LAm
+cuida de ella de tu lado no se aparte,
+          REm                       SOL
+dile a tu hijo que la mime y la acompañe.//
+
+</pre>
+
+</div>
+
+
+
+<script src="../scripts/cancionero.js"></script>
+
+
+<script type="text/javascript">
+$(function() {
+		$(".btn").show();
+    	$("#letra").transpose();
+		
+    });
+  </script>
+
+  </body>
+  </html>

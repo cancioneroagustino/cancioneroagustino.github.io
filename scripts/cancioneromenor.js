@@ -151,14 +151,43 @@ console.log(keyValue);
         currentKey = newKey;
     };
 
+    // ---- ESPACIADO INTELIGENTE SOLO EN LA FUNCIÓN DE TRANSPOSICIÓN ----
     var transposeChord = function (selector, delta, targetKey) {
         var el = $(selector);
+
+        // Guardar longitud original del acorde + espacios a la derecha
+        if (!el.data("orig-block-len")) {
+            // Calcula cuántos espacios siguen al acorde en la línea original
+            var next = el[0].nextSibling;
+            var spaces = 0;
+            if (next && next.nodeType === 3) { // nodo de texto
+                var m = next.nodeValue.match(/^(\s+)/);
+                if (m) spaces = m[1].length;
+            }
+            el.data("orig-block-len", el.text().length + spaces);
+        }
+
+        var originalBlockLen = el.data("orig-block-len");
         var oldChord = el.text();
         var oldChordRoot = getChordRoot(oldChord);
         var newChordRoot = getNewKey(oldChordRoot, delta, targetKey);
         var newChord = newChordRoot.name + oldChord.substr(oldChordRoot.length);
-        console.log("newChord: "+newChord);
+
+        // Calcular cuántos espacios se necesitan a la derecha
+        var spacesNeeded = originalBlockLen - newChord.length;
+        if (spacesNeeded < 0) spacesNeeded = 0;
+
+        // Modificar el texto del acorde y los espacios a la derecha (en el nodo de texto siguiente)
         el.text(newChord);
+
+        var next = el[0].nextSibling;
+        if (next && next.nodeType === 3) {
+            // Reemplaza los espacios por los nuevos
+            next.nodeValue = " ".repeat(spacesNeeded) + next.nodeValue.replace(/^\s+/, "");
+        } else if (spacesNeeded > 0) {
+            // Si no hay nodo de texto, agrégalo
+            el.after(document.createTextNode(" ".repeat(spacesNeeded)));
+        }
     };
 
     var getNewWhiteSpaceLength = function (a, b, c) {

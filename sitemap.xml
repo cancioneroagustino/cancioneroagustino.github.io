@@ -18,7 +18,7 @@
 </url>
 <url>
 <loc>https://www.cancionerocatolico.cl/04 Salmos.html</loc>
-<lastmod>2025-08-03T01:09:09-04:00</lastmod>
+<lastmod>2025-08-03T01:44:45-04:00</lastmod>
 </url>
 <url>
 <loc>https://www.cancionerocatolico.cl/05 Aleluya.html</loc>
@@ -110,7 +110,7 @@
 </url>
 <url>
 <loc>https://www.cancionerocatolico.cl/crear-programa.html</loc>
-<lastmod>2025-08-03T01:09:09-04:00</lastmod>
+<lastmod>2025-08-03T01:44:45-04:00</lastmod>
 </url>
 <url>
 <loc>https://www.cancionerocatolico.cl/navbar.html</loc>
@@ -2877,6 +2877,10 @@
 <lastmod>2025-08-03T01:09:09-04:00</lastmod>
 </url>
 <url>
+<loc>https://www.cancionerocatolico.cl/Salmos/asuncionvm.html</loc>
+<lastmod>2025-08-03T01:44:45-04:00</lastmod>
+</url>
+<url>
 <loc>https://www.cancionerocatolico.cl/Salmos/cascensiondelsenor.html</loc>
 <lastmod>2025-08-03T01:09:09-04:00</lastmod>
 </url>
@@ -2895,6 +2899,14 @@
 <url>
 <loc>https://www.cancionerocatolico.cl/Salmos/cdom18.html</loc>
 <lastmod>2025-08-03T01:09:09-04:00</lastmod>
+</url>
+<url>
+<loc>https://www.cancionerocatolico.cl/Salmos/cdom19.html</loc>
+<lastmod>2025-08-03T01:44:45-04:00</lastmod>
+</url>
+<url>
+<loc>https://www.cancionerocatolico.cl/Salmos/cdom20.html</loc>
+<lastmod>2025-08-03T01:44:45-04:00</lastmod>
 </url>
 <url>
 <loc>https://www.cancionerocatolico.cl/Salmos/cdom31.html</loc>
@@ -2921,10 +2933,6 @@
 <lastmod>2025-08-03T01:09:09-04:00</lastmod>
 </url>
 <url>
-<loc>https://www.cancionerocatolico.cl/Salmos/cpedroypablo.html</loc>
-<lastmod>2025-08-03T01:09:09-04:00</lastmod>
-</url>
-<url>
 <loc>https://www.cancionerocatolico.cl/Salmos/cpentecostes.html</loc>
 <lastmod>2025-08-03T01:09:09-04:00</lastmod>
 </url>
@@ -2937,12 +2945,16 @@
 <lastmod>2025-08-03T01:09:09-04:00</lastmod>
 </url>
 <url>
-<loc>https://www.cancionerocatolico.cl/Salmos/cvirgencarmen.html</loc>
+<loc>https://www.cancionerocatolico.cl/Salmos/dompascuaresurreccion.html</loc>
 <lastmod>2025-08-03T01:09:09-04:00</lastmod>
 </url>
 <url>
-<loc>https://www.cancionerocatolico.cl/Salmos/dompascuaresurreccion.html</loc>
-<lastmod>2025-08-03T01:09:09-04:00</lastmod>
+<loc>https://www.cancionerocatolico.cl/Salmos/pedroypablo.html</loc>
+<lastmod>2025-08-03T01:44:45-04:00</lastmod>
+</url>
+<url>
+<loc>https://www.cancionerocatolico.cl/Salmos/virgencarmen.html</loc>
+<lastmod>2025-08-03T01:44:45-04:00</lastmod>
 </url>
 <url>
 <loc>https://www.cancionerocatolico.cl/Santo/Santo Betsaida.html</loc>

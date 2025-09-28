@@ -152,7 +152,9 @@ $(function(){
       window.location.href = 'programa-texto.html';
     });
 
+
     document.getElementById('compartir-programa').addEventListener('click', function() {
+      // Usamos el nombre corto en el query para compartir
       const query = programa.map(item => `${encodeURIComponent(item.seccion)}=${encodeURIComponent(item.nombreCorto)}`).join('&');
       const url = `${window.location.origin}${window.location.pathname}?${query}`;
       copiarAlPortapapeles(url);
@@ -167,11 +169,13 @@ $(function(){
       });
     }
 
-    function cargarProgramaDesdeURL() {
-      const params = new URLSearchParams(window.location.search);
-      params.forEach((nombreCorto, seccion) => {
-        const ruta = canciones[seccion]?.[nombreCorto] || "";
-        programa.push({seccion, cancion, nombreCorto: cancion});
+
+      function cargarProgramaDesdeURL() {
+        const params = new URLSearchParams(window.location.search);
+        params.forEach((nombreCorto, seccion) => {
+    // Buscamos la ruta correspondiente usando el nombre corto
+          const ruta = canciones[seccion]?.[nombreCorto] || "";
+          programa.push({seccion, cancion: ruta, nombreCorto: nombreCorto});
       });
       actualizarProgramaLista();
     }

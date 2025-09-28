@@ -15,8 +15,6 @@
   <link rel="canonical" href="https://www.cancionerocatolico.cl/crear-programa.html">
   <link rel="stylesheet" type="text/css" href="css/cancionero.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-
 </head>
 
 <body>
@@ -76,20 +74,10 @@ $(function(){
       <!-- Las canciones seleccionadas se mostrarán aquí -->
     </ul>
 
-    <div>
-      <button id="programa-full" class="btn btn-outline-primary mb-3">Programa full (con acordes)</button>
-      <button id="programa-acordes" class="btn btn-outline-primary mb-3">Lista canciones (con acordes)</button>
-      <button id="programa-texto" class="btn btn-outline-primary mb-3">Lista canciones (sólo texto)</button>
-      <button id="compartir-programa" class="btn btn-outline-primary mb-3">Compartir listado</button>
-    </div>
-    <div>
-      <button id="exportar-pdf-acordes" class="btn btn-primary mb-3">Exportar PDF con acordes</button>
-      <button id="exportar-pdf-texto" class="btn btn-secondary">Exportar PDF sólo texto</button>
-     </div>
-
-  <!-- Contenedores ocultos para el contenido que se exportará -->
-    <div id="pdf-content-acordes" style="display:none;"></div>
-    <div id="pdf-content-texto" style="display:none;"></div>
+    <button id="programa-full" class="btn btn-outline-primary mb-3">Programa full (con acordes)</button>
+    <button id="programa-acordes" class="btn btn-outline-primary mb-3">Lista canciones (con acordes)</button>
+    <button id="programa-texto" class="btn btn-outline-primary mb-3">Lista canciones (sólo texto)</button>
+    <button id="compartir-programa" class="btn btn-outline-primary mb-3">Compartir listado</button>
   </div>
 
   <script>
@@ -180,77 +168,6 @@ $(function(){
         console.error('No se pudo copiar el texto: ', err);
       });
     }
-
-    function generarHTMLPrograma(tipo) {
-      let html = `
-        <div id="pdf-encabezado" style="
-          display: flex; 
-          align-items: center; 
-          justify-content: space-between; 
-          border-bottom: 2px solid #ddd; 
-          padding: 8px 0 14px 0; 
-          margin-bottom: 16px;
-        ">
-          <img src="favicon.ico" alt="Logo Cancionero" style="height: 32px; width: 32px; margin-left: 8px;">
-          <div style="flex: 1;"></div>
-          <span style="
-            font-size: 1.6rem; 
-            font-weight: bold; 
-            color: #333; 
-            margin-right: 12px; 
-            letter-spacing: 1px;
-          ">Cancionero Católico</span>
-        </div>
-        <div id="pdf-programa">
-          <ul style="list-style-type: none; padding: 0;">
-      `;
-      programa.forEach(item => {
-        html += `<li style="margin-bottom: 20px;">
-          <strong style="font-size:1.1rem;">${item.seccion}:</strong> 
-          <span style="font-size:1.15rem;">${item.nombreCorto}</span>`;
-        if (tipo === 'acordes' && item.acordesHTML) {
-          html += `<div class="acordes" style="margin-top: 6px; font-family:monospace; font-size:0.98rem;">${item.acordesHTML}</div>`;
-        }
-        html += `</li>`;
-      });
-      html += `
-          </ul>
-        </div>
-      `;
-      return html;
-    }
-
-    document.getElementById('exportar-pdf-acordes').addEventListener('click', function() {
-      const html = generarHTMLPrograma('acordes');
-      const pdfDiv = document.getElementById('pdf-content-acordes');
-      pdfDiv.innerHTML = html;
-      pdfDiv.style.display = 'block';
-      html2pdf().set({
-        margin: 10,
-        filename: 'programa-misa-acordes.pdf',
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2 },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-      }).from(pdfDiv).save().then(() => {
-        pdfDiv.style.display = 'none';
-      });
-    });
-
-    document.getElementById('exportar-pdf-texto').addEventListener('click', function() {
-      const html = generarHTMLPrograma('texto');
-      const pdfDiv = document.getElementById('pdf-content-texto');
-      pdfDiv.innerHTML = html;
-      pdfDiv.style.display = 'block';
-      html2pdf().set({
-        margin: 10,
-        filename: 'programa-misa-texto.pdf',
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2 },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-      }).from(pdfDiv).save().then(() => {
-        pdfDiv.style.display = 'none';
-      });
-    });    
 
 
       function cargarProgramaDesdeURL() {

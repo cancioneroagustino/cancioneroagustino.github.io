@@ -153,7 +153,7 @@ $(function(){
     });
 
     document.getElementById('compartir-programa').addEventListener('click', function() {
-      const query = programa.map(item => `${encodeURIComponent(item.seccion)}=${encodeURIComponent(item.cancion)}`).join('&');
+      const query = programa.map(item => `${encodeURIComponent(item.seccion)}=${encodeURIComponent(item.nombreCorto)}`).join('&');
       const url = `${window.location.origin}${window.location.pathname}?${query}`;
       copiarAlPortapapeles(url);
       alert("El enlace ha sido copiado al portapapeles.");
@@ -169,7 +169,8 @@ $(function(){
 
     function cargarProgramaDesdeURL() {
       const params = new URLSearchParams(window.location.search);
-      params.forEach((cancion, seccion) => {
+      params.forEach((nombreCorto, seccion) => {
+        const ruta = canciones[seccion]?.[nombreCorto] || "";
         programa.push({seccion, cancion, nombreCorto: cancion});
       });
       actualizarProgramaLista();

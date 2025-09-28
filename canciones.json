@@ -1,18 +1,38 @@
 {
-  "songs": [
-    "Entrada/Esta es la luz de Cristo.html",
-    "Liturgias especiales/SalmosVP.html",
-    "gloria/Gloria Mision Pais - Marcelo Cid.html",
-    "Aleluya/Aleluya Misión País (2).html",
-    "Leccionales/Id y anunciad.html",
-    "Espíritu Santo/Ven, Espíritu de santidad.html",
-    "Espíritu Santo/Ven, Espíritu Santo creador.html",
-    "Ofertorio/Te presentamos la vida, Señor.html",
-    "Santo/Santo Misión País.html",
-    "Cordero/Cordero de Dios Betsaida.html",
-    "Comunión/Canto de victoria.html",
-    "Comunión/Resucitó el Señor, aleluya.html",
-    "Marianos/Regina coeli (Marcelo Cid).html",
-    "Comunión/He decidido seguir a Cristo.html"
-  ]
-}
+  "songs":
+[
+  {
+    "Entrada": "Chile una mesa para todos"
+  },
+  {
+    "Perdón": "Señor ten piedad 6 (C. Fones)"
+  },
+  {
+    "Gloria": "Gloria Misión País - Marcelo Cid"
+  },
+  {
+    "Aleluya": "Aleluya (C. Fones)"
+  },
+  {
+    "Leccional": "No fijéis los ojos"
+  },
+  {
+    "Ofertorio": "Tomad Señor y recibid"
+  },
+  {
+    "Santo": "Santo Cristóbal Fones"
+  },
+  {
+    "Cordero": "Cordero de Dios Betsaida"
+  },
+  {
+    "Comunión": "Construyamos la historia"
+  },
+  {
+    "Comunión": "Alma de Cristo"
+  },
+  {
+    "Mariano": "Virgen del Carmen bella"
+  }
+]
+} 

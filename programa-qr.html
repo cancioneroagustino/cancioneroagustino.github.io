@@ -2,29 +2,37 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Programa de Misa</title>
+  <title>Programa de Misa - QR</title>
+  <style>
+    body { font-family: sans-serif; margin: 2em; }
+    .cancion { margin-bottom: 2em; }
+    pre { background: #f6f6f6; padding: 1em; border-radius: 8px; }
+  </style>
   <script>
     async function cargarPrograma() {
-      // Leer el link desde programa-link.txt
-      const resp = await fetch('programa-link.txt');
-      const link = (await resp.text()).trim();
-
-      // Extraer el parámetro listado del link
-      const url = new URL(link);
-      const listado = url.searchParams.get('listado');
-      if (!listado) {
-        document.getElementById('canciones').innerHTML = "<li>No se encontró el listado.</li>";
-        return;
+      const resp = await fetch('canciones.json');
+      const rutas = await resp.json();
+      let html = '';
+      for (const ruta of rutas) {
+        try {
+          const letraResp = await fetch(ruta);
+          if (letraResp.ok) {
+            const letra = await letraResp.text();
+            html += `<div class="cancion"><pre>${letra}</pre></div>`;
+          } else {
+            html += `<div class="cancion"><em>Letra no encontrada: ${ruta}</em></div>`;
+          }
+        } catch (e) {
+          html += `<div class="cancion"><em>Error al cargar letra: ${ruta}</em></div>`;
+        }
       }
-
-      // Decodificar y procesar igual que programa-texto.html
-      const canciones = decodeURIComponent(listado).split('\n').map(linea => `<li>${linea}</li>`).join('');
-      document.getElementById('canciones').innerHTML = canciones;
+      document.getElementById('contenido').innerHTML = html;
     }
     window.onload = cargarPrograma;
   </script>
 </head>
 <body>
   <h1>Programa de Misa</h1>
-  <ul id="canciones"></ul>
+  <div id="contenido">Cargando programa...</div>
 </body>
+</html>

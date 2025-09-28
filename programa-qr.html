@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Programa de Misa</title>
+  <script>
+    async function cargarPrograma() {
+      // Leer el link desde programa-link.txt
+      const resp = await fetch('programa-link.txt');
+      const link = (await resp.text()).trim();
+
+      // Extraer el parámetro listado del link
+      const url = new URL(link);
+      const listado = url.searchParams.get('listado');
+      if (!listado) {
+        document.getElementById('canciones').innerHTML = "<li>No se encontró el listado.</li>";
+        return;
+      }
+
+      // Decodificar y procesar igual que programa-texto.html
+      const canciones = decodeURIComponent(listado).split('\n').map(linea => `<li>${linea}</li>`).join('');
+      document.getElementById('canciones').innerHTML = canciones;
+    }
+    window.onload = cargarPrograma;
+  </script>
+</head>
+<body>
+  <h1>Programa de Misa</h1>
+  <ul id="canciones"></ul>
+</body>

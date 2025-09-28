@@ -20,22 +20,24 @@
   </form>
   
   <h2 class="my-4">Listado de Canciones</h2>
-  <pre id="output" class="bg-light p-3"></pre></div>
+  <pre id="output" class="bg-light p-3"></pre>
   
   <script>
     $(document).ready(function() {
       $('#extract-form').on('submit', function(event) {
         event.preventDefault();
-        
+
         const url = $('#url-input').val();
         const params = new URL(url).searchParams;
-        const songs = [];
-        
+        const result = [];
+
         for (const [key, value] of params.entries()) {
-          songs.push(decodeURIComponent(value));
+          const obj = {};
+          obj[key] = decodeURIComponent(value);
+          result.push(obj);
         }
-        
-        const output = JSON.stringify({ songs }, null, 2);
+
+        const output = JSON.stringify(result, null, 2);
         $('#output').text(output);
       });
     });

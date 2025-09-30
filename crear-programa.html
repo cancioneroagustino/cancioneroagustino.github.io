@@ -229,9 +229,8 @@ $(function(){
     }
 
     // --- Auto redirección a programa-texto si se pide ?autoTexto=1 ---
-window.addEventListener('load', function(){
-  const params = new URLSearchParams(window.location.search);
-  if (params.get('autoTexto') === '1') {
+  window.addEventListener('load', function(){
+  if (window.location.hash === '#autoTexto=1') {
     // Espera un instante para que se cargue el programa desde la URL
     setTimeout(() => {
       document.getElementById('programa-texto').click();

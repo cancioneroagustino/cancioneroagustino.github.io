@@ -228,6 +228,16 @@ $(function(){
       });
     }
 
+    // --- Auto redirección a programa-texto si se pide ?autoTexto=1 ---
+  window.addEventListener('load', function(){
+  if (window.location.hash === '#autoTexto=1') {
+    // Espera un instante para que se cargue el programa desde la URL
+    setTimeout(() => {
+      document.getElementById('programa-texto').click();
+    }, 100); // 0.8 s suele ser suficiente; ajusta si hace falta
+  }
+});
+
     // Inicializar la lista de canciones
     actualizarCanciones();
     // Cargar programa desde la URL si existen parámetros

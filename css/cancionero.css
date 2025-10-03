@@ -418,10 +418,36 @@ audio{
 }
 
 
-.accordion-body a.btn {
-  display: block;
-  width: 100%;
-}
+    @media (min-width: 992px) {
+      .accordion-button { 
+        pointer-events: none;   /* desactiva clics */
+        background-color: #f8f9fa;
+      }
+      .accordion-collapse {
+        display: block !important;  /* siempre visible */
+        height: auto !important;
+      }
+      .accordion-body {
+        padding: 1rem;
+      }
+
+      .accordion-body a.btn {
+  		display: block;
+  		width: 100%;
+	  }
+	  
+      .accordion .row {
+        display: flex;
+      }
+      .accordion .col-lg-4 {
+        border-right: 1px solid #ddd;
+      }
+      .accordion .col-lg-4:last-child {
+        border-right: none;
+      }
+    }
+
+
 
 @media (max-width: 575.98px){html {font-size: 4vw;}}
 @media (min-width: 576px) and (max-width: 767.98px){html {font-size: 2.5vw}}

@@ -12,16 +12,41 @@
   <meta charset="utf-8">
   <title>Salmos</title>
   <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0">
-  <meta name="robots" content="noindex">
+  <link rel="canonical" href="https://www.cancionerocatolico.cl/04 Salmos.html">
   <link rel="stylesheet" type="text/css" href="css/cancionero.css" >
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+  <style>
+    /* Desktop: mostrar acordeón abierto y en 3 columnas */
+    @media (min-width: 992px) {
+      .accordion-button { 
+        pointer-events: none;   /* desactiva clics */
+        background-color: #f8f9fa;
+      }
+      .accordion-collapse {
+        display: block !important;  /* siempre visible */
+        height: auto !important;
+      }
+      .accordion-body {
+        padding: 1rem;
+      }
+      .accordion .row {
+        display: flex;
+      }
+      .accordion .col-lg-4 {
+        border-right: 1px solid #ddd;
+      }
+      .accordion .col-lg-4:last-child {
+        border-right: none;
+      }
+    }
+  </style>
 </head>
 
 <body>
 
 <div id="nav-placeholder"></div>
-
 <script>
 $(function(){
   $("#nav-placeholder").load("navbar.html");
@@ -32,53 +57,56 @@ $(function(){
   <h1>SALMOS</h1>
 </div>
 
-<!-- Tabs para Ciclos -->
-<div class="container">
-  <ul class="nav nav-tabs" id="ciclosTabs" role="tablist">
-    <li class="nav-item">
-      <a class="nav-link active" id="ciclo-a-tab" data-bs-toggle="tab" href="#ciclo-a" role="tab">Ciclo A</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" id="ciclo-b-tab" data-bs-toggle="tab" href="#ciclo-b" role="tab">Ciclo B</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" id="ciclo-c-tab" data-bs-toggle="tab" href="#ciclo-c" role="tab">Ciclo C</a>
-    </li>
-  </ul>
+<!-- Acordeón único -->
+<div class="accordion container" id="accordionCiclos">
+  <div class="row">
 
-  <div class="tab-content mt-3">
-    
     <!-- Ciclo A -->
-    <div class="tab-pane fade show active" id="ciclo-a" role="tabpanel">
-      <h1 class="seccion">Ciclo A</h1>
-      <div class="d-flex row justify-content-center col-lg-8 mx-auto mb-5">
-        <p class="texto text-center mt-3">Tiempo ordinario</p>
-        <!-- aquí van todos los botones (duplicado de C) -->
-        <a class="btn btn-outline-primary btn-sm" href="Salmos/cdom02.html">Domingo 2</a>
-        <a class="btn btn-outline-primary btn-sm" href="Salmos/cdom03.html">Domingo 3</a>
-        <a class="btn btn-outline-primary btn-sm" href="Salmos/cdom04.html">Domingo 4</a>
-        <!-- ... sigue igual que Ciclo C -->
+    <div class="accordion-item col-lg-4">
+      <h2 class="accordion-header" id="headingA">
+        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseA">
+          Ciclo A
+        </button>
+      </h2>
+      <div id="collapseA" class="accordion-collapse collapse show" data-bs-parent="#accordionCiclos">
+        <div class="accordion-body">
+          <p class="texto text-center mt-3">Tiempo ordinario</p>
+          <a class="btn btn-outline-primary btn-sm" href="Salmos/cdom02.html">Domingo 2</a>
+          <a class="btn btn-outline-primary btn-sm" href="Salmos/cdom03.html">Domingo 3</a>
+          <a class="btn btn-outline-primary btn-sm" href="Salmos/cdom04.html">Domingo 4</a>
+          <!-- ... resto de botones -->
+        </div>
       </div>
     </div>
 
     <!-- Ciclo B -->
-    <div class="tab-pane fade" id="ciclo-b" role="tabpanel">
-      <h1 class="seccion">Ciclo B</h1>
-      <div class="d-flex row justify-content-center col-lg-8 mx-auto mb-5">
-        <p class="texto text-center mt-3">Tiempo ordinario</p>
-        <!-- botones duplicados de Ciclo C -->
-        <a class="btn btn-outline-primary btn-sm" href="Salmos/cdom02.html">Domingo 2</a>
-        <a class="btn btn-outline-primary btn-sm" href="Salmos/cdom03.html">Domingo 3</a>
-        <a class="btn btn-outline-primary btn-sm" href="Salmos/cdom04.html">Domingo 4</a>
-        <!-- ... sigue igual que Ciclo C -->
+    <div class="accordion-item col-lg-4">
+      <h2 class="accordion-header" id="headingB">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseB">
+          Ciclo B
+        </button>
+      </h2>
+      <div id="collapseB" class="accordion-collapse collapse" data-bs-parent="#accordionCiclos">
+        <div class="accordion-body">
+          <p class="texto text-center mt-3">Tiempo ordinario</p>
+          <a class="btn btn-outline-primary btn-sm" href="Salmos/cdom02.html">Domingo 2</a>
+          <a class="btn btn-outline-primary btn-sm" href="Salmos/cdom03.html">Domingo 3</a>
+          <a class="btn btn-outline-primary btn-sm" href="Salmos/cdom04.html">Domingo 4</a>
+          <!-- ... resto de botones -->
+        </div>
       </div>
     </div>
 
     <!-- Ciclo C -->
-    <div class="tab-pane fade" id="ciclo-c" role="tabpanel">
-      <h1 class="seccion">Ciclo C</h1>
-      <div class="d-flex row justify-content-center col-lg-8 mx-auto mb-5">
-        <p class="texto text-center mt-3">Tiempo ordinario</p>
+    <div class="accordion-item col-lg-4">
+      <h2 class="accordion-header" id="headingC">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseC">
+          Ciclo C
+        </button>
+      </h2>
+      <div id="collapseC" class="accordion-collapse collapse" data-bs-parent="#accordionCiclos">
+        <div class="accordion-body">
+          <p class="texto text-center mt-3">Tiempo ordinario</p>
     <a class="btn btn-outline-primary btn-sm" href="Salmos/cdom02.html">Domingo 2</a>
     <a class="btn btn-outline-primary btn-sm" href="Salmos/cdom03.html">Domingo 3</a>
     <a class="btn btn-outline-primary btn-sm" href="Salmos/cdom04.html">Domingo 4</a>
@@ -126,12 +154,14 @@ $(function(){
       <a class="btn btn-outline-primary btn-sm" href="Salmos/csantisimatrinidad.html">Santísima Trinidad</a>
       <a class="btn btn-outline-primary btn-sm" href="Salmos/ccorpuschristi.html">Corpus Christi</a>
       <a class="btn btn-outline-primary btn-sm" href="Salmos/csagradocorazon.html">Sagrado Corazón de Jesús</a>
+        </div>
       </div>
     </div>
+
   </div>
 </div>
 
-<!-- Solemnidades (sección aparte, siempre visible) -->
+<!-- Solemnidades -->
 <div>
   <h1 class="seccion">Solemnidades</h1>
   <div class="d-flex row justify-content-center col-lg-8 mx-auto mb-5">

@@ -7,6 +7,7 @@
 	src: url("https://www.cancionerocatolico.cl/fonts/iosevka-term-bold.woff2") format('woff2');
 }
 
+
 @font-face {
 	font-family: 'Iosevka Term Web';
 	font-display: swap;
@@ -23,6 +24,96 @@
 	font-stretch: normal;
 	font-style: normal;
 	src: url("https://www.cancionerocatolico.cl/fonts/iosevka-term-regular.woff2") format('woff2');
+}
+
+@font-face {
+	font-family: 'Drafting';
+	font-display: swap;
+	font-weight: 700;
+	font-stretch: normal;
+	font-style: normal;
+	src: url("https://www.cancionerocatolico.cl/fonts/DraftinMmono-Bold.woff2") format('woff2');
+}
+
+@font-face {
+	font-family: 'Drafting';
+	font-display: swap;
+	font-weight: 700;
+	font-stretch: normal;
+	font-style: italic;
+	src: url("https://www.cancionerocatolico.cl/fonts/DraftinMmono-BoldItalic.woff2") format('woff2');
+}
+
+@font-face {
+	font-family: 'Drafting';
+	font-display: swap;
+	font-weight: 500;
+	font-stretch: normal;
+	font-style: normal;
+	src: url("https://www.cancionerocatolico.cl/fonts/DraftingMono-Medium.woff2") format('woff2');
+}
+
+@font-face {
+	font-family: 'Drafting';
+	font-display: swap;
+	font-weight: 500;
+	font-stretch: normal;
+	font-style: italic;
+	src: url("https://www.cancionerocatolico.cl/fonts/DraftingMono-MediumItalic.woff2") format('woff2');
+}
+
+@font-face {
+	font-family: 'Drafting';
+	font-display: swap;
+	font-weight: 400;
+	font-stretch: normal;
+	font-style: normal;
+	src: url("https://www.cancionerocatolico.cl/fonts/DraftingMono-Regular.woff2") format('woff2');
+}
+
+@font-face {
+	font-family: 'Drafting';
+	font-display: swap;
+	font-weight: 400;
+	font-stretch: normal;
+	font-style: italic;
+	src: url("https://www.cancionerocatolico.cl/fonts/DraftingMono-Italic.woff2") format('woff2');
+}
+
+@font-face {
+	font-family: 'Drafting';
+	font-display: swap;
+	font-weight: 300;
+	font-stretch: normal;
+	font-style: normal;
+	src: url("https://www.cancionerocatolico.cl/fonts/DraftinMmono-Light.woff2") format('woff2');
+}
+
+@font-face {
+	font-family: 'Drafting';
+	font-display: swap;
+	font-weight: 300;
+	font-stretch: normal;
+	font-style: italic;
+	src: url("https://www.cancionerocatolico.cl/fonts/DraftinMmono-LightItalic.woff2") format('woff2');
+}
+
+@font-face {
+	font-family: 'Drafting';
+	font-display: swap;
+	font-weight: 200;
+	font-stretch: normal;
+	font-style: normal;
+	src: url("https://www.cancionerocatolico.cl/fonts/DraftinMmono-ExtraLight.woff2") format('woff2');
+}
+
+@font-face {
+	font-family: 'Drafting';
+	font-display: swap;
+	font-weight: 200;
+	font-stretch: normal;
+	font-style: italic;
+	src: url("https://www.cancionerocatolico.cl/fonts/DraftinMmono-ExtraLightItalic.woff2") format('woff2');
 }
 
 @font-face {

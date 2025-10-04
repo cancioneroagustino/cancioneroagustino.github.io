@@ -429,7 +429,9 @@ audio{
 @media (min-width: 992px) {
   .accordion-button { 
     pointer-events: none;   /* desactiva clics */
+    color: #009F98;
     background-color: #f8f9fa;
+    text-align: center;
   }
   
   .accordion-collapse {

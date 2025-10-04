@@ -417,35 +417,44 @@ audio{
 	height: auto;
 }
 
+    /* Mobile: botones en lista vertical */
+@media (max-width: 991px) {
+  .accordion-body a.btn {
+    display: block;
+    width: 100% !important;
+    margin-bottom: 0.25rem;
+  }
+}
 
-    @media (min-width: 992px) {
-      .accordion-button { 
-        pointer-events: none;   /* desactiva clics */
-        background-color: #f8f9fa;
-      }
-      .accordion-collapse {
-        display: block !important;  /* siempre visible */
-        height: auto !important;
-      }
-      .accordion-body {
-        padding: 1rem;
-      }
+@media (min-width: 992px) {
+  .accordion-button { 
+    pointer-events: none;   /* desactiva clics */
+    background-color: #f8f9fa;
+  }
+  
+  .accordion-collapse {
+    display: block !important;  /* siempre visible */
+    height: auto !important;
+  }
+  .accordion-body {
+    padding: 1rem;
+  }
 
-      .accordion-body a.btn {
-  		display: block;
-  		width: 100%;
-	  }
-	  
-      .accordion .row {
-        display: flex;
-      }
-      .accordion .col-lg-4 {
-        border-right: 1px solid #ddd;
-      }
-      .accordion .col-lg-4:last-child {
-        border-right: none;
-      }
-    }
+  .accordion-body a.btn {
+		display: block;
+		width: 100%;
+  }
+  
+  .accordion .row {
+    display: flex;
+  }
+  .accordion .col-lg-4 {
+    border-right: 1px solid #ddd;
+  }
+  .accordion .col-lg-4:last-child {
+    border-right: none;
+  }
+}
 
 
 

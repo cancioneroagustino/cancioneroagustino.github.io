@@ -25,60 +25,35 @@ $(function(){
 });
 </script>
 
-  <div>
-    <h1 class="seccion">Crea tu Programa de Misa</h1>
-  </div>
+  <main class="container mt-4 text-center">
+    <h1>Crear programa de misa</h1>
 
-  <div class="col-12 col-lg-8 col-xl-6 mx-auto px-1 mb-5">
-    <form id="programa-form">
-      <h2>Agregar Canciones</h2>
-      <label for="seccion">Sección de la Misa:</label>
-      <select id="seccion">
-        <option value="Entrada">Entrada</option>
-        <option value="Perdón">Perdón</option>
-        <option value="Gloria">Gloria</option>
-        <option value="Gloria_no_litúrgico">Gloria no litúrgico</option>
-        <option value="Salmo">Salmo</option>
-        <option value="Aleluya">Aleluya</option>
-        <option value="Leccional">Leccionales</option>
-        <option value="Ofertorio">Ofertorio</option>
-        <option value="Santo">Santo</option>
-        <option value="Santo_no_litúrgico">Santo no litúrgico</option>
-        <option value="Padrenuestro">Padrenuestro</option>
-        <option value="Padrenuestro_no_litúrgico">Padrenuestro no litúrgico</option>
-        <option value="Paz">Paz</option>
-        <option value="Cordero">Cordero</option>
-        <option value="Comunión">Comunión</option>
-        <option value="Espíritu_Santo">Espíritu Santo</option>
-        <option value="Salida">Salida</option>
-        <option value="Mariano">Marianos</option>
-        <option value="Rosario">Santo Rosario</option>
-        <option value="Matrimonio">Matrimonio</option>
-        <option value="Liturgia_especial">Liturgias especiales</option>
-        <option value="Agustiniano">Agustinianos</option>
-        <option value="Villancico">Villancicos</option>
-        <option value="Varios">Cantos varios</option>
-        <option value="Misaalachilena">Misa a la chilena</option>
-      </select>
-
-      <label for="canto">Canción:</label>
-      <select id="canto">
-        <!-- Las opciones se llenarán dinámicamente -->
-      </select>
-
-      <button type="button" id="agregar-cancion" class="btn btn-outline-primary mb-3">Agregar Canción</button>
+    <!-- Formulario 1: Selección de sección -->
+    <form id="form-seccion" class="mt-4">
+      <label for="seccion-select">Sección de la misa:</label>
+      <select id="seccion-select" class="form-select" onchange="actualizarListaCanciones()"></select>
     </form>
 
-    <h2>Programa de Misa</h2>
-    <ul id="programa-lista">
-      <!-- Las canciones seleccionadas se mostrarán aquí -->
-    </ul>
+    <!-- Formulario 2: Selección de canción -->
+    <form id="form-cancion" class="mt-3">
+      <label for="cancion-select">Canción:</label>
+      <select id="cancion-select" class="form-select"></select>
+      <button type="button" class="btn btn-primary mt-2" onclick="agregarCancion()">Agregar</button>
+    </form>
 
-    <button id="programa-full" class="btn btn-outline-primary mb-3">Programa full (con acordes)</button>
-    <button id="programa-acordes" class="btn btn-outline-primary mb-3">Lista canciones (con acordes)</button>
-    <button id="programa-texto" class="btn btn-outline-primary mb-3">Lista canciones (sólo texto)</button>
-    <button id="compartir-programa" class="btn btn-outline-primary mb-3">Compartir listado</button>
-  </div>
+    <hr>
+
+<!-- Listado del programa -->
+    <ul id="programa-lista" class="list-unstyled mt-3"></ul>
+
+    <div class="mt-4">
+      <button id="programa-full" class="btn btn-success">Programa full con acordes</button>
+      <button id="programa-acordes" class="btn btn-primary">Lista canciones con acordes</button>
+      <button id="programa-texto" class="btn btn-secondary">Lista canciones sólo texto</button>
+      <button id="limpiar-programa" class="btn btn-danger">Limpiar</button>
+      <button id="compartir-programa" class="btn btn-info">Compartir listado</button>
+    </div>
+  </main>
 
   <script>
     const canciones = {
@@ -500,7 +475,7 @@ $(function(){
   },
 
 
-  "Gloria_no_litúrgico": {
+  "Gloria no litúrgico": {
     "Gloria abreviado": {
       "ruta": "gloria/Gloria abreviado.html",
       "tono": "DO"
@@ -1885,7 +1860,7 @@ $(function(){
   },
 
 
-  "Santo_no_litúrgico": {
+  "Santo no litúrgico": {
     "Santo Betsaida": {
       "ruta": "Santo/Santo Betsaida.html",
       "tono": "DO"
@@ -1943,7 +1918,7 @@ $(function(){
 
 
 
-  "Padrenuestro_no_litúrgico": {
+  "Padrenuestro no litúrgico": {
     "Padrenuestro misionero": {
       "ruta": "Padrenuestro/Padrenuestro misionero.html",
       "tono": "DO"
@@ -3062,7 +3037,7 @@ $(function(){
 
 
 
-  "Espíritu_Santo": {
+  "Espíritu Santo": {
     "Bautismo": {
       "ruta": "Espíritu Santo/Bautismo.html",
       "tono": "DO"
@@ -3675,7 +3650,7 @@ $(function(){
 
 
 
-  "Liturgia_especial": {
+  "Liturgia especial": {
     "Ahora, Señor": {
       "ruta": "Liturgias especiales/Ahora, Señor.html",
       "tono": "DO"
@@ -4188,243 +4163,200 @@ $(function(){
 };
 
 
-// --- Variables globales ---
-let programa = JSON.parse(localStorage.getItem("programaMisa")) || [];
+    let programa = JSON.parse(localStorage.getItem("programaMisa")) || [];
 
-// --- Actualizar lista de canciones según la sección seleccionada ---
-function actualizarListaCanciones() {
-  const seccion = document.getElementById("seccion-select").value;
-  const selectCanciones = document.getElementById("cancion-select");
-  selectCanciones.innerHTML = "";
+    /* --- Poblar el select de secciones --- */
+    const seccionSelect = document.getElementById("seccion-select");
+    for (const seccion in canciones) {
+      const option = document.createElement("option");
+      option.value = seccion;
+      option.textContent = seccion;
+      seccionSelect.appendChild(option);
+    }
 
-  for (const nombre in canciones[seccion]) {
-    const option = document.createElement("option");
-    option.value = nombre;
-    option.textContent = nombre;
-    selectCanciones.appendChild(option);
-  }
-}
-
-// --- Agregar canción seleccionada al programa ---
-function agregarCancion() {
-  const seccion = document.getElementById("seccion-select").value;
-  const nombre = document.getElementById("cancion-select").value;
-  const datos = canciones[seccion][nombre];
-
-  programa.push({
-    seccion: seccion,
-    nombre: nombre,
-    cancion: datos.ruta,
-    tono: datos.tono
-  });
-
-  mostrarPrograma();
-  guardarPrograma();
-}
-
-// --- Guardar programa en localStorage ---
-function guardarPrograma() {
-  localStorage.setItem("programaMisa", JSON.stringify(programa));
-}
-
-// --- Función para transponer medio tono (mantiene notación latina y "m") ---
-function transponerTono(tono, semitonos) {
-  const tonos = ["DO","DO#","RE","MIb","MI","FA","FA#","SOL","LAb","LA","SIb","SI"];
-  const esMenor = tono.endsWith("m");
-  const base = esMenor ? tono.slice(0, -1) : tono;
-
-  const idx = tonos.indexOf(base);
-  if (idx === -1) return tono;
-
-  const nuevo = tonos[(idx + semitonos + 12) % 12];
-  return esMenor ? nuevo + "m" : nuevo;
-}
-
-// --- Mostrar listado del programa con flechas ◀ TONO ▶ ---
-function mostrarPrograma() {
-  const contenedor = document.getElementById("programa-lista");
-  contenedor.innerHTML = "";
-
-  programa.forEach((item, index) => {
-    const li = document.createElement("li");
-    li.classList.add("programa-item");
-    li.textContent = `${item.seccion}: ${item.nombre} `;
-
-    const contTono = document.createElement("span");
-    contTono.classList.add("control-tono");
-
-    const btnDown = document.createElement("span");
-    btnDown.textContent = "◀";
-    btnDown.classList.add("flecha-tono");
-    btnDown.title = "Bajar medio tono";
-    btnDown.onclick = () => {
-      item.tono = transponerTono(item.tono, -1);
-      spanTono.textContent = item.tono;
-      guardarPrograma();
-    };
-
-    const spanTono = document.createElement("span");
-    spanTono.classList.add("tono-actual");
-    spanTono.textContent = item.tono;
-
-    const btnUp = document.createElement("span");
-    btnUp.textContent = "▶";
-    btnUp.classList.add("flecha-tono");
-    btnUp.title = "Subir medio tono";
-    btnUp.onclick = () => {
-      item.tono = transponerTono(item.tono, +1);
-      spanTono.textContent = item.tono;
-      guardarPrograma();
-    };
-
-    contTono.appendChild(btnDown);
-    contTono.appendChild(spanTono);
-    contTono.appendChild(btnUp);
-    li.appendChild(contTono);
-    contenedor.appendChild(li);
-  });
-}
-
-
-
-
-
-
-
-
-
-    const seccionSelect = document.getElementById('seccion');
-    const cantoSelect = document.getElementById('canto');
-    const programaLista = document.getElementById('programa-lista');
-    const programa = [];
-
-    function actualizarCanciones() {
+    /* --- Actualizar canciones según sección --- */
+    function actualizarListaCanciones() {
       const seccion = seccionSelect.value;
-      const opciones = canciones[seccion];
-      cantoSelect.innerHTML = '';
-      for (const [nombreCorto, ruta] of Object.entries(opciones)) {
-        const option = document.createElement('option');
-        option.value = ruta;
-        option.textContent = nombreCorto;
-        cantoSelect.appendChild(option);
+      const selectCancion = document.getElementById("cancion-select");
+      selectCancion.innerHTML = "";
+
+      for (const nombre in canciones[seccion]) {
+        const option = document.createElement("option");
+        option.value = nombre;
+        option.textContent = nombre;
+        selectCancion.appendChild(option);
       }
     }
 
-    seccionSelect.addEventListener('change', actualizarCanciones);
+    /* --- Transposición de tono (respeta 'm') --- */
+    function transponerTono(tono, semitonos) {
+      const tonos = ["DO","DO#","RE","MIb","MI","FA","FA#","SOL","LAb","LA","SIb","SI"];
+      const esMenor = tono.endsWith("m");
+      const base = esMenor ? tono.slice(0, -1) : tono;
+      const idx = tonos.indexOf(base);
+      if (idx === -1) return tono;
+      const nuevo = tonos[(idx + semitonos + 12) % 12];
+      return esMenor ? nuevo + "m" : nuevo;
+    }
 
-    document.getElementById('agregar-cancion').addEventListener('click', function() {
+    /* --- Agregar canción al programa --- */
+    function agregarCancion() {
       const seccion = seccionSelect.value;
-      const cancion = cantoSelect.value;
-      const nombreCorto = cantoSelect.options[cantoSelect.selectedIndex].text;
-      programa.push({seccion, cancion, nombreCorto});
-      actualizarProgramaLista();
-    });
-
-    document.getElementById('programa-full').addEventListener('click', function() {
-      localStorage.setItem('programaMisa', JSON.stringify(programa));
-      window.location.href = 'programa-full.html';
-    });
-
-    document.getElementById('programa-acordes').addEventListener('click', function() {
-      localStorage.setItem('programaMisa', JSON.stringify(programa));
-      window.location.href = 'programa-acordes.html';
-    });
-
-    document.getElementById('programa-texto').addEventListener('click', function() {
-      localStorage.setItem('programaMisa', JSON.stringify(programa));
-      window.location.href = 'programa-texto.html';
-    });
-
-
-    document.getElementById('compartir-programa').addEventListener('click', function() {
-      // Usamos el nombre corto en el query para compartir
-      const query = programa.map(item => `${encodeURIComponent(item.seccion)}=${encodeURIComponent(item.nombreCorto)}`).join('&');
-      const url = `${window.location.origin}${window.location.pathname}?${query}`;
-      copiarAlPortapapeles(url);
-      alert("El enlace ha sido copiado al portapapeles.");
-    });
-
-    function copiarAlPortapapeles(texto) {
-      navigator.clipboard.writeText(texto).then(function() {
-        console.log('Texto copiado al portapapeles');
-      }, function(err) {
-        console.error('No se pudo copiar el texto: ', err);
+      const nombre = document.getElementById("cancion-select").value;
+      const datos = canciones[seccion][nombre];
+      programa.push({
+        seccion: seccion,
+        nombre: nombre,
+        cancion: datos.ruta,
+        tono: datos.tono
       });
+      mostrarPrograma();
+      guardarPrograma();
     }
 
-
-      function cargarProgramaDesdeURL() {
-        const params = new URLSearchParams(window.location.search);
-        params.forEach((nombreCorto, seccion) => {
-    // Buscamos la ruta correspondiente usando el nombre corto
-          const ruta = canciones[seccion]?.[nombreCorto] || "";
-          programa.push({seccion, cancion: ruta, nombreCorto: nombreCorto});
-      });
-      actualizarProgramaLista();
+    /* --- Guardar programa --- */
+    function guardarPrograma() {
+      localStorage.setItem("programaMisa", JSON.stringify(programa));
     }
 
-    function actualizarProgramaLista() {
-      programaLista.innerHTML = '';
+    /* --- Mostrar programa en pantalla --- */
+    function mostrarPrograma() {
+      const lista = document.getElementById("programa-lista");
+      lista.innerHTML = "";
+
       programa.forEach((item, index) => {
-        const li = document.createElement('li');
-        li.className = 'cancion-item';
-        li.innerHTML = `<span>${item.seccion}: ${item.nombreCorto}</span>`;
-        
-        const buttonGroup = document.createElement('div');
-        buttonGroup.className = 'd-inline-flex justify-content-end btn-group';
-        
-        
-        const upButton = document.createElement('button');
-        upButton.textContent = '↑';
-        upButton.className = 'btn btn-outline-info btn-sm';
-        upButton.addEventListener('click', () => {
+        const li = document.createElement("li");
+        li.classList.add("programa-item");
+        li.textContent = `${item.seccion}: ${item.nombre} `;
+
+        // Control de tono
+        const contTono = document.createElement("span");
+        contTono.classList.add("control-tono");
+
+        const btnDown = document.createElement("span");
+        btnDown.textContent = "◀";
+        btnDown.classList.add("flecha-tono");
+        btnDown.onclick = () => {
+          item.tono = transponerTono(item.tono, -1);
+          spanTono.textContent = item.tono;
+          guardarPrograma();
+        };
+
+        const spanTono = document.createElement("span");
+        spanTono.classList.add("tono-actual");
+        spanTono.textContent = item.tono;
+
+        const btnUp = document.createElement("span");
+        btnUp.textContent = "▶";
+        btnUp.classList.add("flecha-tono");
+        btnUp.onclick = () => {
+          item.tono = transponerTono(item.tono, +1);
+          spanTono.textContent = item.tono;
+          guardarPrograma();
+        };
+
+        contTono.appendChild(btnDown);
+        contTono.appendChild(spanTono);
+        contTono.appendChild(btnUp);
+        li.appendChild(contTono);
+
+        // Botones mover y eliminar
+        const btnSubir = document.createElement("button");
+        btnSubir.textContent = "↑";
+        btnSubir.onclick = () => {
           if (index > 0) {
-            [programa[index], programa[index - 1]] = [programa[index - 1], programa[index]];
-            actualizarProgramaLista();
+            [programa[index - 1], programa[index]] = [programa[index], programa[index - 1]];
+            mostrarPrograma();
+            guardarPrograma();
           }
-        });
+        };
+        li.appendChild(btnSubir);
 
-        const downButton = document.createElement('button');
-        downButton.textContent = '↓';
-        downButton.className = 'btn btn-outline-info btn-sm';
-        downButton.addEventListener('click', () => {
+        const btnBajar = document.createElement("button");
+        btnBajar.textContent = "↓";
+        btnBajar.onclick = () => {
           if (index < programa.length - 1) {
-            [programa[index], programa[index + 1]] = [programa[index + 1], programa[index]];
-            actualizarProgramaLista();
+            [programa[index + 1], programa[index]] = [programa[index], programa[index + 1]];
+            mostrarPrograma();
+            guardarPrograma();
           }
-        });
+        };
+        li.appendChild(btnBajar);
 
-        const removeButton = document.createElement('button');
-        removeButton.innerHTML = '&times;';
-        removeButton.className = 'btn btn-outline-danger btn-sm';
-        removeButton.addEventListener('click', () => {
+        const btnEliminar = document.createElement("button");
+        btnEliminar.textContent = "✕";
+        btnEliminar.onclick = () => {
           programa.splice(index, 1);
-          actualizarProgramaLista();
-        });
+          mostrarPrograma();
+          guardarPrograma();
+        };
+        li.appendChild(btnEliminar);
 
-        buttonGroup.appendChild(upButton);
-        buttonGroup.appendChild(downButton);
-        buttonGroup.appendChild(removeButton);
-        
-        li.appendChild(buttonGroup);
-        programaLista.appendChild(li);
+        lista.appendChild(li);
       });
     }
 
-    // --- Auto redirección a programa-texto si se pide ?autoTexto=1 ---
-  window.addEventListener('load', function(){
-  if (window.location.hash === '#autoTexto=1') {
-    // Espera un instante para que se cargue el programa desde la URL
-    setTimeout(() => {
-      document.getElementById('programa-texto').click();
-    }, 50); // 0.8 s suele ser suficiente; ajusta si hace falta
-  }
+    /* --- Limpiar programa --- */
+    document.getElementById("limpiar-programa").addEventListener("click", () => {
+      if (confirm("¿Seguro que deseas borrar todo el programa?")) {
+        programa = [];
+        guardarPrograma();
+        mostrarPrograma();
+      }
+    });
+
+/* --- Compartir programa (genera URL con tonos) --- */
+document.getElementById("compartir-programa").addEventListener("click", () => {
+  const params = programa.map(item =>
+    `${encodeURIComponent(item.seccion)}=${encodeURIComponent(item.nombre)}|${encodeURIComponent(item.tono)}`
+  ).join("&");
+  const url = `${window.location.origin}${window.location.pathname}?${params}`;
+  navigator.clipboard.writeText(url);
+  alert("Programa de misa copiado al portapapeles:\n\n" + url);
 });
 
-    // Inicializar la lista de canciones
-    actualizarCanciones();
-    // Cargar programa desde la URL si existen parámetros
-    cargarProgramaDesdeURL();
+/* --- Cargar programa desde URL (con tono incluido) --- */
+function cargarProgramaDesdeURL() {
+  const params = new URLSearchParams(window.location.search);
+  if ([...params].length === 0) return;
+
+  programa = [];
+  for (const [seccion, valor] of params.entries()) {
+    const [nombre, tono] = valor.split("|");
+    if (canciones[seccion] && canciones[seccion][nombre]) {
+      const datos = canciones[seccion][nombre];
+      programa.push({
+        seccion: seccion,
+        nombre: nombre,
+        cancion: datos.ruta,
+        tono: tono || datos.tono   // usa el del enlace o el por defecto
+      });
+    }
+  }
+  guardarPrograma();
+  mostrarPrograma();
+}
+
+    /* --- Botones de salida --- */
+    document.getElementById("programa-full").addEventListener("click", () => {
+      guardarPrograma();
+      window.location.href = "programa-fullv2.html";
+    });
+    document.getElementById("programa-acordes").addEventListener("click", () => {
+      guardarPrograma();
+      window.location.href = "programa-acordesv2.html";
+    });
+    document.getElementById("programa-texto").addEventListener("click", () => {
+      guardarPrograma();
+      window.location.href = "programa-texto.html";
+    });
+
+    /* --- Inicialización --- */
+    window.addEventListener("DOMContentLoaded", () => {
+      actualizarListaCanciones();
+      mostrarPrograma();
+      cargarProgramaDesdeURL();
+    });
   </script>
 </body>
 </html>

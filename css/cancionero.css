@@ -460,6 +460,41 @@ audio{
 
 
 
+.programa-item {
+  margin-bottom: 6px;
+  font-size: 1rem;
+}
+
+.control-tono {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: 8px;
+  font-weight: bold;
+}
+
+.flecha-tono {
+  cursor: pointer;
+  font-weight: bold;
+  user-select: none;
+  padding: 0 4px;
+  color: #007b7b;
+  transition: transform 0.1s;
+}
+
+.flecha-tono:hover {
+  transform: scale(1.2);
+  color: #009F98;
+}
+
+.tono-actual {
+  min-width: 32px;
+  text-align: center;
+}
+
+
+
+
 @media (max-width: 575.98px){html {font-size: 4vw;}}
 @media (min-width: 576px) and (max-width: 767.98px){html {font-size: 2.5vw}}
 @media (min-width: 768px) and (max-width: 991.98px){html {font-size: 2vw}}

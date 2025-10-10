@@ -4294,14 +4294,6 @@ $(function(){
       });
     }
 
-    /* --- Limpiar programa --- */
-    document.getElementById("limpiar-programa").addEventListener("click", () => {
-      if (confirm("¿Seguro que deseas borrar todo el programa?")) {
-        programa = [];
-        guardarPrograma();
-        mostrarPrograma();
-      }
-    });
 
 /* --- Compartir programa (genera URL con tonos) --- */
 document.getElementById("compartir-programa").addEventListener("click", () => {
@@ -4346,7 +4338,7 @@ function cargarProgramaDesdeURL() {
     });
     document.getElementById("programa-texto").addEventListener("click", () => {
       guardarPrograma();
-      window.location.href = "programa-texto.html";
+      window.location.href = "programa-textov2.html";
     });
 
     /* --- Inicialización --- */

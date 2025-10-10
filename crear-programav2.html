@@ -46,20 +46,19 @@ $(function(){
 <!-- Listado del programa -->
     <ul id="programa-lista" class="list-unstyled mt-3"></ul>
 
-    <div class="mt-4">
-      <button id="programa-full" class="btn btn-success">Programa full con acordes</button>
-      <button id="programa-acordes" class="btn btn-primary">Lista canciones con acordes</button>
-      <button id="programa-texto" class="btn btn-secondary">Lista canciones sólo texto</button>
-      <button id="limpiar-programa" class="btn btn-danger">Limpiar</button>
-      <button id="compartir-programa" class="btn btn-info">Compartir listado</button>
-    </div>
+<div>
+    <button id="programa-full" class="btn btn-outline-primary mb-3">Programa full (con acordes)</button>
+    <button id="programa-acordes" class="btn btn-outline-primary mb-3">Lista canciones (con acordes)</button>
+    <button id="programa-texto" class="btn btn-outline-primary mb-3">Lista canciones (sólo texto)</button>
+    <button id="compartir-programa" class="btn btn-outline-primary mb-3">Compartir listado</button>
+  </div>
   </main>
 
   <script>
     const canciones = {
 
 {
-  "Entrada": {
+ Entrada: {
     "Abre tu jardín": {
       "ruta": "Entrada/Abre tu jardín.html",
       "tono": "MI"
@@ -319,7 +318,7 @@ $(function(){
   },
 
 
-  "Perdón": {
+  Perdón: {
     "Oh Señor ten piedad 1 (RE)": {
       "ruta": "Perdón/Oh Señor ten piedad 1 (RE).html",
       "tono": "RE"
@@ -443,7 +442,7 @@ $(function(){
   },
 
 
-  "Gloria": {
+  Gloria: {
     "Gloria (Misa rítmica)": {
       "ruta": "gloria/Gloria (Misa rítmica).html",
       "tono": "MIm"
@@ -475,7 +474,7 @@ $(function(){
   },
 
 
-  "Gloria no litúrgico": {
+  Gloria no litúrgico: {
     "Gloria abreviado": {
       "ruta": "gloria/Gloria abreviado.html",
       "tono": "DO"
@@ -496,7 +495,7 @@ $(function(){
 
 
 
-  "Salmo": {
+  Salmo: {
     "Domingo 1 A (Bautismo del Señor)": {
       "ruta": "Salmos/abaut.html",
       "tono": "DO"
@@ -1277,7 +1276,7 @@ $(function(){
 
 
 
-  "Aleluya": {
+  Aleluya: {
     "Aleluya gregoriano (vigilia pascual)": {
       "ruta": "Aleluya/Aleluya gregoriano.html",
       "tono": "DO"
@@ -1398,7 +1397,7 @@ $(function(){
 
 
 
-  "Leccional": {
+  Leccional: {
     "Acuérdate de mí": {
       "ruta": "Leccionales/Acuérdate de mí.html",
       "tono": "DO"
@@ -1679,7 +1678,7 @@ $(function(){
 
 
 
-  "Ofertorio": {
+  Ofertorio: {
     "Bendito seas Señor": {
       "ruta": "Ofertorio/Bendito seas Señor.html",
       "tono": "DO"
@@ -1816,7 +1815,7 @@ $(function(){
 
 
 
-  "Santo": {
+  Santo: {
     "Santo Cristóbal Fones": {
       "ruta": "Santo/Santo Cristóbal Fones.html",
       "tono": "DO"
@@ -1860,7 +1859,7 @@ $(function(){
   },
 
 
-  "Santo no litúrgico": {
+  Santo no litúrgico: {
     "Santo Betsaida": {
       "ruta": "Santo/Santo Betsaida.html",
       "tono": "DO"
@@ -1889,7 +1888,7 @@ $(function(){
 
 
 
-  "Padrenuestro": {
+  Padrenuestro: {
     "Padrenuestro 1 (SOL)": {
       "ruta": "Padrenuestro/Padrenuestro 1 (SOL).html",
       "tono": "DO"
@@ -1918,7 +1917,7 @@ $(function(){
 
 
 
-  "Padrenuestro no litúrgico": {
+  Padrenuestro no litúrgico: {
     "Padrenuestro misionero": {
       "ruta": "Padrenuestro/Padrenuestro misionero.html",
       "tono": "DO"
@@ -1931,7 +1930,7 @@ $(function(){
 
 
 
-  "Paz": {
+  Paz: {
     "Contemplando el mar (chilote)": {
       "ruta": "Paz/Contemplando el mar (chilote).html",
       "tono": "DO"
@@ -1983,7 +1982,7 @@ $(function(){
   },
 
 
-  "Cordero": {
+  Cordero: {
     "Cordero de Dios DO (1) - Paz sin fronteras": {
       "ruta": "Cordero/Cordero de Dios DO (1).html",
       "tono": "DO"
@@ -2036,7 +2035,7 @@ $(function(){
 
 
 
-  "Comunión": {
+  Comunión: {
     "A todos doy": {
       "ruta": "Comunión/A todos doy.html",
       "tono": "DO"
@@ -3037,7 +3036,7 @@ $(function(){
 
 
 
-  "Espíritu Santo": {
+  Espíritu Santo: {
     "Bautismo": {
       "ruta": "Espíritu Santo/Bautismo.html",
       "tono": "DO"
@@ -3182,7 +3181,7 @@ $(function(){
 
 
 
-  "Salida": {
+  Salida: {
     "Envíanos Señor": {
       "ruta": "Salida/Envíanos Señor.html",
       "tono": "DO"
@@ -3211,7 +3210,7 @@ $(function(){
 
 
 
-  "Mariano": {
+  Mariano: {
     "Regina coeli": {
       "ruta": "Marianos/Regina coeli.html",
       "tono": "DO"
@@ -3584,7 +3583,7 @@ $(function(){
 
 
 
-  "Rosario": {
+  Rosario: {
     "Oración inicial del mes de María": {
       "ruta": "Rosario/Oración inicial del mes de María.html",
       "tono": "DO"
@@ -3613,7 +3612,7 @@ $(function(){
 
 
 
-  "Matrimonio": {
+  Matrimonio: {
     "A prometerte vengo": {
       "ruta": "Matrimonio/A prometerte vengo.html",
       "tono": "DO"
@@ -3650,7 +3649,7 @@ $(function(){
 
 
 
-  "Liturgia especial": {
+  Liturgia especial: {
     "Ahora, Señor": {
       "ruta": "Liturgias especiales/Ahora, Señor.html",
       "tono": "DO"
@@ -3743,7 +3742,7 @@ $(function(){
 
 
 
-  "Agustiniano": {
+  Agustiniano: {
     "Canción a Santa Mónica": {
       "ruta": "Agustinianos/Canción a Santa Mónica.html",
       "tono": "DO"
@@ -3832,7 +3831,7 @@ $(function(){
 
 
 
-  "Villancico": {
+  Villancico: {
     "A las doce de la noche": {
       "ruta": "Villancicos/A las doce de la noche.html",
       "tono": "DO"
@@ -3957,7 +3956,7 @@ $(function(){
 
 
 
-  "Varios": {
+  Varios: {
     "Canción a Alberto Hurtado": {
       "ruta": "Varios/Canción a Alberto Hurtado.html",
       "tono": "DO"
@@ -3994,7 +3993,7 @@ $(function(){
 
 
 
-  "Misaalachilena": {
+  Misa a la chilena: {
     "Aleluya, Cristo venció a la muerte": {
       "ruta": "Entrada/Aleluya, Cristo venció a la muerte.html",
       "tono": "DO"

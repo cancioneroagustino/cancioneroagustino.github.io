@@ -46,7 +46,7 @@ $(function(){
 <!-- Listado del programa -->
     <ul id="programa-lista" class="list-unstyled mt-3"></ul>
 
-<div>
+<div class="mt-4">
     <button id="programa-full" class="btn btn-outline-primary mb-3">Programa full (con acordes)</button>
     <button id="programa-acordes" class="btn btn-outline-primary mb-3">Lista canciones (con acordes)</button>
     <button id="programa-texto" class="btn btn-outline-primary mb-3">Lista canciones (sólo texto)</button>
@@ -55,9 +55,8 @@ $(function(){
   </main>
 
   <script>
+    /* --- Catálogo de canciones: ruta + tono --- */
     const canciones = {
-
-{
  Entrada: {
     "Abre tu jardín": {
       "ruta": "Entrada/Abre tu jardín.html",

@@ -19,7 +19,7 @@
     });
   </script>
 
-  <div id="programa-acordes-container" class="d-flex justify-content-center mt-5"></div>
+  <div id="programa-completo-container" class="d-flex justify-content-center mt-5"></div>
 
   <script>
   // --- Recuperar el programa desde localStorage ---
@@ -69,8 +69,8 @@
   }
 
   // --- Mostrar todas las canciones juntas ---
-  async function mostrarProgramaConAcordes() {
-    const container = document.getElementById('programa-acordes-container');
+  async function mostrarProgramaCompleto() {
+    const container = document.getElementById('programa-completo-container');
     let contenidoTotal = "";
 
     for (const item of programa) {
@@ -79,7 +79,7 @@
       await cargarScript(script);
 
       const contenidoCancion = await cargarCancion(item.cancion, item.tono);
-      contenidoTotal += `<div class="cancion-content mb-4">${contenidoCancion}</div>`;
+      contenidoTotal += `<div class="cancion-content">${contenidoCancion}</div>`;
     }
 
     container.innerHTML = contenidoTotal;

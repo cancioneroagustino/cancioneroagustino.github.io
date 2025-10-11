@@ -4234,7 +4234,6 @@ $(function(){
 
       programa.forEach((item, index) => {
         const li = document.createElement("li");
-        li.className = 'cancion-item';
         li.classList.add("programa-item");
         li.textContent = `${item.seccion}: ${item.nombre} `;
 
@@ -4349,11 +4348,11 @@ function cargarProgramaDesdeURL() {
     /* --- Botones de salida --- */
     document.getElementById("programa-full").addEventListener("click", () => {
       guardarPrograma();
-      window.location.href = "programa-full.html";
+      window.location.href = "programa-fullv2.html";
     });
     document.getElementById("programa-acordes").addEventListener("click", () => {
       guardarPrograma();
-      window.location.href = "programa-acordes.html";
+      window.location.href = "programa-acordesv2.html";
     });
     document.getElementById("programa-texto").addEventListener("click", () => {
       guardarPrograma();

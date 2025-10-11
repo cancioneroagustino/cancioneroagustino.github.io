@@ -117,4 +117,49 @@
       }
 
       // El plugin crea antes del <pre> un elemento .transpose-keys con enlaces <a> con nombres de tonos.
-      // Q
+      // Queremos hacer "click" en el enlace cuyo texto coincida con el tono objetivo (sin la 'm')
+      const claveObjetivo = tonoDeseado.replace(/m$/i, '');
+
+      // Encontramos el bloque de keys que el plugin creó (está justo antes del pre)
+      const $keysBlock = $pre.prev('.transpose-keys');
+      if ($keysBlock.length) {
+        // Buscar el <a> con texto exacto (ignorando mayúsc/minúsc)
+        const $link = $keysBlock.find('a').filter(function() {
+          return $(this).text().toUpperCase() === claveObjetivo.toUpperCase();
+        }).first();
+
+        if ($link.length) {
+          // Disparamos el click para que el plugin haga la transposición real
+          $link.trigger('click');
+        } else {
+          console.warn('No se encontró enlace de tono', claveObjetivo, 'en keysBlock para', ruta);
+        }
+      } else {
+        console.warn('No se encontró .transpose-keys antes del <pre> para', ruta);
+      }
+
+    } catch (err) {
+      console.error(err);
+      const errDiv = document.createElement('div');
+      errDiv.className = 'cancion-content mb-4';
+      errDiv.innerHTML = `<h2>Error</h2><p>Error al cargar la canción ${ruta}. ${err.message}</p>`;
+      container.appendChild(errDiv);
+    }
+  }
+
+  // --- Mostrar todas las canciones juntas (modo "acordes") ---
+  async function mostrarProgramaConAcordes() {
+    const container = document.getElementById('programa-acordes-container');
+
+    // Iteramos en orden y procesamos cada canción
+    for (const item of programa) {
+      // item tiene: {seccion, nombre, cancion (ruta), tono}
+      await insertarYCambiarSiCorresponde(container, item.cancion, item.tono);
+    }
+  }
+
+  // Ejecutar
+  mostrarProgramaConAcordes();
+  </script>
+</body>
+</html>

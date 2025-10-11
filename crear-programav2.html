@@ -15,6 +15,20 @@
   <meta name="robots" content="noindex">
   <link rel="stylesheet" type="text/css" href="css/cancionero.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  <style>
+  .cancion-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 8px;
+  border-bottom: 1px solid #ddd;
+}
+
+.btn-grupo {
+  display: inline-flex;
+  gap: 5px;
+}  
+  </style>
 </head>
 
 <body>
@@ -4255,8 +4269,12 @@ $(function(){
         li.appendChild(contTono);
 
         // Botones mover y eliminar
+        const buttonGroup = document.createElement('div');
+        buttonGroup.className = 'd-inline-flex justify-content-end btn-group';
+
         const btnSubir = document.createElement("button");
         btnSubir.textContent = "↑";
+        btnSubir.className = 'btn btn-outline-info btn-sm';
         btnSubir.onclick = () => {
           if (index > 0) {
             [programa[index - 1], programa[index]] = [programa[index], programa[index - 1]];
@@ -4264,10 +4282,11 @@ $(function(){
             guardarPrograma();
           }
         };
-        li.appendChild(btnSubir);
+        buttonGroup.appendChild(btnSubir);
 
         const btnBajar = document.createElement("button");
         btnBajar.textContent = "↓";
+        btnBajar.className = 'btn btn-outline-info btn-sm';
         btnBajar.onclick = () => {
           if (index < programa.length - 1) {
             [programa[index + 1], programa[index]] = [programa[index], programa[index + 1]];
@@ -4275,29 +4294,24 @@ $(function(){
             guardarPrograma();
           }
         };
-        li.appendChild(btnBajar);
+        buttonGroup.appendChild(btnBajar);
 
         const btnEliminar = document.createElement("button");
         btnEliminar.textContent = "✕";
+        btnEliminar.className = 'btn btn-outline-danger btn-sm';
         btnEliminar.onclick = () => {
           programa.splice(index, 1);
           mostrarPrograma();
           guardarPrograma();
         };
-        li.appendChild(btnEliminar);
+        buttonGroup.appendChild(btnEliminar);
 
+        li.appendChild(buttonGroup);
         lista.appendChild(li);
       });
     }
 
-    /* --- Limpiar programa --- */
-    document.getElementById("limpiar-programa").addEventListener("click", () => {
-      if (confirm("¿Seguro que deseas borrar todo el programa?")) {
-        programa = [];
-        guardarPrograma();
-        mostrarPrograma();
-      }
-    });
+
 
 /* --- Compartir programa (genera URL con tonos) --- */
 document.getElementById("compartir-programa").addEventListener("click", () => {
@@ -4344,6 +4358,17 @@ function cargarProgramaDesdeURL() {
       guardarPrograma();
       window.location.href = "programa-texto.html";
     });
+
+
+        // --- Auto redirección a programa-texto si se pide ?autoTexto=1 ---
+  window.addEventListener('load', function(){
+  if (window.location.hash === '#autoTexto=1') {
+    // Espera un instante para que se cargue el programa desde la URL
+    setTimeout(() => {
+      document.getElementById('programa-texto').click();
+    }, 50); // 0.8 s suele ser suficiente; ajusta si hace falta
+  }
+});
 
     /* --- Inicialización --- */
     window.addEventListener("DOMContentLoaded", () => {

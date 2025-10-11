@@ -3022,7 +3022,7 @@ $(function(){
 
 
 
-  Espíritu Santo: {
+  "Espíritu Santo": {
     "Bautismo": {
       "ruta": "Espíritu Santo/Bautismo.html",
       "tono": "DO"
@@ -3635,7 +3635,7 @@ $(function(){
 
 
 
-  Liturgia especial: {
+  "Liturgia especial": {
     "Ahora, Señor": {
       "ruta": "Liturgias especiales/Ahora, Señor.html",
       "tono": "DO"
@@ -3987,7 +3987,7 @@ $(function(){
 
 
 
-  Misa a la chilena: {
+  "Misa a la chilena": {
     "Aleluya, Cristo venció a la muerte": {
       "ruta": "Entrada/Aleluya, Cristo venció a la muerte.html",
       "tono": "DO"
@@ -4158,6 +4158,15 @@ $(function(){
 
     let programa = JSON.parse(localStorage.getItem("programaMisa")) || [];
 
+    /* --- Poblar el select de secciones --- */
+    const seccionSelect = document.getElementById("seccion-select");
+    for (const seccion in canciones) {
+      const option = document.createElement("option");
+      option.value = seccion;
+      option.textContent = seccion;
+      seccionSelect.appendChild(option);
+      seccionSelect.dispatchEvent(new Event("change"));
+    }
 
     /* --- Actualizar canciones según sección --- */
     function actualizarListaCanciones() {
@@ -4281,6 +4290,14 @@ $(function(){
       });
     }
 
+    /* --- Limpiar programa --- */
+    document.getElementById("limpiar-programa").addEventListener("click", () => {
+      if (confirm("¿Seguro que deseas borrar todo el programa?")) {
+        programa = [];
+        guardarPrograma();
+        mostrarPrograma();
+      }
+    });
 
 /* --- Compartir programa (genera URL con tonos) --- */
 document.getElementById("compartir-programa").addEventListener("click", () => {
@@ -4289,7 +4306,7 @@ document.getElementById("compartir-programa").addEventListener("click", () => {
   ).join("&");
   const url = `${window.location.origin}${window.location.pathname}?${params}`;
   navigator.clipboard.writeText(url);
-  alert("Programa de misa copiado al portapapeles:\n\n" + url);
+  alert("Enlace copiado al portapapeles:\n\n" + url);
 });
 
 /* --- Cargar programa desde URL (con tono incluido) --- */
@@ -4317,41 +4334,23 @@ function cargarProgramaDesdeURL() {
     /* --- Botones de salida --- */
     document.getElementById("programa-full").addEventListener("click", () => {
       guardarPrograma();
-      window.location.href = "programa-fullv2.html";
+      window.location.href = "programa-full.html";
     });
     document.getElementById("programa-acordes").addEventListener("click", () => {
       guardarPrograma();
-      window.location.href = "programa-acordesv2.html";
+      window.location.href = "programa-acordes.html";
     });
     document.getElementById("programa-texto").addEventListener("click", () => {
       guardarPrograma();
-      window.location.href = "programa-textov2.html";
+      window.location.href = "programa-texto.html";
     });
 
     /* --- Inicialización --- */
-document.addEventListener("readystatechange", () => {
-  if (document.readyState === "complete") {
-    const seccionSelect = document.getElementById("seccion-select");
-    if (!seccionSelect) {
-      console.error("No se encontró el elemento #seccion-select");
-      return;
-    }
-
-    // Poblar el select de secciones
-    for (const seccion in canciones) {
-      const option = document.createElement("option");
-      option.value = seccion;
-      option.textContent = seccion;
-      seccionSelect.appendChild(option);
-    }
-
-    actualizarListaCanciones();
-    mostrarPrograma();
-    cargarProgramaDesdeURL();
-
-    console.log("✅ Programa inicializado correctamente");
-  }
-});
+    window.addEventListener("DOMContentLoaded", () => {
+      actualizarListaCanciones();
+      mostrarPrograma();
+      cargarProgramaDesdeURL();
+    });
   </script>
 </body>
 </html>

@@ -2,13 +2,11 @@
 <html lang="es">
 <head>
   <meta charset="utf-8">
-  <title>Programa de misa - Cancionero Católico</title>
+  <title>Programa con Acordes - Cancionero Católico</title>
   <meta name="robots" content="noindex">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" type="text/css" href="css/cancionero.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-  <script src="scripts/cancionero.js"></script>
-  <script src="scripts/cancioneromenor.js"></script>
 </head>
 
 <body>
@@ -19,94 +17,104 @@
     });
   </script>
 
-  <div id="programa-completo-container" class="d-flex justify-content-center mt-5"></div>
+  <div id="programa-acordes-container" class="d-flex justify-content-center mt-5"></div>
 
   <script>
-  // --- Recuperar el programa desde localStorage ---
+  // --- Lee el programa desde localStorage ---
   const programa = JSON.parse(localStorage.getItem('programaMisa'));
-  if (!programa) {
+  if (!programa || programa.length === 0) {
     alert('No hay un programa de misa guardado.');
     window.location.href = 'crear-programa.html';
   }
 
-  // --- Cargar dinámicamente el script correcto (mayor o menor) ---
+  // --- Helper: cargar un script solo una vez ---
   function cargarScript(src) {
     return new Promise((resolve, reject) => {
       if (document.querySelector(`script[src="${src}"]`)) return resolve();
       const s = document.createElement("script");
       s.src = src;
       s.onload = resolve;
-      s.onerror = reject;
+      s.onerror = () => reject(new Error('Error cargando ' + src));
       document.head.appendChild(s);
     });
   }
 
+  // --- Cargar y obtener title + contenido del <pre id="letra"> (sin modificar) ---
+  async function fetchCancionData(ruta) {
+    const res = await fetch(ruta);
+    if (!res.ok) throw new Error('Error al cargar ' + ruta);
+    const text = await res.text();
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(text, 'text/html');
 
+    // Título
+    const titleEl = doc.querySelector('title');
+    const title = titleEl ? titleEl.innerText : 'Sin título';
 
-  // --- Función local para transponer acordes en notación latina ---
-  function transponerAcordes(texto, tonoOrigen, tonoDestino) {
-    const tonos = ["DO","DO#","RE","MIb","MI","FA","FA#","SOL","LAb","LA","SIb","SI"];
-    const idxOrig = tonos.indexOf(tonoOrigen);
-    const idxDest = tonos.indexOf(tonoDestino);
-    if (idxOrig === -1 || idxDest === -1) return texto;
-    const diff = (idxDest - idxOrig + 12) % 12;
+    // Pre con id="letra" (extraemos su innerHTML y su data-key)
+    const pre = doc.querySelector('pre#letra');
+    if (!pre) throw new Error('No se encontró <pre id="letra"> en ' + ruta);
 
-    return texto.replace(
-      /\b(DO#|DO|RE#|RE|MIb|MI|FA#|FA|SOL#|SOL|LAb|LA|SIb|SI)(m|7|maj7|sus4|dim|aug|add9|m7|m6|m9)?\b/g,
-      (acorde, base, sufijo = "") => {
-        const i = tonos.indexOf(base);
-        if (i === -1) return acorde;
-        const nuevo = tonos[(i + diff) % 12];
-        return nuevo + sufijo;
-      }
-    );
+    const preInner = pre.innerHTML;
+    const dataKey = pre.getAttribute('data-key') || '';
+
+    return { title, preInner, dataKey };
   }
-  
 
-  // --- Cargar y procesar una canción ---
-  async function cargarCancion(ruta, tonoDestino) {
+  // --- Insertar canción en el DOM y, si corresponde, transponer usando plugin ---
+  async function insertarYCambiarSiCorresponde(container, ruta, tonoDeseado) {
     try {
-      const response = await fetch(ruta);
-      if (!response.ok) throw new Error('Error al cargar la canción');
-      const contenido = await response.text();
+      const { title, preInner, dataKey: tonoOriginal } = await fetchCancionData(ruta);
 
-      const parser = new DOMParser();
-      const doc = parser.parseFromString(contenido, 'text/html');
-       const preContent = doc.querySelector('pre').innerHTML;
-      const tonoOriginal = pre ? pre.dataset.key : null;
-      const title = doc.querySelector('title').innerText;
+      // Crear contenedor visual para la canción
+      const article = document.createElement('div');
+      article.className = 'cancion-content mb-4';
 
-      // Transponer si corresponde
-      if (tonoDestino && tonoOriginal && tonoDestino !== tonoOriginal) {
-        pre.innerHTML = transponerAcordes(pre.innerHTML, tonoOriginal.replace('m',''), tonoDestino.replace('m',''));
-        pre.dataset.key = tonoDestino;
+      // Título
+      const h2 = document.createElement('h2');
+      h2.textContent = title;
+      article.appendChild(h2);
+
+      // Pre con la letra (no usamos id duplicado; usamos clase "letra" y data-key original)
+      const pre = document.createElement('pre');
+      pre.className = 'letra';
+      pre.setAttribute('data-key', tonoOriginal);
+      pre.innerHTML = preInner;
+      article.appendChild(pre);
+
+      // Append provisional (antes de plugin)
+      container.appendChild(article);
+
+      // Si no hay tonoDeseado, dejamos la canción tal cual
+      if (!tonoDeseado) {
+        return;
       }
 
-      return `<h2>${title}</h2><pre class="lh-base">${pre.innerHTML}</pre>`;
-    } catch (error) {
-      console.error('Error:', error);
-      return '<p>Error al cargar la canción.</p>';
-    }
-  }
+      // Si el tono deseado es igual al original, no necesitamos transponer
+      // (nota: comparaciones simples; se pueden normalizar si quisieras)
+      if (tonoDeseado === tonoOriginal) {
+        return;
+      }
 
-  // --- Mostrar todas las canciones juntas ---
-  async function mostrarProgramaCompleto() {
-    const container = document.getElementById('programa-completo-container');
-    let contenidoTotal = "";
+      // Determinar si usar menor o mayor según la 'm' final en tonoDeseado
+      const usarMenor = /m$/i.test(tonoDeseado);
+      const script = usarMenor ? 'scripts/cancioneromenor.js' : 'scripts/cancionero.js';
 
-    for (const item of programa) {
-      const usarMenor = item.tono && item.tono.endsWith("m");
-      const script = usarMenor ? "scripts/cancioneromenor.js" : "scripts/cancionero.js";
+      // Cargar el script correspondiente (si ya está cargado, cargarScript es no-op)
       await cargarScript(script);
 
-      const contenidoCancion = await cargarCancion(item.cancion, item.tono);
-      contenidoTotal += `<div class="cancion-content">${contenidoCancion}</div>`;
-    }
+      // Invocar el plugin sobre este elemento <pre> específico
+      // (el plugin creará sus controles justo antes del <pre>)
+      // Usamos jQuery aquí, el plugin está escrito en jQuery.
+      const $pre = $(pre);
+      // Llamada al plugin: esto inicializa la UI de transposición para este <pre>
+      if (typeof $pre.transpose === 'function') {
+        $pre.transpose();
+      } else {
+        // Si por alguna razón el plugin no expone la función, lanzar error visible
+        console.warn('Plugin transpose no disponible para', script);
+        return;
+      }
 
-    container.innerHTML = contenidoTotal;
-  }
-
-  mostrarProgramaConAcordes();
-  </script>
-</body>
-</html>
+      // El plugin crea antes del <pre> un elemento .transpose-keys con enlaces <a> con nombres de tonos.
+      // Q

@@ -4171,14 +4171,6 @@ $(function(){
 
     let programa = JSON.parse(localStorage.getItem("programaMisa")) || [];
 
-    /* --- Poblar el select de secciones --- */
-    const seccionSelect = document.getElementById("seccion-select");
-    for (const seccion in canciones) {
-      const option = document.createElement("option");
-      option.value = seccion;
-      option.textContent = seccion;
-      seccionSelect.appendChild(option);
-    }
 
     /* --- Actualizar canciones según sección --- */
     function actualizarListaCanciones() {
@@ -4350,11 +4342,29 @@ function cargarProgramaDesdeURL() {
     });
 
     /* --- Inicialización --- */
-    window.addEventListener("DOMContentLoaded", () => {
-      actualizarListaCanciones();
-      mostrarPrograma();
-      cargarProgramaDesdeURL();
-    });
+document.addEventListener("readystatechange", () => {
+  if (document.readyState === "complete") {
+    const seccionSelect = document.getElementById("seccion-select");
+    if (!seccionSelect) {
+      console.error("No se encontró el elemento #seccion-select");
+      return;
+    }
+
+    // Poblar el select de secciones
+    for (const seccion in canciones) {
+      const option = document.createElement("option");
+      option.value = seccion;
+      option.textContent = seccion;
+      seccionSelect.appendChild(option);
+    }
+
+    actualizarListaCanciones();
+    mostrarPrograma();
+    cargarProgramaDesdeURL();
+
+    console.log("✅ Programa inicializado correctamente");
+  }
+});
   </script>
 </body>
 </html>

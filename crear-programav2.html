@@ -4237,6 +4237,9 @@ $(function(){
         li.classList.add("programa-item");
         li.textContent = `${item.seccion}: ${item.nombre} `;
 
+       const buttonGroup = document.createElement('div');
+        buttonGroup.className = 'd-inline-flex justify-content-end btn-group';
+
         // Control de tono
         const contTono = document.createElement("span");
         contTono.classList.add("control-tono");
@@ -4266,12 +4269,9 @@ $(function(){
         contTono.appendChild(btnDown);
         contTono.appendChild(spanTono);
         contTono.appendChild(btnUp);
-        li.appendChild(contTono);
+        buttonGroup.appendChild(contTono);
 
         // Botones mover y eliminar
-        const buttonGroup = document.createElement('div');
-        buttonGroup.className = 'd-inline-flex justify-content-end btn-group';
-
         const btnSubir = document.createElement("button");
         btnSubir.textContent = "↑";
         btnSubir.className = 'btn btn-outline-info btn-sm';

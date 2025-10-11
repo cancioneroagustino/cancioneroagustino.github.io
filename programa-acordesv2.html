@@ -7,6 +7,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" type="text/css" href="css/cancionero.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  <script src="scripts/cancionero.js"></script>
+  <script src="scripts/cancioneromenor.js"></script>
 </head>
 
 <body>
@@ -39,24 +41,6 @@
     });
   }
 
-  // --- Función local para transponer acordes en notación latina ---
-  function transponerAcordes(texto, tonoOrigen, tonoDestino) {
-    const tonos = ["DO","DO#","RE","MIb","MI","FA","FA#","SOL","LAb","LA","SIb","SI"];
-    const idxOrig = tonos.indexOf(tonoOrigen);
-    const idxDest = tonos.indexOf(tonoDestino);
-    if (idxOrig === -1 || idxDest === -1) return texto;
-    const diff = (idxDest - idxOrig + 12) % 12;
-
-    return texto.replace(
-      /\b(DO#|DO|RE#|RE|MIb|MI|FA#|FA|SOL#|SOL|LAb|LA|SIb|SI)(m|7|maj7|sus4|dim|aug|add9|m7|m6|m9)?\b/g,
-      (acorde, base, sufijo = "") => {
-        const i = tonos.indexOf(base);
-        if (i === -1) return acorde;
-        const nuevo = tonos[(i + diff) % 12];
-        return nuevo + sufijo;
-      }
-    );
-  }
 
   // --- Cargar y procesar una canción ---
   async function cargarCancion(ruta, tonoDestino) {
@@ -67,7 +51,7 @@
 
       const parser = new DOMParser();
       const doc = parser.parseFromString(contenido, 'text/html');
-      const pre = doc.querySelector('pre#letra');
+       const preContent = doc.querySelector('pre').innerHTML;
       const tonoOriginal = pre ? pre.dataset.key : null;
       const title = doc.querySelector('title').innerText;
 

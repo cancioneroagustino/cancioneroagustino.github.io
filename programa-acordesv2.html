@@ -85,16 +85,26 @@
       // Append provisional (antes de plugin)
       container.appendChild(article);
 
-      // Si no hay tonoDeseado, dejamos la canción tal cual
-      if (!tonoDeseado) {
-        return;
-      }
+      // Siempre queremos mostrar el plugin, incluso si no hay cambio de tono
+const usarMenor = /m$/i.test(tonoDeseado || tonoOriginal);
+const script = usarMenor ? 'scripts/cancioneromenor.js' : 'scripts/cancionero.js';
+await cargarScript(script);
 
-      // Si el tono deseado es igual al original, no necesitamos transponer
-      // (nota: comparaciones simples; se pueden normalizar si quisieras)
-      if (tonoDeseado === tonoOriginal) {
-        return;
-      }
+// Inicializar el plugin (muestra los botones de tono)
+const $pre = $(pre);
+if (typeof $pre.transpose === 'function') {
+  $pre.transpose();
+}
+
+// Si hay tonoDeseado distinto, aplicar el cambio
+if (tonoDeseado && tonoDeseado !== tonoOriginal) {
+  const claveObjetivo = tonoDeseado.replace(/m$/i, '');
+  const $keysBlock = $pre.prev('.transpose-keys');
+  const $link = $keysBlock.find('a').filter(function () {
+    return $(this).text().toUpperCase() === claveObjetivo.toUpperCase();
+  }).first();
+  if ($link.length) $link.trigger('click');
+}
 
       // Determinar si usar menor o mayor según la 'm' final en tonoDeseado
       const usarMenor = /m$/i.test(tonoDeseado);

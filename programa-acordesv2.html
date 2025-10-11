@@ -17,14 +17,14 @@
     });
   </script>
 
-  <div id="programa-acordes-container" class="row justify-content-center mt-5"></div>
+  <div id="programa-acordes-container" class="d-flex justify-content-center mt-5"></div>
 
   <script>
   // --- Lee el programa desde localStorage ---
   const programa = JSON.parse(localStorage.getItem('programaMisa'));
   if (!programa || programa.length === 0) {
     alert('No hay un programa de misa guardado.');
-    window.location.href = 'crear-programav2.html';
+    window.location.href = 'crear-programa.html';
   }
 
   // --- Helper: cargar un script solo una vez ---
@@ -66,14 +66,10 @@
     try {
       const { title, preInner, dataKey: tonoOriginal } = await fetchCancionData(ruta);
 
-      // Crear columna Bootstrap
-      const col = document.createElement("div");
-      col.className = "col-12 col-md-8 col-lg-4";
-
-      // Crear contenedor de la canción
+      // Crear contenedor visual para la canción
       const article = document.createElement('div');
       article.className = 'cancion-content mb-4';
-      
+
       // Título
       const h2 = document.createElement('h2');
       h2.textContent = title;
@@ -87,30 +83,18 @@
       article.appendChild(pre);
 
       // Append provisional (antes de plugin)
-      col.appendChild(article);
-      container.appendChild(col);
       container.appendChild(article);
 
-      // Siempre queremos mostrar el plugin, incluso si no hay cambio de tono
-const usarMenor = /m$/i.test(tonoDeseado || tonoOriginal);
-const script = usarMenor ? 'scripts/cancioneromenor.js' : 'scripts/cancionero.js';
-await cargarScript(script);
+      // Si no hay tonoDeseado, dejamos la canción tal cual
+      if (!tonoDeseado) {
+        return;
+      }
 
-// Inicializar el plugin (muestra los botones de tono)
-const $pre = $(pre);
-if (typeof $pre.transpose === 'function') {
-  $pre.transpose();
-}
-
-// Si hay tonoDeseado distinto, aplicar el cambio
-if (tonoDeseado && tonoDeseado !== tonoOriginal) {
-  const claveObjetivo = tonoDeseado.replace(/m$/i, '');
-  const $keysBlock = $pre.prev('.transpose-keys');
-  const $link = $keysBlock.find('a').filter(function () {
-    return $(this).text().toUpperCase() === claveObjetivo.toUpperCase();
-  }).first();
-  if ($link.length) $link.trigger('click');
-}
+      // Si el tono deseado es igual al original, no necesitamos transponer
+      // (nota: comparaciones simples; se pueden normalizar si quisieras)
+      if (tonoDeseado === tonoOriginal) {
+        return;
+      }
 
       // Determinar si usar menor o mayor según la 'm' final en tonoDeseado
       const usarMenor = /m$/i.test(tonoDeseado);

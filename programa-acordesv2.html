@@ -131,12 +131,15 @@
         if ($link.length) {
           // Disparamos el click para que el plugin haga la transposición real
           $link.trigger('click');
+          // Ocultar los botones de transposición
+          $pre.prev('.transpose-keys').hide();
         } else {
           console.warn('No se encontró enlace de tono', claveObjetivo, 'en keysBlock para', ruta);
         }
       } else {
         console.warn('No se encontró .transpose-keys antes del <pre> para', ruta);
       }
+
 
     } catch (err) {
       console.error(err);

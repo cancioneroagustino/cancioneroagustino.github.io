@@ -4234,6 +4234,7 @@ $(function(){
 
       programa.forEach((item, index) => {
         const li = document.createElement("li");
+        li.className = 'cancion-item';
         li.classList.add("programa-item");
         li.textContent = `${item.seccion}: ${item.nombre} `;
 

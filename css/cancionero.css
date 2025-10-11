@@ -357,7 +357,17 @@ h2 {
     gap: 5px;
 }
 
-.btn-group {
+.programa-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: 0;
+    margin-bottom: 0.5rem;
+}
+
+
+
+.programa-item .btn-group {
     gap: 5px;
 }
 

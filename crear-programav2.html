@@ -30,7 +30,7 @@ $(function(){
 
     <!-- Formulario 1: Selección de sección -->
     <form id="form-seccion" class="mt-4">
-      <label for="seccion-select">Sección de la misa:</label>
+      <label for="seccion-select">Sección:</label>
       <select id="seccion-select" class="form-select" onchange="actualizarListaCanciones()"></select>
     </form>
 
@@ -51,6 +51,7 @@ $(function(){
     <button id="programa-acordes" class="btn btn-outline-primary mb-3">Lista canciones (con acordes)</button>
     <button id="programa-texto" class="btn btn-outline-primary mb-3">Lista canciones (sólo texto)</button>
     <button id="compartir-programa" class="btn btn-outline-primary mb-3">Compartir listado</button>
+    <button id="limpiar-programa" class="btn btn-outline-primary mb-3">Limpiar</button>
   </div>
   </main>
 
@@ -469,7 +470,10 @@ $(function(){
     "Gloria pascual (Gen verde)": {
       "ruta": "gloria/Gloria pascual (Gen verde).html",
       "tono": "LA"
+       }
     },
+
+    "Gloria no litúrgico": {
     "Gloria abreviado": {
       "ruta": "gloria/Gloria abreviado.html",
       "tono": "DO"
@@ -1676,7 +1680,7 @@ $(function(){
   Ofertorio: {
     "Bendito seas Señor": {
       "ruta": "Ofertorio/Bendito seas Señor.html",
-      "tono": "DO"
+      "tono": "RE"
     },
     "Después de preparar": {
       "ruta": "Ofertorio/Después de preparar.html",
@@ -1688,7 +1692,7 @@ $(function(){
     },
     "El trigo transformado": {
       "ruta": "Ofertorio/El trigo transformado.html",
-      "tono": "DO"
+      "tono": "RE"
     },
     "En tu altar, Señor": {
       "ruta": "Ofertorio/En tu altar, Señor.html",
@@ -1696,15 +1700,15 @@ $(function(){
     },
     "Esperamos, Señor, tu venida": {
       "ruta": "Ofertorio/Esperamos, Señor, tu venida.html",
-      "tono": "DO"
+      "tono": "RE"
     },
     "Este pan y este vino": {
       "ruta": "Ofertorio/Este pan y este vino.html",
-      "tono": "DO"
+      "tono": "MI"
     },
     "Este trigo": {
       "ruta": "Ofertorio/Este trigo.html",
-      "tono": "DO"
+      "tono": "RE"
     },
     "Hoy nos presentamos ante Ti, Señor": {
       "ruta": "Ofertorio/Hoy nos presentamos ante Ti, Señor.html",
@@ -1712,7 +1716,7 @@ $(function(){
     },
     "Junto a la mesa": {
       "ruta": "Ofertorio/Junto a la mesa.html",
-      "tono": "DO"
+      "tono": "LA"
     },
     "Juntos nos acercamos": {
       "ruta": "Ofertorio/Juntos nos acercamos.html",
@@ -1720,27 +1724,27 @@ $(function(){
     },
     "Manos abiertas": {
       "ruta": "Ofertorio/Manos abiertas.html",
-      "tono": "DO"
+      "tono": "RE"
     },
     "Mi Cuerpo es comida": {
       "ruta": "Ofertorio/Mi Cuerpo es comida.html",
-      "tono": "DO"
+      "tono": "MIm"
     },
     "Negra es la uva": {
       "ruta": "Ofertorio/Negra es la uva.html",
-      "tono": "DO"
+      "tono": "REm"
     },
     "Pan y vino sobre el altar": {
       "ruta": "Ofertorio/Pan y vino sobre el altar.html",
-      "tono": "DO"
+      "tono": "LA"
     },
     "Recibe, oh Dios": {
       "ruta": "Ofertorio/Recibe, oh Dios.html",
-      "tono": "DO"
+      "tono": "LA"
     },
     "Recibe, oh Dios (folclórico)": {
       "ruta": "Ofertorio/Recibe, oh Dios (folclórico).html",
-      "tono": "DO"
+      "tono": "LA"
     },
     "Sabemos que vendrás": {
       "ruta": "Ofertorio/Sabemos que vendrás.html",
@@ -1752,7 +1756,7 @@ $(function(){
     },
     "Te haces presente en mí": {
       "ruta": "Ofertorio/Te haces presente en mí.html",
-      "tono": "DO"
+      "tono": "RE"
     },
     "Te ofrecemos con el vino y con el pan": {
       "ruta": "Ofertorio/Te ofrecemos con el vino y con el pan.html",
@@ -1768,15 +1772,15 @@ $(function(){
     },
     "Te presentamos el vino y el pan": {
       "ruta": "Ofertorio/Te presentamos el vino y el pan.html",
-      "tono": "DO"
+      "tono": "RE"
     },
     "Te presentamos la vida, Señor": {
       "ruta": "Ofertorio/Te presentamos la vida, Señor.html",
-      "tono": "DO"
+      "tono": "REm"
     },
     "Te presentamos la vida, Señor (con cambio de tono)": {
       "ruta": "Ofertorio/Te presentamos la vida, Señor (con cambio de tono).html",
-      "tono": "DO"
+      "tono": "REm"
     },
     "Todos los problemas": {
       "ruta": "Ofertorio/Todos los problemas.html",
@@ -1784,27 +1788,27 @@ $(function(){
     },
     "Toma": {
       "ruta": "Ofertorio/Toma.html",
-      "tono": "DO"
+      "tono": "LA"
     },
     "Toma mi mano hermano": {
       "ruta": "Ofertorio/Toma mi mano hermano.html",
-      "tono": "DO"
+      "tono": "REm"
     },
     "Tomad Señor y recibid": {
       "ruta": "Ofertorio/Tomad Señor y recibid.html",
-      "tono": "DO"
+      "tono": "RE"
     },
     "Un niño se te acercó": {
       "ruta": "Ofertorio/Un niño se te acercó.html",
-      "tono": "DO"
+      "tono": "LA"
     },
     "Una espiga": {
       "ruta": "Ofertorio/Una espiga.html",
-      "tono": "DO"
+      "tono": "MI"
     },
     "Yo soy el trigo": {
       "ruta": "Ofertorio/Yo soy el trigo.html",
-      "tono": "DO"
+      "tono": "SOL"
     }
   },
 
@@ -1813,7 +1817,7 @@ $(function(){
   Santo: {
     "Santo Cristóbal Fones": {
       "ruta": "Santo/Santo Cristóbal Fones.html",
-      "tono": "DO"
+      "tono": "LA"
     },
     "Santo DO (1)": {
       "ruta": "Santo/Santo DO (1).html",
@@ -1825,51 +1829,55 @@ $(function(){
     },
     "Santo Encuentro continental": {
       "ruta": "Santo/Santo Encuentro continental.html",
-      "tono": "DO"
+      "tono": "SOL"
     },
     "Santo folclórico": {
       "ruta": "Santo/Santo folclórico.html",
-      "tono": "DO"
+      "tono": "RE"
     },
     "Santo LAm": {
       "ruta": "Santo/Santo LAm.html",
-      "tono": "DO"
+      "tono": "LAm"
     },
     "Santo MI": {
       "ruta": "Santo/Santo MI.html",
-      "tono": "DO"
+      "tono": "MI"
     },
     "Santo M. Frisina": {
       "ruta": "Santo/Santo M. Frisina.html",
-      "tono": "DO"
+      "tono": "RE"
     },
     "Santo Misión País": {
       "ruta": "Santo/Santo Misión País.html",
-      "tono": "DO"
+      "tono": "LA"
     },
     "Santo Vicente Bianchi": {
       "ruta": "Santo/Santo Vicente Bianchi.html",
-      "tono": "DO"
+      "tono": "SOL"
+     }
     },
+
+
+  "Santo no litúrgico": {
     "Santo Betsaida": {
       "ruta": "Santo/Santo Betsaida.html",
-      "tono": "DO"
+      "tono": "RE"
     },
     "Santo MIm": {
       "ruta": "Santo/Santo MIm.html",
-      "tono": "DO"
+      "tono": "MIm"
     },
     "Santo Misa comunitaria": {
       "ruta": "Santo/Santo Misa comunitaria.html",
-      "tono": "DO"
+      "tono": "MI"
     },
     "Santo REm": {
       "ruta": "Santo/Santo REm.html",
-      "tono": "DO"
+      "tono": "REm"
     },
     "Santo Cielo y tierra pasarán": {
       "ruta": "Santo/Santo Cielo y tierra pasarán.html",
-      "tono": "DO"
+      "tono": "REm"
     },
     "Santo es el Señor, aleluya": {
       "ruta": "Santo/Santo es el Señor, aleluya.html",
@@ -1882,7 +1890,7 @@ $(function(){
   Padrenuestro: {
     "Padrenuestro 1 (SOL)": {
       "ruta": "Padrenuestro/Padrenuestro 1 (SOL).html",
-      "tono": "DO"
+      "tono": "SOL"
     },
     "Padrenuestro 2 (DO)": {
       "ruta": "Padrenuestro/Padrenuestro 2 (DO).html",
@@ -1894,23 +1902,26 @@ $(function(){
     },
     "Padrenuestro 4 (gregoriano español)": {
       "ruta": "Padrenuestro/Padrenuestro 4 (gregoriano español).html",
-      "tono": "DO"
+      "tono": "RE"
     },
     "Padrenuestro mapuche": {
       "ruta": "Padrenuestro/Padrenuestro mapuche.html",
-      "tono": "DO"
+      "tono": "MIm"
     },
     "Pater noster": {
       "ruta": "Padrenuestro/Pater noster.html",
-      "tono": "DO"
+      "tono": "RE"
+     }
     },
+
+    "Padrenuestro no litúrgico": {
     "Padrenuestro misionero": {
       "ruta": "Padrenuestro/Padrenuestro misionero.html",
-      "tono": "DO"
+      "tono": "SOL"
     },
     "Padre nuestro, Tú que estás": {
       "ruta": "Padrenuestro/Padre nuestro, Tú que estás.html",
-      "tono": "DO"
+      "tono": "LAm"
     }
   },
 
@@ -1927,23 +1938,23 @@ $(function(){
     },
     "Hemos venido aquí": {
       "ruta": "Paz/Hemos venido aquí.html",
-      "tono": "DO"
+      "tono": "LA"
     },
     "La paz esté con nosotros": {
       "ruta": "Paz/La paz esté con nosotros.html",
-      "tono": "DO"
+      "tono": "LAm"
     },
     "Mensajero de la paz": {
       "ruta": "Paz/Mensajero de la paz.html",
-      "tono": "DO"
+      "tono": "LAm"
     },
     "Paz en la tierra": {
       "ruta": "Paz/Paz en la tierra.html",
-      "tono": "DO"
+      "tono": "FA"
     },
     "Paz, paz, paz": {
       "ruta": "Paz/Paz, paz, paz.html",
-      "tono": "DO"
+      "tono": "SOL"
     },
     "Que haya paz": {
       "ruta": "Paz/Que haya paz.html",
@@ -1951,7 +1962,7 @@ $(function(){
     },
     "Señor, danos tu paz": {
       "ruta": "Paz/Señor, danos tu paz.html",
-      "tono": "DO"
+      "tono": "RE"
     },
     "Unidos": {
       "ruta": "Paz/Unidos.html",
@@ -1959,11 +1970,11 @@ $(function(){
     },
     "Ven, construyamos la paz": {
       "ruta": "Paz/Ven, construyamos la paz.html",
-      "tono": "DO"
+      "tono": "LA"
     },
     "Yo les doy mi paz": {
       "ruta": "Paz/Yo les doy mi paz.html",
-      "tono": "DO"
+      "tono": "REm"
     }
   },
 
@@ -1979,39 +1990,39 @@ $(function(){
     },
     "Cordero de Dios SIm": {
       "ruta": "Cordero/Cordero de Dios SIm.html",
-      "tono": "DO"
+      "tono": "SIm"
     },
     "Cordero de Dios SOL": {
       "ruta": "Cordero/Cordero de Dios SOL.html",
-      "tono": "DO"
+      "tono": "SOL"
     },
     "Cordero de Dios Dynamis": {
       "ruta": "Cordero/Cordero de Dios Dynamis.html",
-      "tono": "DO"
+      "tono": "REm"
     },
     "Cordero de Dios Betsaida": {
       "ruta": "Cordero/Cordero de Dios Betsaida.html",
-      "tono": "DO"
+      "tono": "RE"
     },
     "Cordero de Dios folclórico - Polka - (RE)": {
       "ruta": "Cordero/Cordero de Dios folclórico Polka.html",
-      "tono": "DO"
+      "tono": "RE"
     },
     "Cordero de Dios folclórico Raúl de Ramón (LAm)": {
       "ruta": "Cordero/Cordero de Dios folclórico Raúl de Ramón.html",
-      "tono": "DO"
+      "tono": "LAm"
     },
     "Cordero de Dios folclórico Vicente Bianchi (MIm)": {
       "ruta": "Cordero/Cordero de Dios folclórico Vicente Bianchi.html",
-      "tono": "DO"
+      "tono": "MIm"
     },
     "Cordero de Dios Tomás Aragüés": {
       "ruta": "Cordero/Cordero de Dios Tomás Aragüés.html",
-      "tono": "DO"
+      "tono": "RE"
     },
     "Dios de amor, el Cordero": {
       "ruta": "Cordero/Dios de amor, el Cordero.html",
-      "tono": "DO"
+      "tono": "SOL"
     },
     "Paz - Cordero Schöenstatt": {
       "ruta": "Cordero/Paz - Cordero Schöenstatt.html",
@@ -2024,39 +2035,39 @@ $(function(){
   Comunión: {
     "A todos doy": {
       "ruta": "Comunión/A todos doy.html",
-      "tono": "DO"
+      "tono": "LA"
     },
     "Abandónate": {
       "ruta": "Comunión/Abandónate.html",
-      "tono": "DO"
+      "tono": "FA#m"
     },
     "Adorando": {
       "ruta": "Comunión/Adorando.html",
-      "tono": "DO"
+      "tono": "LAm"
     },
     "Adoremos reverentes": {
       "ruta": "Comunión/Adoremos reverentes.html",
-      "tono": "DO"
+      "tono": "LAm"
     },
     "Al amor más sincero": {
       "ruta": "Comunión/Al amor más sincero.html",
-      "tono": "DO"
+      "tono": "MI"
     },
     "Aleluya a Cristo Rey": {
       "ruta": "Comunión/Aleluya a Cristo Rey.html",
-      "tono": "DO"
+      "tono": "REm"
     },
     "Aleluya por esa gente": {
       "ruta": "Comunión/Aleluya por esa gente.html",
-      "tono": "DO"
+      "tono": "MI"
     },
     "Alma de Cristo": {
       "ruta": "Comunión/Alma de Cristo.html",
-      "tono": "DO"
+      "tono": "RE"
     },
     "Alma misionera": {
       "ruta": "Comunión/Alma misionera.html",
-      "tono": "DO"
+      "tono": "MI"
     },
     "Amaos": {
       "ruta": "Comunión/Amaos.html",
@@ -2064,43 +2075,43 @@ $(function(){
     },
     "Amar es entregarse": {
       "ruta": "Comunión/Amar es entregarse.html",
-      "tono": "DO"
+      "tono": "MI"
     },
     "Amar sin descanso": {
       "ruta": "Comunión/Amar sin descanso.html",
-      "tono": "DO"
+      "tono": "FA"
     },
     "Amarte a Ti, Señor": {
       "ruta": "Comunión/Amarte a Ti, Señor.html",
-      "tono": "DO"
+      "tono": "RE"
     },
     "Amigo de publicanos": {
       "ruta": "Comunión/Amigo de publicanos.html",
-      "tono": "DO"
+      "tono": "MIm"
     },
     "Ante Ti, Señor": {
       "ruta": "Comunión/Ante Ti, Señor.html",
-      "tono": "DO"
+      "tono": "RE"
     },
     "Anunciaremos tu Reino, Señor": {
       "ruta": "Comunión/Anunciaremos tu Reino, Señor.html",
-      "tono": "DO"
+      "tono": "MIm"
     },
     "Aquí hay un muchacho": {
       "ruta": "Comunión/Aquí hay un muchacho.html",
-      "tono": "DO"
+      "tono": "LA"
     },
     "Aún en la tormenta": {
       "ruta": "Comunión/Aún en la tormenta.html",
-      "tono": "DO"
+      "tono": "MI"
     },
     "Bienaventurados": {
       "ruta": "Comunión/Bienaventurados.html",
-      "tono": "DO"
+      "tono": "RE"
     },
     "Bienaventurados los misericordiosos": {
       "ruta": "Comunión/Bienaventurados los misericordiosos.html",
-      "tono": "DO"
+      "tono": "DO#m"
     },
     "Buen Pastor": {
       "ruta": "Comunión/Buen Pastor.html",
@@ -2108,55 +2119,55 @@ $(function(){
     },
     "Camino de la cruz": {
       "ruta": "Comunión/Camino de la cruz.html",
-      "tono": "DO"
+      "tono": "LA"
     },
     "Canción al Corazón de Jesús": {
       "ruta": "Comunión/Canción al Corazón de Jesús.html",
-      "tono": "DO"
+      "tono": "RE"
     },
     "Canción de la alianza": {
       "ruta": "Comunión/Canción de la alianza.html",
-      "tono": "DO"
+      "tono": "SOL"
     },
     "Canción de San Francisco Javier": {
       "ruta": "Comunión/Canción de San Francisco Javier.html",
-      "tono": "DO"
+      "tono": "LA"
     },
     "Canción de Zaqueo": {
       "ruta": "Comunión/Canción de Zaqueo.html",
-      "tono": "DO"
+      "tono": "SOL"
     },
     "Cantando voy feliz": {
       "ruta": "Comunión/Cantando voy feliz.html",
-      "tono": "DO"
+      "tono": "LAm"
     },
     "Cantaré por siempre": {
       "ruta": "Comunión/Cantaré por siempre.html",
-      "tono": "DO"
+      "tono": "RE"
     },
     "Cantaré por siempre (abreviado)": {
       "ruta": "Comunión/Cantaré por siempre (abreviado).html",
-      "tono": "DO"
+      "tono": "RE"
     },
     "Cantemos al amor de los amores": {
       "ruta": "Comunión/Cantemos al amor de los amores.html",
-      "tono": "DO"
+      "tono": "RE"
     },
     "Cantemos a la vida": {
       "ruta": "Comunión/Cantemos a la vida.html",
-      "tono": "DO"
+      "tono": "LAm"
     },
     "Cántico de la creación": {
       "ruta": "Comunión/Cántico de la creación.html",
-      "tono": "DO"
+      "tono": "LA"
     },
     "Canto de victoria": {
       "ruta": "Comunión/Canto de victoria.html",
-      "tono": "DO"
+      "tono": "RE"
     },
     "Caridad y comprensión": {
       "ruta": "Comunión/Caridad y comprensión.html",
-      "tono": "DO"
+      "tono": "RE"
     },
     "Cien ovejas": {
       "ruta": "Comunión/Cien ovejas.html",
@@ -2164,11 +2175,11 @@ $(function(){
     },
     "Clavado en la cruz": {
       "ruta": "Comunión/Clavado en la cruz.html",
-      "tono": "DO"
+      "tono": "RE"
     },
     "Come este pan, bebe este cáliz": {
       "ruta": "Comunión/Come este pan, bebe este cáliz.html",
-      "tono": "DO"
+      "tono": "SOL"
     },
     "Como en Caná": {
       "ruta": "Comunión/Como en Caná.html",
@@ -2180,11 +2191,11 @@ $(function(){
     },
     "Cómo quisiera": {
       "ruta": "Comunión/Cómo quisiera.html",
-      "tono": "DO"
+      "tono": "SOL"
     },
     "Comunión": {
       "ruta": "Comunión/Comunión.html",
-      "tono": "DO"
+      "tono": "FA"
     },
     "Con alma de niño": {
       "ruta": "Comunión/Con alma de niño.html",
@@ -2196,7 +2207,7 @@ $(function(){
     },
     "Consagrados a Ti": {
       "ruta": "Comunión/Consagrados a Ti.html",
-      "tono": "DO"
+      "tono": "LA"
     },
     "Consolad a mi pueblo": {
       "ruta": "Comunión/Consolad a mi pueblo.html",
@@ -2204,7 +2215,7 @@ $(function(){
     },
     "Construyamos la historia": {
       "ruta": "Comunión/Construyamos la historia.html",
-      "tono": "DO"
+      "tono": "RE"
     },
     "Creo en Jesús": {
       "ruta": "Comunión/Creo en Jesús.html",
@@ -2212,7 +2223,7 @@ $(function(){
     },
     "Creo en Ti, te lo vuelvo a decir": {
       "ruta": "Comunión/Creo en Ti, te lo vuelvo a decir.html",
-      "tono": "DO"
+      "tono": "SOL"
     },
     "Creo en Ti": {
       "ruta": "Comunión/Creo en Ti.html",
@@ -2224,27 +2235,27 @@ $(function(){
     },
     "Cristo ayer, Cristo hoy": {
       "ruta": "Comunión/Cristo ayer, Cristo hoy.html",
-      "tono": "DO"
+      "tono": "LA"
     },
     "Cristo está conmigo": {
       "ruta": "Comunión/Cristo está conmigo.html",
-      "tono": "DO"
+      "tono": "SOL"
     },
     "Cristo te necesita": {
       "ruta": "Comunión/Cristo te necesita.html",
-      "tono": "DO"
+      "tono": "SIm"
     },
     "Cristos jóvenes": {
       "ruta": "Comunión/Cristos jóvenes.html",
-      "tono": "DO"
+      "tono": "LA"
     },
     "Cruz de amor": {
       "ruta": "Comunión/Cruz de amor.html",
-      "tono": "DO"
+      "tono": "LAm"
     },
     "Cuando los ángeles cantan gloria": {
       "ruta": "Comunión/Cuando los ángeles cantan gloria.html",
-      "tono": "DO"
+      "tono": "RE"
     },
     "Déjate": {
       "ruta": "Comunión/Déjate.html",
@@ -2252,31 +2263,31 @@ $(function(){
     },
     "Den gloria a Dios": {
       "ruta": "Comunión/Den gloria a Dios.html",
-      "tono": "DO"
+      "tono": "SOL"
     },
     "Denles ustedes de comer": {
       "ruta": "Comunión/Denles ustedes de comer.html",
-      "tono": "DO"
+      "tono": "REm"
     },
     "Dentro de ti": {
       "ruta": "Comunión/Dentro de ti.html",
-      "tono": "DO"
+      "tono": "RE"
     },
     "Descansaré": {
       "ruta": "Comunión/Descansaré.html",
-      "tono": "DO"
+      "tono": "SOL"
     },
     "Día y noche": {
       "ruta": "Comunión/Día y noche.html",
-      "tono": "DO"
+      "tono": "RE"
     },
     "Digno de recibirte": {
       "ruta": "Comunión/Digno de recibirte.html",
-      "tono": "DO"
+      "tono": "SOL"
     },
     "Dios de amor": {
       "ruta": "Comunión/Dios de amor.html",
-      "tono": "DO"
+      "tono": "LA"
     },
     "Dios te espera en el altar": {
       "ruta": "Comunión/Dios te espera en el altar.html",
@@ -2284,7 +2295,7 @@ $(function(){
     },
     "Dios te llama": {
       "ruta": "Comunión/Dios te llama.html",
-      "tono": "DO"
+      "tono": "SOL"
     },
     "Dura cadena": {
       "ruta": "Comunión/Dura cadena.html",
@@ -2292,7 +2303,7 @@ $(function(){
     },
     "El amor de Cristo nos reúne": {
       "ruta": "Comunión/El amor de Cristo nos reúne.html",
-      "tono": "DO"
+      "tono": "MI"
     },
     "El apóstol": {
       "ruta": "Comunión/El apóstol.html",
@@ -2304,35 +2315,35 @@ $(function(){
     },
     "El canto del mar": {
       "ruta": "Comunión/El canto del mar.html",
-      "tono": "DO"
+      "tono": "REm"
     },
     "El cazador": {
       "ruta": "Comunión/El cazador.html",
-      "tono": "DO"
+      "tono": "MI"
     },
     "El crucifijo": {
       "ruta": "Comunión/El crucifijo.html",
-      "tono": "DO"
+      "tono": "RE"
     },
     "El huerto": {
       "ruta": "Comunión/El huerto.html",
-      "tono": "DO"
+      "tono": "SOL"
     },
     "El llamado": {
       "ruta": "Comunión/El llamado.html",
-      "tono": "DO"
+      "tono": "LAm"
     },
     "El pan sabroso": {
       "ruta": "Comunión/El pan sabroso.html",
-      "tono": "DO"
+      "tono": "RE"
     },
     "El proceso": {
       "ruta": "Comunión/El proceso.html",
-      "tono": "DO"
+      "tono": "LAm"
     },
     "El profeta": {
       "ruta": "Comunión/El profeta.html",
-      "tono": "DO"
+      "tono": "LAm"
     },
     "El que muere por mí": {
       "ruta": "Comunión/El que muere por mí.html",
@@ -2340,7 +2351,7 @@ $(function(){
     },
     "El Señor es mi fuerza": {
       "ruta": "Comunión/El Señor es mi fuerza.html",
-      "tono": "DO"
+      "tono": "REm"
     },
     "El Señor nos ha amado": {
       "ruta": "Comunión/El Señor nos ha amado.html",
@@ -2348,31 +2359,31 @@ $(function(){
     },
     "El sermón del monte": {
       "ruta": "Comunión/El sermón del monte.html",
-      "tono": "DO"
+      "tono": "LA"
     },
     "El testigo": {
       "ruta": "Comunión/El testigo.html",
-      "tono": "DO"
+      "tono": "SOL"
     },
     "El Verbo se hizo carne": {
       "ruta": "Comunión/El Verbo se hizo carne.html",
-      "tono": "DO"
+      "tono": "RE"
     },
     "En mi Getsemaní": {
       "ruta": "Comunión/En mi Getsemaní.html",
-      "tono": "DO"
+      "tono": "RE"
     },
     "En Ti, en Ti": {
       "ruta": "Comunión/En Ti, en Ti.html",
-      "tono": "DO"
+      "tono": "RE"
     },
     "En tu misericordia": {
       "ruta": "Comunión/En tu misericordia.html",
-      "tono": "DO"
+      "tono": "RE"
     },
     "En tu nombre echaré las redes": {
       "ruta": "Comunión/En tu nombre echaré las redes.html",
-      "tono": "DO"
+      "tono": "LAm"
     },
     "En tus manos, Señor": {
       "ruta": "Comunión/En tus manos, Señor.html",
@@ -2380,43 +2391,43 @@ $(function(){
     },
     "Escúchame Dios": {
       "ruta": "Comunión/Escúchame Dios.html",
-      "tono": "DO"
+      "tono": "SOL"
     },
     "Es el Señor": {
       "ruta": "Comunión/Es el Señor.html",
-      "tono": "DO"
+      "tono": "RE"
     },
     "Es imposible no creer en Ti": {
       "ruta": "Comunión/Es imposible no creer en Ti.html",
-      "tono": "DO"
+      "tono": "LAm"
     },
     "Estás dentro de mí": {
       "ruta": "Comunión/Estás dentro de mí.html",
-      "tono": "DO"
+      "tono": "LA"
     },
     "Esto que soy, eso te doy": {
       "ruta": "Comunión/Esto que soy, eso te doy.html",
-      "tono": "DO"
+      "tono": "SOL"
     },
     "Estoy pensando en Dios": {
       "ruta": "Comunión/Estoy pensando en Dios.html",
-      "tono": "DO"
+      "tono": "RE"
     },
     "Eternamente paz": {
       "ruta": "Comunión/Eternamente paz.html",
-      "tono": "DO"
+      "tono": "RE"
     },
     "Eterno Señor": {
       "ruta": "Comunión/Eterno Señor.html",
-      "tono": "DO"
+      "tono": "LA"
     },
     "Evangelio es decir amigo": {
       "ruta": "Comunión/Evangelio es decir amigo.html",
-      "tono": "DO"
+      "tono": "FA"
     },
     "Felices": {
       "ruta": "Comunión/Felices.html",
-      "tono": "DO"
+      "tono": "RE"
     },
     "Felices hombres del Señor": {
       "ruta": "Comunión/Felices hombres del Señor.html",
@@ -2424,35 +2435,35 @@ $(function(){
     },
     "Frente a Ti, oh Jesús": {
       "ruta": "Comunión/Frente a Ti, oh Jesús.html",
-      "tono": "DO"
+      "tono": "DO#m"
     },
     "Fuego": {
       "ruta": "Comunión/Fuego.html",
-      "tono": "DO"
+      "tono": "RE"
     },
     "Fue por ti": {
       "ruta": "Comunión/Fue por ti.html",
-      "tono": "DO"
+      "tono": "LA"
     },
     "Gozo de amor": {
       "ruta": "Comunión/Gozo de amor.html",
-      "tono": "DO"
+      "tono": "RE"
     },
     "Gracias": {
       "ruta": "Comunión/Gracias.html",
-      "tono": "DO"
+      "tono": "LA"
     },
     "Gracias a Dios": {
       "ruta": "Comunión/Gracias a Dios.html",
-      "tono": "DO"
+      "tono": "RE"
     },
     "Haces nuevas todas las cosas": {
       "ruta": "Comunión/Haces nuevas todas las cosas.html",
-      "tono": "DO"
+      "tono": "SOL"
     },
     "Hagan esto en memoria mía": {
       "ruta": "Comunión/Hagan esto en memoria mía.html",
-      "tono": "DO"
+      "tono": "SOL"
     },
     "Hambre de Dios": {
       "ruta": "Comunión/Hambre de Dios.html",
@@ -2460,11 +2471,11 @@ $(function(){
     },
     "Ha venido el Señor": {
       "ruta": "Comunión/Ha venido el Señor.html",
-      "tono": "DO"
+      "tono": "RE"
     },
     "Hay que construir la vida": {
       "ruta": "Comunión/Hay que construir la vida.html",
-      "tono": "DO"
+      "tono": "REm"
     },
     "Hay una luz": {
       "ruta": "Comunión/Hay una luz.html",
@@ -2472,7 +2483,7 @@ $(function(){
     },
     "He decidido seguir a Cristo": {
       "ruta": "Comunión/He decidido seguir a Cristo.html",
-      "tono": "DO"
+      "tono": "LA"
     },
     "Heme aquí": {
       "ruta": "Comunión/Heme aquí.html",
@@ -2484,7 +2495,7 @@ $(function(){
     },
     "He pensado": {
       "ruta": "Comunión/He pensado.html",
-      "tono": "DO"
+      "tono": "RE"
     },
     "Hijo pródigo": {
       "ruta": "Comunión/Hijo pródigo.html",
@@ -2492,35 +2503,35 @@ $(function(){
     },
     "Hombres nuevos (danos un corazón)": {
       "ruta": "Comunión/Hombres nuevos (danos un corazón).html",
-      "tono": "DO"
+      "tono": "LAm"
     },
     "Huayno al Sagrado Corazón": {
       "ruta": "Comunión/Huayno al Sagrado Corazón.html",
-      "tono": "DO"
+      "tono": "LAm"
     },
     "Id amigos": {
       "ruta": "Comunión/Id amigos.html",
-      "tono": "DO"
+      "tono": "LA"
     },
     "Isaías": {
       "ruta": "Comunión/Isaías.html",
-      "tono": "DO"
+      "tono": "RE"
     },
     "Jesucristo": {
       "ruta": "Comunión/Jesucristo.html",
-      "tono": "DO"
+      "tono": "SIm"
     },
     "Jesús (testimonio)": {
       "ruta": "Comunión/Jesús (testimonio).html",
-      "tono": "DO"
+      "tono": "SIm"
     },
     "Jesús amigo": {
       "ruta": "Comunión/Jesús amigo.html",
-      "tono": "DO"
+      "tono": "LAm"
     },
     "Jesús, el carpintero": {
       "ruta": "Comunión/Jesús, el carpintero.html",
-      "tono": "DO"
+      "tono": "SIm"
     },
     "Jesús, estoy aquí": {
       "ruta": "Comunión/Jesús, estoy aquí.html",
@@ -2528,7 +2539,7 @@ $(function(){
     },
     "Jesús Eucaristía": {
       "ruta": "Comunión/Jesús Eucaristía.html",
-      "tono": "DO"
+      "tono": "LA"
     },
     "Jesús, Jesús, Jesús": {
       "ruta": "Comunión/Jesús, Jesús, Jesús.html",
@@ -2544,27 +2555,27 @@ $(function(){
     },
     "Junto a la cruz": {
       "ruta": "Comunión/Junto a la cruz.html",
-      "tono": "DO"
+      "tono": "LA"
     },
     "Junto a Ti al caer de la tarde": {
       "ruta": "Comunión/Junto a Ti al caer de la tarde.html",
-      "tono": "DO"
+      "tono": "RE"
     },
     "La fiesta del Señor": {
       "ruta": "Comunión/La fiesta del Señor.html",
-      "tono": "DO"
+      "tono": "RE"
     },
     "La oración": {
       "ruta": "Comunión/La oración.html",
-      "tono": "DO"
+      "tono": "LAm"
     },
     "La samaritana": {
       "ruta": "Comunión/La samaritana.html",
-      "tono": "DO"
+      "tono": "SIm"
     },
     "Locos para Cristo": {
       "ruta": "Comunión/Locos para Cristo.html",
-      "tono": "DO"
+      "tono": "SOL"
     },
     "Los pasos de Jesús": {
       "ruta": "Comunión/Los pasos de Jesús.html",
@@ -2572,27 +2583,27 @@ $(function(){
     },
     "Maestro bueno": {
       "ruta": "Comunión/Maestro bueno.html",
-      "tono": "DO"
+      "tono": "SIm"
     },
     "Mar adentro": {
       "ruta": "Comunión/Mar adentro.html",
-      "tono": "DO"
+      "tono": "RE"
     },
     "Maranathá": {
       "ruta": "Comunión/Maranathá.html",
-      "tono": "DO"
+      "tono": "SOL"
     },
     "Más cerca, Oh Dios, de Ti": {
       "ruta": "Comunión/Más cerca, Oh Dios, de Ti.html",
-      "tono": "DO"
+      "tono": "RE"
     },
     "Mensajero de la paz": {
       "ruta": "Comunión/Mensajero de la paz.html",
-      "tono": "DO"
+      "tono": "LAm"
     },
     "Me tocaste, Jesús": {
       "ruta": "Comunión/Me tocaste, Jesús.html",
-      "tono": "DO"
+      "tono": "SOL"
     },
     "Mi Buen Pastor": {
       "ruta": "Comunión/Mi Buen Pastor.html",
@@ -2600,7 +2611,7 @@ $(function(){
     },
     "Milagro de amor": {
       "ruta": "Comunión/Milagro de amor.html",
-      "tono": "DO"
+      "tono": "SOL"
     },
     "Mirad al Señor": {
       "ruta": "Comunión/Mirad al Señor.html",
@@ -2616,11 +2627,11 @@ $(function(){
     },
     "Ningún camino": {
       "ruta": "Comunión/Ningún camino.html",
-      "tono": "DO"
+      "tono": "REm"
     },
     "No me mueve": {
       "ruta": "Comunión/No me mueve.html",
-      "tono": "DO"
+      "tono": "REm"
     },
     "No sabía": {
       "ruta": "Comunión/No sabía.html",
@@ -2628,7 +2639,7 @@ $(function(){
     },
     "No somos dignos": {
       "ruta": "Comunión/No somos dignos.html",
-      "tono": "DO"
+      "tono": "REm"
     },
     "Oh Cristo, Tú reinarás": {
       "ruta": "Comunión/Oh Cristo, Tú reinarás.html",
@@ -2636,7 +2647,7 @@ $(function(){
     },
     "Oh, Sagrado Corazón": {
       "ruta": "Comunión/Oh, Sagrado Corazón.html",
-      "tono": "DO"
+      "tono": "SOL"
     },
     "Oración": {
       "ruta": "Comunión/Oración.html",
@@ -2644,27 +2655,27 @@ $(function(){
     },
     "Oración al Cristo del Calvario": {
       "ruta": "Comunión/Oración al Cristo del Calvario.html",
-      "tono": "DO"
+      "tono": "MIm"
     },
     "Oración de unidad": {
       "ruta": "Comunión/Oración de unidad.html",
-      "tono": "DO"
+      "tono": "RE"
     },
     "Padre amado": {
       "ruta": "Comunión/Padre amado.html",
-      "tono": "DO"
+      "tono": "LA"
     },
     "Padre amerindio": {
       "ruta": "Comunión/Padre amerindio.html",
-      "tono": "DO"
+      "tono": "SOL"
     },
     "Padre, vuelvo a Ti": {
       "ruta": "Comunión/Padre, vuelvo a Ti.html",
-      "tono": "DO"
+      "tono": "RE"
     },
     "Pan de vida": {
       "ruta": "Comunión/Pan de vida.html",
-      "tono": "DO"
+      "tono": "RE"
     },
     "Pan verdadero": {
       "ruta": "Comunión/Pan verdadero.html",
@@ -2676,7 +2687,7 @@ $(function(){
     },
     "Para llegar al cielo": {
       "ruta": "Comunión/Para llegar al cielo.html",
-      "tono": "DO"
+      "tono": "RE"
     },
     "Para que sigas aquí": {
       "ruta": "Comunión/Para que sigas aquí.html",
@@ -2688,15 +2699,15 @@ $(function(){
     },
     "Peregrino de Emaús": {
       "ruta": "Comunión/Peregrino de Emaús.html",
-      "tono": "DO"
+      "tono": "LAm"
     },
     "Pescador": {
       "ruta": "Comunión/Pescador.html",
-      "tono": "DO"
+      "tono": "LAm"
     },
     "Pescador (corazón infinito)": {
       "ruta": "Comunión/Pescador (corazón infinito).html",
-      "tono": "DO"
+      "tono": "RE"
     },
     "Pescador de hombres": {
       "ruta": "Comunión/Pescador de hombres.html",
@@ -2704,46 +2715,46 @@ $(function(){
     },
     "Plegaria simple": {
       "ruta": "Comunión/Plegaria simple.html",
-      "tono": "DO"
+      "tono": "LA"
     },
     "Pregón Pascual (Cristóbal Fones)": {
       "ruta": "Comunión/Pregón Pascual (Cristóbal Fones).html",
-      "tono": "DO"
+      "tono": "RE"
     },
     "Prepáranos, Señor": {
       "ruta": "Comunión/Prepáranos, Señor.html",
-      "tono": "DO"
+      "tono": "MI"
     },
     "Presente, vivo y real": {
       "ruta": "Comunión/Presente, vivo y real.html",
-      "tono": "DO"
+      "tono": "MIm"
     },
     "Quédate conmigo": {
       "ruta": "Comunión/Quédate conmigo.html",
-      "tono": "DO"
+      "tono": "RE"
+    },
+    "Quédate con nosotros (Jesed)": {
+      "ruta": "Comunión/Quédate con nosotros (Jesed).html",
+      "tono": "MIM"
+    },
+    "Quédate con nosotros (Romina González)": {
+      "ruta": "Comunión/Quédate con nosotros (Romina González).html",
+      "tono": "MIm"
+    },
+    "Que tu palabra nos cambie el corazón": {
+      "ruta": "Comunión/Que tu palabra nos cambie el corazón.html",
+      "tono": "LA"
     },
     "¿Quién es el que vieron pasar?": {
       "ruta": "Comunión/Quién es el que vieron pasar.html",
       "tono": "DO"
     },
-    "Quédate con nosotros (Jesed)": {
-      "ruta": "Comunión/Quédate con nosotros (Jesed).html",
-      "tono": "DO"
-    },
-    "Quédate con nosotros (Romina González)": {
-      "ruta": "Comunión/Quédate con nosotros (Romina González).html",
-      "tono": "DO"
-    },
-    "Que tu palabra nos cambie el corazón": {
-      "ruta": "Comunión/Que tu palabra nos cambie el corazón.html",
+    "¿Quién podrá apartarnos de su amor?": {
+      "ruta": "Comunión/Quién podrá apartarnos de su amor.html",
       "tono": "DO"
     },
     "Quiero ser tu amigo, Jesucristo": {
       "ruta": "Comunión/Quiero ser tu amigo, Jesucristo.html",
-      "tono": "DO"
-    },
-    "¿Quién podrá apartarnos de su amor?": {
-      "ruta": "Comunión/Quién podrá apartarnos de su amor.html",
       "tono": "DO"
     },
     "Recíbeme": {
@@ -4297,7 +4308,14 @@ $(function(){
       });
     }
 
-
+    /* --- Limpiar programa --- */
+    document.getElementById("limpiar-programa").addEventListener("click", () => {
+       {
+        programa = [];
+        guardarPrograma();
+        mostrarPrograma();
+      }
+    });
 
 /* --- Compartir programa (genera URL con tonos) --- */
 document.getElementById("compartir-programa").addEventListener("click", () => {

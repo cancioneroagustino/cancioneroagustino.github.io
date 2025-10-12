@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-YES9XTRYX6"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-YES9XTRYX6');
+  </script>
+  <meta charset="utf-8">
+  <title>Programa de misa - Cancionero Católico</title>
+  <meta name="robots" content="noindex">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, minimum-scale=1.0">
+  <link rel="canonical" href="https://www.cancionerocatolico.cl/programa-full.html">
+  <link rel="stylesheet" type="text/css" href="css/cancionero.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+</head>
+
+<body>
+  <div id="nav-placeholder"></div>
+  <script>
+    $(function(){
+      $("#nav-placeholder").load("navbar.html");
+    });
+  </script> 
+
+  <div class="navigation-buttons">
+    <button id="anterior" class="btn btn-outline-primary">Anterior</button>
+    <button id="siguiente" class="btn btn-outline-primary">Siguiente</button>
+  </div>
+
+  <div id="programa-container"></div>
+
+  <script>
+    const programa = JSON.parse(localStorage.getItem('programaMisa'));
+    if (!programa) {
+      alert('No hay un programa de misa guardado.');
+      window.location.href = 'crear-programa.html';
+    }
+
+    const canciones = programa.map(item => item.cancion);
+    let currentIndex = 0;
+
+    async function cargarCancion(ruta) {
+      try {
+        console.log(`Cargando canción desde: ${ruta}`);
+        const response = await fetch(ruta);
+        if (!response.ok) {
+          throw new Error('Error al cargar la canción');
+        }
+        const contenido = await response.text();
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(contenido, 'text/html');
+        const bodyContent = doc.querySelector('body').innerHTML;
+
+        // Crear un contenedor temporal para manipular el contenido
+        const tempContainer = document.createElement('div');
+        tempContainer.innerHTML = bodyContent;
+
+        // Eliminar el navbar si está presente
+        const navbar = tempContainer.querySelector('#nav-placeholder');
+        if (navbar) {
+          navbar.remove();
+        }
+
+        document.getElementById('programa-container').innerHTML = tempContainer.innerHTML;
+
+        // Ajustar rutas de los scripts y ejecutarlos
+        const scripts = tempContainer.querySelectorAll('script');
+        scripts.forEach(script => {
+          const newScript = document.createElement('script');
+          if (script.src) {
+            // Ajustar la ruta del script
+            let src = script.src;
+            if (src.startsWith('../')) {
+              src = src.replace('../', '/');  // Ajustar esto según tu estructura de archivos
+            }
+            newScript.src = src;
+            newScript.onload = () => {
+              console.log(`Script loaded: ${newScript.src}`);
+              if (script.textContent) {
+                console.log(`Executing inline script from: ${newScript.src}`);
+                eval(script.textContent);
+              }
+            };
+            newScript.onerror = () => {
+              console.error(`Failed to load script: ${newScript.src}`);
+            };
+          } else {
+            newScript.textContent = script.textContent;
+            console.log('Executing inline script');
+          }
+          document.body.appendChild(newScript);
+        });
+
+        // Verificar si la función transpose está disponible
+        if (typeof $.fn.transpose === 'function') {
+          console.log('La función transpose está disponible.');
+        } else {
+          console.error('La función transpose no está disponible.');
+        }
+
+      } catch (error) {
+        console.error('Error:', error);
+        document.getElementById('programa-container').innerHTML = '<p>Error al cargar la canción. Inténtalo de nuevo más tarde.</p>';
+      }
+    }
+
+    function mostrarCancion(index) {
+      cargarCancion(canciones[index]);
+    }
+
+    document.getElementById('anterior').addEventListener('click', function() {
+      if (currentIndex > 0) {
+        currentIndex--;
+        mostrarCancion(currentIndex);
+      }
+    });
+
+    document.getElementById('siguiente').addEventListener('click', function() {
+      if (currentIndex < canciones.length - 1) {
+        currentIndex++;
+        mostrarCancion(currentIndex);
+      }
+    });
+
+    // Mostrar la primera canción al cargar la página
+    mostrarCancion(currentIndex);
+  </script>
+</body>
+</html>

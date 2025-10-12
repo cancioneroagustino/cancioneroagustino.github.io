@@ -238,7 +238,7 @@
       });
 
       var $this = $(this);
-      var keysHtml = $("<div class='transpose-keys col-8 justify-content-md-center'></div>");
+      var keysHtml = $("<div class='transpose-keys justify-content-md-center'></div>");
       keysHtml.html(keyLinks.join(""));
       $("a", keysHtml).click(function(e) {
           e.preventDefault();

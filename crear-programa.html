@@ -4166,7 +4166,7 @@ $(function(){
 };
 
 
-    let programa = JSON.parse(localStorage.getItem("programaMisa")) || [];
+let programa = JSON.parse(localStorage.getItem("programaMisa")) || [];
 
     /* --- Poblar el select de secciones --- */
     const seccionSelect = document.getElementById("seccion-select");
@@ -4175,7 +4175,6 @@ $(function(){
       option.value = seccion;
       option.textContent = seccion;
       seccionSelect.appendChild(option);
-      seccionSelect.dispatchEvent(new Event("change"));
     }
 
     /* --- Actualizar canciones según sección --- */
@@ -4233,9 +4232,6 @@ $(function(){
         li.classList.add("programa-item");
         li.textContent = `${item.seccion}: ${item.nombre} `;
 
-       const buttonGroup = document.createElement('div');
-        buttonGroup.className = 'd-inline-flex justify-content-end btn-group';
-
         // Control de tono
         const contTono = document.createElement("span");
         contTono.classList.add("control-tono");
@@ -4265,12 +4261,11 @@ $(function(){
         contTono.appendChild(btnDown);
         contTono.appendChild(spanTono);
         contTono.appendChild(btnUp);
-        buttonGroup.appendChild(contTono);
+        li.appendChild(contTono);
 
         // Botones mover y eliminar
         const btnSubir = document.createElement("button");
         btnSubir.textContent = "↑";
-        btnSubir.className = 'btn btn-outline-info btn-sm';
         btnSubir.onclick = () => {
           if (index > 0) {
             [programa[index - 1], programa[index]] = [programa[index], programa[index - 1]];
@@ -4278,11 +4273,10 @@ $(function(){
             guardarPrograma();
           }
         };
-        buttonGroup.appendChild(btnSubir);
+        li.appendChild(btnSubir);
 
         const btnBajar = document.createElement("button");
         btnBajar.textContent = "↓";
-        btnBajar.className = 'btn btn-outline-info btn-sm';
         btnBajar.onclick = () => {
           if (index < programa.length - 1) {
             [programa[index + 1], programa[index]] = [programa[index], programa[index + 1]];
@@ -4290,63 +4284,60 @@ $(function(){
             guardarPrograma();
           }
         };
-        buttonGroup.appendChild(btnBajar);
+        li.appendChild(btnBajar);
 
         const btnEliminar = document.createElement("button");
         btnEliminar.textContent = "✕";
-        btnEliminar.className = 'btn btn-outline-danger btn-sm';
         btnEliminar.onclick = () => {
           programa.splice(index, 1);
           mostrarPrograma();
           guardarPrograma();
         };
-        buttonGroup.appendChild(btnEliminar);
+        li.appendChild(btnEliminar);
 
-        li.appendChild(buttonGroup);
         lista.appendChild(li);
       });
     }
 
     /* --- Limpiar programa --- */
     document.getElementById("limpiar-programa").addEventListener("click", () => {
-       {
+      if (confirm("¿Seguro que deseas borrar todo el programa?")) {
         programa = [];
         guardarPrograma();
         mostrarPrograma();
       }
     });
 
-/* --- Compartir programa (genera URL con tonos) --- */
-document.getElementById("compartir-programa").addEventListener("click", () => {
-  const params = programa.map(item =>
-    `${encodeURIComponent(item.seccion)}=${encodeURIComponent(item.nombre)}|${encodeURIComponent(item.tono)}`
-  ).join("&");
-  const url = `${window.location.origin}${window.location.pathname}?${params}`;
-  navigator.clipboard.writeText(url);
-  alert("Enlace copiado al portapapeles:\n\n" + url);
-});
+    /* --- Compartir programa (genera URL) --- */
+    document.getElementById("compartir-programa").addEventListener("click", () => {
+      const params = programa.map(item =>
+        `${encodeURIComponent(item.seccion)}=${encodeURIComponent(item.nombre)}`
+      ).join("&");
+      const url = `${window.location.origin}${window.location.pathname}?${params}`;
+      navigator.clipboard.writeText(url);
+      alert("Enlace copiado al portapapeles:\n\n" + url);
+    });
 
-/* --- Cargar programa desde URL (con tono incluido) --- */
-function cargarProgramaDesdeURL() {
-  const params = new URLSearchParams(window.location.search);
-  if ([...params].length === 0) return;
+    /* --- Cargar programa desde URL --- */
+    function cargarProgramaDesdeURL() {
+      const params = new URLSearchParams(window.location.search);
+      if ([...params].length === 0) return;
 
-  programa = [];
-  for (const [seccion, valor] of params.entries()) {
-    const [nombre, tono] = valor.split("|");
-    if (canciones[seccion] && canciones[seccion][nombre]) {
-      const datos = canciones[seccion][nombre];
-      programa.push({
-        seccion: seccion,
-        nombre: nombre,
-        cancion: datos.ruta,
-        tono: tono || datos.tono   // usa el del enlace o el por defecto
-      });
+      programa = [];
+      for (const [seccion, nombre] of params.entries()) {
+        if (canciones[seccion] && canciones[seccion][nombre]) {
+          const datos = canciones[seccion][nombre];
+          programa.push({
+            seccion: seccion,
+            nombre: nombre,
+            cancion: datos.ruta,
+            tono: datos.tono
+          });
+        }
+      }
+      guardarPrograma();
+      mostrarPrograma();
     }
-  }
-  guardarPrograma();
-  mostrarPrograma();
-}
 
     /* --- Botones de salida --- */
     document.getElementById("programa-full").addEventListener("click", () => {
@@ -4362,45 +4353,14 @@ function cargarProgramaDesdeURL() {
       window.location.href = "programa-texto.html";
     });
 
-
-        // --- Auto redirección a programa-texto si se pide ?autoTexto=1 ---
-  window.addEventListener('load', function(){
-  if (window.location.hash === '#autoTexto=1') {
-    // Espera un instante para que se cargue el programa desde la URL
-    setTimeout(() => {
-      document.getElementById('programa-texto').click();
-    }, 50); // 800 ms suele ser suficiente;
-  }
-});
-
-/* --- Inicialización robusta --- */
-function intentarCargarPrograma() {
-  if (typeof canciones !== 'undefined' && Object.keys(canciones).length > 0) {
-    const params = new URLSearchParams(window.location.search);
-    if ([...params].length > 0) {
+    /* --- Inicialización --- */
+    window.addEventListener("DOMContentLoaded", () => {
+      actualizarListaCanciones();
+      mostrarPrograma();
       cargarProgramaDesdeURL();
-    }
-  } else {
-    setTimeout(intentarCargarPrograma, 100);
-  }
-}
-
-function inicializarPrograma() {
-  actualizarListaCanciones();
-  mostrarPrograma();
-  intentarCargarPrograma();
-}
-
-// Ejecutar al cargar la página normalmente
-window.addEventListener("DOMContentLoaded", inicializarPrograma);
-
-// Detectar si el usuario pega un enlace y presiona Enter (sin recargar completamente)
-window.addEventListener("pageshow", (event) => {
-  // Se activa incluso si viene desde caché o un “soft reload”
-  if (event.persisted || performance.getEntriesByType("navigation")[0]?.type === "reload") {
-    intentarCargarPrograma();
-  }
-});
+    });
   </script>
 </body>
 </html>
+
+   

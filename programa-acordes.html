@@ -62,93 +62,87 @@
   }
 
   // --- Insertar canción en el DOM y, si corresponde, transponer usando plugin ---
-  async function insertarYCambiarSiCorresponde(container, ruta, tonoDeseado) {
-    try {
-      const { title, preInner, dataKey: tonoOriginal } = await fetchCancionData(ruta);
+async function insertarYCambiarSiCorresponde(container, ruta, tonoDeseado) {
+  try {
+    const { title, preInner, dataKey: tonoOriginal } = await fetchCancionData(ruta);
 
-      // Crear contenedor visual para la canción
-      const article = document.createElement('div');
-      article.className = 'cancion-content mb-4';
+    // Crear la columna bootstrap
+    const col = document.createElement("div");
+    col.className = "col-12 col-md-8 col-lg-4";
 
-      // Título
-      const h2 = document.createElement('h2');
-      h2.textContent = title;
-      article.appendChild(h2);
+    // Contenedor de la canción
+    const article = document.createElement("div");
+    article.className = "d-flex justify-content-center cancion-content mb-4";
 
-      // Pre con la letra (no usamos id duplicado; usamos clase "letra" y data-key original)
-      const pre = document.createElement('pre');
-      pre.className = 'letra';
-      pre.setAttribute('data-key', tonoOriginal);
-      pre.innerHTML = preInner;
-      article.appendChild(pre);
+    // Título
+    const h2 = document.createElement("h2");
+    h2.textContent = title;
+    h2.className = "col-12 text-center";
+    article.appendChild(h2);
 
-      // Append provisional (antes de plugin)
-      container.appendChild(article);
+    // Pre con la letra
+    const pre = document.createElement("pre");
+    pre.className = "letra";
+    pre.setAttribute("data-key", tonoOriginal);
+    pre.innerHTML = preInner;
+    article.appendChild(pre);
 
-      // Si no hay tonoDeseado, dejamos la canción tal cual
-      if (!tonoDeseado) {
-        return;
-      }
+    col.appendChild(article);
+    container.appendChild(col);
 
-      // Si el tono deseado es igual al original, no necesitamos transponer
-      // (nota: comparaciones simples; se pueden normalizar si quisieras)
-      if (tonoDeseado === tonoOriginal) {
-        return;
-      }
+    // Determinar si usar versión mayor o menor según el tono solicitado o el original
+    const usarMenor = /m$/i.test(tonoDeseado || tonoOriginal);
+    const script = usarMenor
+      ? "scripts/cancioneromenor.js"
+      : "scripts/cancionero.js";
 
-      // Determinar si usar menor o mayor según la 'm' final en tonoDeseado
-      const usarMenor = /m$/i.test(tonoDeseado);
-      const script = usarMenor ? 'scripts/cancioneromenor.js' : 'scripts/cancionero.js';
+    // Asegurar que jQuery esté cargado
+    await cargarScript("https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js");
 
-      // Cargar el script correspondiente (si ya está cargado, cargarScript es no-op)
-      await cargarScript(script);
+    // Cargar el script adecuado
+    await cargarScript(script);
 
-      // Invocar el plugin sobre este elemento <pre> específico
-      // (el plugin creará sus controles justo antes del <pre>)
-      // Usamos jQuery aquí, el plugin está escrito en jQuery.
-      const $pre = $(pre);
-      // Llamada al plugin: esto inicializa la UI de transposición para este <pre>
-      if (typeof $pre.transpose === 'function') {
-        $pre.transpose();
-      } else {
-        // Si por alguna razón el plugin no expone la función, lanzar error visible
-        console.warn('Plugin transpose no disponible para', script);
-        return;
-      }
+    // Esperar un momento para que el plugin se registre
+    await new Promise((r) => setTimeout(r, 100));
 
-      // El plugin crea antes del <pre> un elemento .transpose-keys con enlaces <a> con nombres de tonos.
-      // Queremos hacer "click" en el enlace cuyo texto coincida con el tono objetivo (sin la 'm')
-      const claveObjetivo = tonoDeseado.replace(/m$/i, '');
+    // Inicializar el plugin
+    if (window.jQuery && typeof jQuery.fn.transpose === "function") {
+      const $pre = jQuery(pre);
+      $pre.transpose();
 
-      // Encontramos el bloque de keys que el plugin creó (está justo antes del pre)
-      const $keysBlock = $pre.prev('.transpose-keys');
-      if ($keysBlock.length) {
-        // Buscar el <a> con texto exacto (ignorando mayúsc/minúsc)
-        const $link = $keysBlock.find('a').filter(function() {
-          return $(this).text().toUpperCase() === claveObjetivo.toUpperCase();
-        }).first();
-
+      // Aplicar cambio de tono si es distinto
+      if (tonoDeseado && tonoDeseado !== tonoOriginal) {
+        const claveObjetivo = tonoDeseado.replace(/m$/i, "");
+        const $keysBlock = $pre.prev(".transpose-keys");
+        const $link = $keysBlock
+          .find("a")
+          .filter(function () {
+            return (
+              jQuery(this).text().toUpperCase() ===
+              claveObjetivo.toUpperCase()
+            );
+          })
+          .first();
         if ($link.length) {
-          // Disparamos el click para que el plugin haga la transposición real
-          $link.trigger('click');
-          // Ocultar los botones de transposición
-          $pre.prev('.transpose-keys').hide();
+          $link.trigger("click");
         } else {
-          console.warn('No se encontró enlace de tono', claveObjetivo, 'en keysBlock para', ruta);
+          console.warn(
+            "No se encontró enlace de tono",
+            claveObjetivo,
+            "para",
+            ruta
+          );
         }
-      } else {
-        console.warn('No se encontró .transpose-keys antes del <pre> para', ruta);
       }
-
-
-    } catch (err) {
-      console.error(err);
-      const errDiv = document.createElement('div');
-      errDiv.className = 'cancion-content mb-4';
-      errDiv.innerHTML = `<h2>Error</h2><p>Error al cargar la canción ${ruta}. ${err.message}</p>`;
-      container.appendChild(errDiv);
+    } else {
+      console.warn("⚠️ Plugin transpose no disponible aún:", script);
     }
-  }
+  } catch (err) {
+  console.warn("⚠️ Error menor o falta de tonalidad en:", ruta, err.message);
+  // No mostramos nada visual si el contenido ya se insertó correctamente.
+  // Sólo dejamos el log en consola para depuración.
+}
+}
 
   // --- Mostrar todas las canciones juntas (modo "acordes") ---
   async function mostrarProgramaConAcordes() {

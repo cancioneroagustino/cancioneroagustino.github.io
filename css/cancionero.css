@@ -368,27 +368,6 @@ h2 {
 
 
 
-.btn-outline-info {
-  color: #0dcaf0;
-  border-color: #0dcaf0;
-}
-
-.btn-outline-info:hover {
-  background-color: #0dcaf0;
-  color: white;
-}
-
-.btn-outline-danger {
-  color: #dc3545;
-  border-color: #dc3545;
-}
-
-.btn-outline-danger:hover {
-  background-color: #dc3545;
-  color: white;
-}
-
-
 
 
 #programa-lista {

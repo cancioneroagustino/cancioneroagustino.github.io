@@ -25,12 +25,12 @@ $(function(){
 });
 </script>
 
-<main class="container mt-4 text-center">
-    <h1>Crear programa de misa</h1>
+  <main class="container mt-4 text-center">
+    <h1 class="titulo">CREAR PROGRAMA DE MISA</h1>
 
     <!-- Formulario 1: Selección de sección -->
     <form id="form-seccion" class="mt-4">
-      <label for="seccion-select">Sección de la misa:</label>
+      <label for="seccion-select">Sección:</label>
       <select id="seccion-select" class="form-select" onchange="actualizarListaCanciones()"></select>
     </form>
 
@@ -38,21 +38,23 @@ $(function(){
     <form id="form-cancion" class="mt-3">
       <label for="cancion-select">Canción:</label>
       <select id="cancion-select" class="form-select"></select>
-      <button type="button" class="btn btn-primary mt-2" onclick="agregarCancion()">Agregar</button>
+    <div class="d-flex justify-content-around">
+      <button type="button" class="btn btn-outline-primary mt-2" onclick="agregarCancion()">Agregar</button>
+      <button id="limpiar-programa" class="btn btn-outline-primary mt-2">Limpiar listado</button>
+  </div>
     </form>
 
     <hr>
 
-    <!-- Listado del programa -->
+<!-- Listado del programa -->
     <ul id="programa-lista" class="list-unstyled mt-3"></ul>
 
-    <div class="mt-4">
-      <button id="programa-full" class="btn btn-success">Programa con acordes (una por una)</button>
-      <button id="programa-acordes" class="btn btn-primary">Programa con acordes (todas juntas)</button>
-      <button id="programa-texto" class="btn btn-secondary">Solo texto (asamblea)</button>
-      <button id="limpiar-programa" class="btn btn-danger">Limpiar</button>
-      <button id="compartir-programa" class="btn btn-info">Compartir listado</button>
-    </div>
+<div class="mt-4">
+    <button id="programa-full" class="btn btn-outline-primary mb-3">Programa full (con acordes)</button>
+    <button id="programa-acordes" class="btn btn-outline-primary mb-3">Lista canciones (con acordes)</button>
+    <button id="programa-texto" class="btn btn-outline-primary mb-3">Lista canciones (sólo texto)</button>
+    <button id="compartir-programa" class="btn btn-outline-primary mb-3">Compartir listado</button>
+  </div>
   </main>
 
   <script>
@@ -4164,7 +4166,7 @@ $(function(){
 };
 
 
-let programa = JSON.parse(localStorage.getItem("programaMisa")) || [];
+    let programa = JSON.parse(localStorage.getItem("programaMisa")) || [];
 
     /* --- Poblar el select de secciones --- */
     const seccionSelect = document.getElementById("seccion-select");
@@ -4173,6 +4175,7 @@ let programa = JSON.parse(localStorage.getItem("programaMisa")) || [];
       option.value = seccion;
       option.textContent = seccion;
       seccionSelect.appendChild(option);
+      seccionSelect.dispatchEvent(new Event("change"));
     }
 
     /* --- Actualizar canciones según sección --- */
@@ -4230,7 +4233,7 @@ let programa = JSON.parse(localStorage.getItem("programaMisa")) || [];
         li.classList.add("programa-item");
         li.textContent = `${item.seccion}: ${item.nombre} `;
 
-     const buttonGroup = document.createElement('div');
+       const buttonGroup = document.createElement('div');
         buttonGroup.className = 'd-inline-flex justify-content-end btn-group';
 
         // Control de tono
@@ -4306,15 +4309,15 @@ let programa = JSON.parse(localStorage.getItem("programaMisa")) || [];
 
     /* --- Limpiar programa --- */
     document.getElementById("limpiar-programa").addEventListener("click", () => {
-      if (confirm("¿Seguro que deseas borrar todo el programa?")) {
+       {
         programa = [];
         guardarPrograma();
         mostrarPrograma();
       }
     });
 
-    /* --- Compartir programa (genera URL) --- */
-    document.getElementById("compartir-programa").addEventListener("click", () => {
+/* --- Compartir programa (genera URL con tonos) --- */
+document.getElementById("compartir-programa").addEventListener("click", () => {
   const params = programa.map(item =>
     `${encodeURIComponent(item.seccion)}=${encodeURIComponent(item.nombre)}|${encodeURIComponent(item.tono)}`
   ).join("&");
@@ -4323,8 +4326,8 @@ let programa = JSON.parse(localStorage.getItem("programaMisa")) || [];
   alert("Enlace copiado al portapapeles:\n\n" + url);
 });
 
-    /* --- Cargar programa desde URL --- */
-    function cargarProgramaDesdeURL() {
+/* --- Cargar programa desde URL (con tono incluido) --- */
+function cargarProgramaDesdeURL() {
   const params = new URLSearchParams(window.location.search);
   if ([...params].length === 0) return;
 
@@ -4343,6 +4346,7 @@ let programa = JSON.parse(localStorage.getItem("programaMisa")) || [];
   }
   guardarPrograma();
   mostrarPrograma();
+}
 
     /* --- Botones de salida --- */
     document.getElementById("programa-full").addEventListener("click", () => {
@@ -4358,6 +4362,17 @@ let programa = JSON.parse(localStorage.getItem("programaMisa")) || [];
       window.location.href = "programa-texto.html";
     });
 
+
+        // --- Auto redirección a programa-texto si se pide ?autoTexto=1 ---
+  window.addEventListener('load', function(){
+  if (window.location.hash === '#autoTexto=1') {
+    // Espera un instante para que se cargue el programa desde la URL
+    setTimeout(() => {
+      document.getElementById('programa-texto').click();
+    }, 50); // 800 ms suele ser suficiente;
+  }
+});
+
     /* --- Inicialización --- */
     window.addEventListener("DOMContentLoaded", () => {
       actualizarListaCanciones();
@@ -4367,5 +4382,3 @@ let programa = JSON.parse(localStorage.getItem("programaMisa")) || [];
   </script>
 </body>
 </html>
-
-   

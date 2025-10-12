@@ -25,36 +25,34 @@ $(function(){
 });
 </script>
 
-  <main class="container mt-4 text-center">
-    <h1 class="titulo">CREAR PROGRAMA DE MISA</h1>
+<main class="container mt-4 text-center">
+    <h1>Crear programa de misa</h1>
 
     <!-- Formulario 1: Selección de sección -->
     <form id="form-seccion" class="mt-4">
-      <label for="seccion-select">Sección:</label>
+      <label for="seccion-select">Sección de la misa:</label>
       <select id="seccion-select" class="form-select" onchange="actualizarListaCanciones()"></select>
     </form>
 
-   <!-- Formulario 2: Selección de canción -->
+    <!-- Formulario 2: Selección de canción -->
     <form id="form-cancion" class="mt-3">
       <label for="cancion-select">Canción:</label>
       <select id="cancion-select" class="form-select"></select>
-    <div class="d-flex justify-content-around">
-      <button type="button" class="btn btn-outline-primary mt-2" onclick="agregarCancion()">Agregar</button>
-      <button id="limpiar-programa" class="btn btn-outline-primary mt-2">Limpiar listado</button>
-  </div>
+      <button type="button" class="btn btn-primary mt-2" onclick="agregarCancion()">Agregar</button>
     </form>
 
     <hr>
 
-<!-- Listado del programa -->
+    <!-- Listado del programa -->
     <ul id="programa-lista" class="list-unstyled mt-3"></ul>
 
-<div class="mt-4">
-    <button id="programa-full" class="btn btn-outline-primary mb-3">Programa full (con acordes)</button>
-    <button id="programa-acordes" class="btn btn-outline-primary mb-3">Lista canciones (con acordes)</button>
-    <button id="programa-texto" class="btn btn-outline-primary mb-3">Lista canciones (sólo texto)</button>
-    <button id="compartir-programa" class="btn btn-outline-primary mb-3">Compartir listado</button>
-  </div>
+    <div class="mt-4">
+      <button id="programa-full" class="btn btn-success">Programa con acordes (una por una)</button>
+      <button id="programa-acordes" class="btn btn-primary">Programa con acordes (todas juntas)</button>
+      <button id="programa-texto" class="btn btn-secondary">Solo texto (asamblea)</button>
+      <button id="limpiar-programa" class="btn btn-danger">Limpiar</button>
+      <button id="compartir-programa" class="btn btn-info">Compartir listado</button>
+    </div>
   </main>
 
   <script>

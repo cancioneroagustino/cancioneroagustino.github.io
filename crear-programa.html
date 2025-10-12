@@ -4373,20 +4373,33 @@ function cargarProgramaDesdeURL() {
   }
 });
 
-/* --- Inicialización --- */
-window.addEventListener("DOMContentLoaded", () => {
+/* --- Inicialización robusta --- */
+function intentarCargarPrograma() {
+  if (typeof canciones !== 'undefined' && Object.keys(canciones).length > 0) {
+    const params = new URLSearchParams(window.location.search);
+    if ([...params].length > 0) {
+      cargarProgramaDesdeURL();
+    }
+  } else {
+    setTimeout(intentarCargarPrograma, 100);
+  }
+}
+
+function inicializarPrograma() {
   actualizarListaCanciones();
   mostrarPrograma();
-
-  function intentarCargarPrograma() {
-    if (typeof canciones !== 'undefined' && Object.keys(canciones).length > 0) {
-      cargarProgramaDesdeURL();
-    } else {
-      setTimeout(intentarCargarPrograma,1000);
-    }
-  }
-
   intentarCargarPrograma();
+}
+
+// Ejecutar al cargar la página normalmente
+window.addEventListener("DOMContentLoaded", inicializarPrograma);
+
+// Detectar si el usuario pega un enlace y presiona Enter (sin recargar completamente)
+window.addEventListener("pageshow", (event) => {
+  // Se activa incluso si viene desde caché o un “soft reload”
+  if (event.persisted || performance.getEntriesByType("navigation")[0]?.type === "reload") {
+    intentarCargarPrograma();
+  }
 });
   </script>
 </body>

@@ -4373,12 +4373,21 @@ function cargarProgramaDesdeURL() {
   }
 });
 
-    /* --- Inicialización --- */
-    window.addEventListener("DOMContentLoaded", () => {
-      actualizarListaCanciones();
-      mostrarPrograma();
+/* --- Inicialización --- */
+window.addEventListener("DOMContentLoaded", () => {
+  actualizarListaCanciones();
+  mostrarPrograma();
+
+  function intentarCargarPrograma() {
+    if (typeof canciones !== 'undefined' && Object.keys(canciones).length > 0) {
       cargarProgramaDesdeURL();
-    });
+    } else {
+      setTimeout(intentarCargarPrograma, 100);
+    }
+  }
+
+  intentarCargarPrograma();
+});
   </script>
 </body>
 </html>

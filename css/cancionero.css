@@ -223,6 +223,7 @@
   --bs-btn-hover-color: #009F98;
   --bs-btn-hover-bg: #ffffff;
   --bs-btn-hover-border-color: #009F98;
+  --bs-btn-active-color:#009F98;--bs-btn-active-bg:#ffffff;--bs-btn-active-border-color:#009F98;--bs-btn-active-shadow:none;
 }
 
 
@@ -345,6 +346,22 @@ h2 {
     color:#2159D6;
 }
 
+
+
+.programa-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: 0;
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+}
+
+
+#programa-lista {
+      padding-left: 2vw;
+    }
+
 .cancion-item {
     display: flex;
     justify-content: space-between;
@@ -357,26 +374,41 @@ h2 {
     gap: 5px;
 }
 
-.programa-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-left: 0;
-    margin-bottom: 0.5rem;
-}
-
-
-
-
-
-
-#programa-lista {
-      padding-left: 2vw;
-    }
-
 .cancion-content h2 {
       margin-left: 10px;
 }
+
+
+.control-tono {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: 8px;
+  font-weight: bold;
+}
+
+.flecha-tono {
+  cursor: pointer;
+  font-weight: bold;
+  user-select: none;
+  padding: 0 4px;
+  color: #007b7b;
+  transition: transform 0.1s;
+}
+
+.flecha-tono:hover {
+  transform: scale(1.2);
+  color: #009F98;
+}
+
+.tono-actual {
+  min-width: 32px;
+  text-align: center;
+}
+
+
+
+
 
 
 span.c {
@@ -469,40 +501,6 @@ audio{
   .accordion .col-lg-4:last-child {
     border-right: none;
   }
-}
-
-
-
-.programa-item {
-  margin-bottom: 6px;
-  font-size: 1rem;
-}
-
-.control-tono {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  margin-left: 8px;
-  font-weight: bold;
-}
-
-.flecha-tono {
-  cursor: pointer;
-  font-weight: bold;
-  user-select: none;
-  padding: 0 4px;
-  color: #007b7b;
-  transition: transform 0.1s;
-}
-
-.flecha-tono:hover {
-  transform: scale(1.2);
-  color: #009F98;
-}
-
-.tono-actual {
-  min-width: 32px;
-  text-align: center;
 }
 
 

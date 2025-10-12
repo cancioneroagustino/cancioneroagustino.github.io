@@ -4317,34 +4317,34 @@ let programa = JSON.parse(localStorage.getItem("programaMisa")) || [];
 
     /* --- Compartir programa (genera URL) --- */
     document.getElementById("compartir-programa").addEventListener("click", () => {
-      const params = programa.map(item =>
-        `${encodeURIComponent(item.seccion)}=${encodeURIComponent(item.nombre)}`
-      ).join("&");
-      const url = `${window.location.origin}${window.location.pathname}?${params}`;
-      navigator.clipboard.writeText(url);
-      alert("Enlace copiado al portapapeles:\n\n" + url);
-    });
+  const params = programa.map(item =>
+    `${encodeURIComponent(item.seccion)}=${encodeURIComponent(item.nombre)}|${encodeURIComponent(item.tono)}`
+  ).join("&");
+  const url = `${window.location.origin}${window.location.pathname}?${params}`;
+  navigator.clipboard.writeText(url);
+  alert("Enlace copiado al portapapeles:\n\n" + url);
+});
 
     /* --- Cargar programa desde URL --- */
     function cargarProgramaDesdeURL() {
-      const params = new URLSearchParams(window.location.search);
-      if ([...params].length === 0) return;
+  const params = new URLSearchParams(window.location.search);
+  if ([...params].length === 0) return;
 
-      programa = [];
-      for (const [seccion, nombre] of params.entries()) {
-        if (canciones[seccion] && canciones[seccion][nombre]) {
-          const datos = canciones[seccion][nombre];
-          programa.push({
-            seccion: seccion,
-            nombre: nombre,
-            cancion: datos.ruta,
-            tono: datos.tono
-          });
-        }
-      }
-      guardarPrograma();
-      mostrarPrograma();
+  programa = [];
+  for (const [seccion, valor] of params.entries()) {
+    const [nombre, tono] = valor.split("|");
+    if (canciones[seccion] && canciones[seccion][nombre]) {
+      const datos = canciones[seccion][nombre];
+      programa.push({
+        seccion: seccion,
+        nombre: nombre,
+        cancion: datos.ruta,
+        tono: tono || datos.tono   // usa el del enlace o el por defecto
+      });
     }
+  }
+  guardarPrograma();
+  mostrarPrograma();
 
     /* --- Botones de salida --- */
     document.getElementById("programa-full").addEventListener("click", () => {

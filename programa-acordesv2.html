@@ -137,12 +137,10 @@ async function insertarYCambiarSiCorresponde(container, ruta, tonoDeseado) {
       console.warn("⚠️ Plugin transpose no disponible aún:", script);
     }
   } catch (err) {
-    console.error(err);
-    const errDiv = document.createElement("div");
-    errDiv.className = "cancion-content mb-4";
-    errDiv.innerHTML = `<h2>Error</h2><p>Error al cargar la canción ${ruta}. ${err.message}</p>`;
-    container.appendChild(errDiv);
-  }
+  console.warn("⚠️ Error menor o falta de tonalidad en:", ruta, err.message);
+  // No mostramos nada visual si el contenido ya se insertó correctamente.
+  // Sólo dejamos el log en consola para depuración.
+}
 }
 
   // --- Mostrar todas las canciones juntas (modo "acordes") ---

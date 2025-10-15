@@ -2007,7 +2007,7 @@ $(function(){
       "tono": "RE"
     },
     "Cordero de Dios folclórico - Polka - (RE)": {
-      "ruta": "Cordero/Cordero de Dios folclórico Polka.html",
+      "ruta": "Cordero/Cordero de Dios folclórico polka.html",
       "tono": "RE"
     },
     "Cordero de Dios folclórico Raúl de Ramón (LAm)": {
@@ -4319,7 +4319,7 @@ $(function(){
 /* --- Compartir programa (genera URL con tonos) --- */
 document.getElementById("compartir-programa").addEventListener("click", () => {
   const params = programa.map(item =>
-    `${encodeURIComponent(item.seccion)}=${encodeURIComponent(item.nombre)}|${encodeURIComponent(item.tono)}`
+    `${encodeURIComponent(item.seccion)}=${encodeURIComponent(item.nombre)}~${encodeURIComponent(item.tono)}`
   ).join("&");
   const url = `${window.location.origin}${window.location.pathname}?${params}`;
   navigator.clipboard.writeText(url);
@@ -4333,7 +4333,7 @@ function cargarProgramaDesdeURL() {
 
   programa = [];
   for (const [seccion, valor] of params.entries()) {
-    const [nombre, tono] = valor.split("|");
+    const [nombre, tono] = valor.split("~");
     if (canciones[seccion] && canciones[seccion][nombre]) {
       const datos = canciones[seccion][nombre];
       programa.push({

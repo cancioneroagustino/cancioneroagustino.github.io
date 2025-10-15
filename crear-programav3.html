@@ -60,5 +60,222 @@ $(function(){
 
 <script src="scripts/cancionero.js"></script>
 
+<script>
+    let programa = JSON.parse(localStorage.getItem("programaMisa")) || [];
+
+    /* --- Poblar el select de secciones --- */
+    const seccionSelect = document.getElementById("seccion-select");
+    for (const seccion in canciones) {
+      const option = document.createElement("option");
+      option.value = seccion;
+      option.textContent = seccion;
+      seccionSelect.appendChild(option);
+      seccionSelect.dispatchEvent(new Event("change"));
+    }
+
+    /* --- Actualizar canciones según sección --- */
+    function actualizarListaCanciones() {
+      const seccion = seccionSelect.value;
+      const selectCancion = document.getElementById("cancion-select");
+      selectCancion.innerHTML = "";
+
+      for (const nombre in canciones[seccion]) {
+        const option = document.createElement("option");
+        option.value = nombre;
+        option.textContent = nombre;
+        selectCancion.appendChild(option);
+      }
+    }
+
+    /* --- Transposición de tono (respeta 'm') --- */
+    function transponerTono(tono, semitonos) {
+      const tonos = ["DO","DO#","RE","MIb","MI","FA","FA#","SOL","LAb","LA","SIb","SI"];
+      const esMenor = tono.endsWith("m");
+      const base = esMenor ? tono.slice(0, -1) : tono;
+      const idx = tonos.indexOf(base);
+      if (idx === -1) return tono;
+      const nuevo = tonos[(idx + semitonos + 12) % 12];
+      return esMenor ? nuevo + "m" : nuevo;
+    }
+
+    /* --- Agregar canción al programa --- */
+    function agregarCancion() {
+      const seccion = seccionSelect.value;
+      const nombre = document.getElementById("cancion-select").value;
+      const datos = canciones[seccion][nombre];
+      programa.push({
+        seccion: seccion,
+        nombre: nombre,
+        cancion: datos.ruta,
+        tono: datos.tono
+      });
+      mostrarPrograma();
+      guardarPrograma();
+    }
+
+    /* --- Guardar programa --- */
+    function guardarPrograma() {
+      localStorage.setItem("programaMisa", JSON.stringify(programa));
+    }
+
+    /* --- Mostrar programa en pantalla --- */
+    function mostrarPrograma() {
+      const lista = document.getElementById("programa-lista");
+      lista.innerHTML = "";
+
+      programa.forEach((item, index) => {
+        const li = document.createElement("li");
+        li.classList.add("programa-item");
+        li.textContent = `${item.seccion}: ${item.nombre} `;
+
+       const buttonGroup = document.createElement('div');
+        buttonGroup.className = 'd-inline-flex justify-content-end btn-group';
+
+        // Control de tono
+        const contTono = document.createElement("span");
+        contTono.classList.add("control-tono");
+
+        const btnDown = document.createElement("span");
+        btnDown.textContent = "◀";
+        btnDown.classList.add("flecha-tono");
+        btnDown.onclick = () => {
+          item.tono = transponerTono(item.tono, -1);
+          spanTono.textContent = item.tono;
+          guardarPrograma();
+        };
+
+        const spanTono = document.createElement("span");
+        spanTono.classList.add("tono-actual");
+        spanTono.textContent = item.tono;
+
+        const btnUp = document.createElement("span");
+        btnUp.textContent = "▶";
+        btnUp.classList.add("flecha-tono");
+        btnUp.onclick = () => {
+          item.tono = transponerTono(item.tono, +1);
+          spanTono.textContent = item.tono;
+          guardarPrograma();
+        };
+
+        contTono.appendChild(btnDown);
+        contTono.appendChild(spanTono);
+        contTono.appendChild(btnUp);
+        buttonGroup.appendChild(contTono);
+
+        // Botones mover y eliminar
+        const btnSubir = document.createElement("button");
+        btnSubir.textContent = "↑";
+        btnSubir.className = 'btn btn-outline-info btn-sm';
+        btnSubir.onclick = () => {
+          if (index > 0) {
+            [programa[index - 1], programa[index]] = [programa[index], programa[index - 1]];
+            mostrarPrograma();
+            guardarPrograma();
+          }
+        };
+        buttonGroup.appendChild(btnSubir);
+
+        const btnBajar = document.createElement("button");
+        btnBajar.textContent = "↓";
+        btnBajar.className = 'btn btn-outline-info btn-sm';
+        btnBajar.onclick = () => {
+          if (index < programa.length - 1) {
+            [programa[index + 1], programa[index]] = [programa[index], programa[index + 1]];
+            mostrarPrograma();
+            guardarPrograma();
+          }
+        };
+        buttonGroup.appendChild(btnBajar);
+
+        const btnEliminar = document.createElement("button");
+        btnEliminar.textContent = "✕";
+        btnEliminar.className = 'btn btn-outline-danger btn-sm';
+        btnEliminar.onclick = () => {
+          programa.splice(index, 1);
+          mostrarPrograma();
+          guardarPrograma();
+        };
+        buttonGroup.appendChild(btnEliminar);
+
+        li.appendChild(buttonGroup);
+        lista.appendChild(li);
+      });
+    }
+
+    /* --- Limpiar programa --- */
+    document.getElementById("limpiar-programa").addEventListener("click", () => {
+       {
+        programa = [];
+        guardarPrograma();
+        mostrarPrograma();
+      }
+    });
+
+/* --- Compartir programa (genera URL con tonos) --- */
+document.getElementById("compartir-programa").addEventListener("click", () => {
+  const params = programa.map(item =>
+    `${encodeURIComponent(item.seccion)}=${encodeURIComponent(item.nombre)}~${encodeURIComponent(item.tono)}`
+  ).join("&");
+  const url = `${window.location.origin}${window.location.pathname}?${params}`;
+  navigator.clipboard.writeText(url);
+  alert("Enlace copiado al portapapeles:\n\n" + url);
+});
+
+/* --- Cargar programa desde URL (con tono incluido) --- */
+function cargarProgramaDesdeURL() {
+  const params = new URLSearchParams(window.location.search);
+  if ([...params].length === 0) return;
+
+  programa = [];
+  for (const [seccion, valor] of params.entries()) {
+    const [nombre, tono] = valor.split("~");
+    if (canciones[seccion] && canciones[seccion][nombre]) {
+      const datos = canciones[seccion][nombre];
+      programa.push({
+        seccion: seccion,
+        nombre: nombre,
+        cancion: datos.ruta,
+        tono: tono || datos.tono   // usa el del enlace o el por defecto
+      });
+    }
+  }
+  guardarPrograma();
+  mostrarPrograma();
+}
+
+    /* --- Botones de salida --- */
+    document.getElementById("programa-full").addEventListener("click", () => {
+      guardarPrograma();
+      window.location.href = "programa-full.html";
+    });
+    document.getElementById("programa-acordes").addEventListener("click", () => {
+      guardarPrograma();
+      window.location.href = "programa-acordes.html";
+    });
+    document.getElementById("programa-texto").addEventListener("click", () => {
+      guardarPrograma();
+      window.location.href = "programa-texto.html";
+    });
+
+
+        // --- Auto redirección a programa-texto si se pide ?autoTexto=1 ---
+  window.addEventListener('load', function(){
+  if (window.location.hash === '#autoTexto=1') {
+    // Espera un instante para que se cargue el programa desde la URL
+    setTimeout(() => {
+      document.getElementById('programa-texto').click();
+    }, 50); // 800 ms suele ser suficiente;
+  }
+});
+
+    /* --- Inicialización --- */
+    window.addEventListener("DOMContentLoaded", () => {
+      actualizarListaCanciones();
+      mostrarPrograma();
+      cargarProgramaDesdeURL();
+    });
+
+</script>
+
 </body>
 </html>

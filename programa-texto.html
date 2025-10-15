@@ -18,7 +18,7 @@
     });
   </script> 
 
-  <div id="programa-completo-container" class="d-flex justify-content-center text-center mt-5"></div>
+  <div id="programa-completo-container" class="d-flex flex-column justify-content-center text-center mt-5"></div>
 
   <script>
     const programa = JSON.parse(localStorage.getItem('programaMisa'));
@@ -71,7 +71,7 @@
       for (const cancion of canciones) {
         const contenidoCancion = await cargarCancion(cancion);
         const divCancion = document.createElement('div');
-        divCancion.className = 'cancion-content';
+        divCancion.className = 'cancion-content align-self-lg-center';
         divCancion.innerHTML = contenidoCancion;
         programaContainer.appendChild(divCancion);
       }

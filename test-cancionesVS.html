@@ -51,18 +51,6 @@
       width: 0%;
       transition: width 0.3s;
     }
-    #visor-container {
-      display: none;
-      margin-top: 30px;
-      border-top: 2px solid #ccc;
-      padding-top: 20px;
-    }
-    iframe {
-      width: 100%;
-      height: 80vh;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-    }
   </style>
 </head>
 <body>
@@ -89,14 +77,6 @@
   <ul id="lista"></ul>
   <p class="contador" id="resumen"></p>
 
-  <h2>Vista previa</h2>
-  <div id="visor-container">
-    <button id="anterior">⬅️ Anterior</button>
-    <button id="siguiente">Siguiente ➡️</button>
-    <p id="titulo-cancion" style="font-weight:bold; margin:10px 0;"></p>
-    <iframe id="visor"></iframe>
-  </div>
-
   <script src="scripts/canciones.js"></script>
   <script>
     const select = document.getElementById('seccion');
@@ -107,16 +87,7 @@
     const estado = document.getElementById('estado');
     const resumen = document.getElementById('resumen');
 
-    const visorContainer = document.getElementById('visor-container');
-    const visor = document.getElementById('visor');
-    const tituloCancion = document.getElementById('titulo-cancion');
-    const btnAnt = document.getElementById('anterior');
-    const btnSig = document.getElementById('siguiente');
-
-    let cancionesActuales = [];
-    let indice = 0;
-
-    // --- Cargar secciones ---
+    // --- Cargar secciones en el selector ---
     for (const seccion in canciones) {
       const opt = document.createElement('option');
       opt.value = seccion;
@@ -127,14 +98,9 @@
     // --- Mostrar canciones de una sección ---
     function mostrarSeccion(seccion) {
       lista.innerHTML = '';
-      cancionesActuales = [];
-      if (!seccion) {
-        visorContainer.style.display = 'none';
-        return;
-      }
+      if (!seccion) return;
       for (const nombre in canciones[seccion]) {
         const datos = canciones[seccion][nombre];
-        cancionesActuales.push({ nombre, ...datos });
         const li = document.createElement('li');
         const link = document.createElement('a');
         link.href = datos.ruta;
@@ -143,40 +109,11 @@
         li.appendChild(link);
         lista.appendChild(li);
       }
-
-      if (cancionesActuales.length > 0) {
-        indice = 0;
-        mostrarCancionActual();
-        visorContainer.style.display = 'block';
-      } else {
-        visorContainer.style.display = 'none';
-      }
     }
 
     select.addEventListener('change', () => mostrarSeccion(select.value));
 
-    // --- Mostrar canción en visor ---
-    function mostrarCancionActual() {
-      if (!cancionesActuales.length) return;
-      const c = cancionesActuales[indice];
-      tituloCancion.textContent = `${indice + 1}/${cancionesActuales.length} — ${c.nombre}`;
-      visor.src = c.ruta;
-    }
-
-    btnAnt.addEventListener('click', () => {
-      if (indice > 0) {
-        indice--;
-        mostrarCancionActual();
-      }
-    });
-    btnSig.addEventListener('click', () => {
-      if (indice < cancionesActuales.length - 1) {
-        indice++;
-        mostrarCancionActual();
-      }
-    });
-
-    // --- Verificar lista actual ---
+    // --- Verificar una lista de enlaces ---
     async function verificarLista(enlaces) {
       const inicio = performance.now();
       let ok = 0, error = 0;
@@ -210,6 +147,7 @@
       resumen.textContent = `✔️ Correctas: ${ok} | ❌ Errores: ${error} | Total: ${total} | ⏱️ ${duracion}s`;
     }
 
+    // --- Verificar solo la sección actual ---
     boton.addEventListener('click', async () => {
       resumen.textContent = '';
       progreso.style.width = '0%';

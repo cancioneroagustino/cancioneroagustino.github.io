@@ -1222,6 +1222,10 @@
       "ruta": "Aleluya/Aleluya gregoriano.html",
       "tono": "FA"
     },
+    "Aleluya gregoriano (o filii et filiae)": {
+      "ruta": "Aleluya/Aleluya gregoriano (o filii et filiae).html",
+      "tono": "FA#m"
+    },
     "Aleluya SOL (1)": {
       "ruta": "Aleluya/Aleluya SOL (1).html",
       "tono": "SOL"
@@ -1998,6 +2002,10 @@
     "Aleluya a Cristo Rey": {
       "ruta": "Comunión/Aleluya a Cristo Rey.html",
       "tono": "REm"
+    },
+    "Aleluya gregoriano (o filii et filiae)": {
+      "ruta": "Comunión/Aleluya (o filii et filiae).html",
+      "tono": "FA#m"
     },
     "Aleluya por esa gente": {
       "ruta": "Comunión/Aleluya por esa gente.html",

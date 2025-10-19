@@ -1587,10 +1587,6 @@
       "ruta": "Leccionales/Tu palabra me da vida.html",
       "tono": "DO"
     },
-    "Tú que habitas al amparo del Altísimo": {
-      "ruta": "Leccionales/Tú que habitas al amparo del Altísimo.html",
-      "tono": "LA"
-    },
     "Tu palabra, Señor, es la verdad": {
       "ruta": "Leccionales/Tu palabra, Señor, es la verdad.html",
       "tono": "LAm"
@@ -2882,6 +2878,10 @@
     "Tu modo": {
       "ruta": "Comunión/Tu modo.html",
       "tono": "MI"
+    },
+    "Tú que habitas al amparo del Altísimo": {
+      "ruta": "Comunión/Tú que habitas al amparo del Altísimo.html",
+      "tono": "LA"
     },
     "Tuyo soy": {
       "ruta": "Comunión/Tuyo soy.html",

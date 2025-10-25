@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Test de enlaces en secciones</title>
+<link rel="stylesheet" type="text/css" href="css/cancionero.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<style>
+  body { padding: 2rem; background-color: #f8f9fa; }
+  h1 { margin-bottom: 1.5rem; }
+  #resultado { white-space: pre-wrap; font-family: monospace; background: white; border-radius: .5rem; padding: 1rem; margin-top: 1rem; }
+</style>
+</head>
+<body>
+
+  <h1>Verificador de enlaces en secciones</h1>
+
+  <div id="botones" class="d-flex flex-wrap gap-2 mb-4"></div>
+  <div id="estado" class="fw-bold mb-2"></div>
+  <div id="resultado"></div>
+
+  <script>
+  const secciones = [
+    "01 Entrada.html","02 Perdón.html","03 Gloria.html","04 Salmos.html","05 Aleluya.html",
+    "06 Leccionales.html","07 Ofertorio.html","08 Santo.html","09 Padrenuestro.html","10 Paz.html",
+    "11 Cordero.html","12 Comunión.html","13 Espíritu Santo.html","14 Salida.html","15 Marianos.html",
+    "16 Rosario.html","17 Matrimonio.html","18 Liturgias especiales.html","19 Agustinianos.html",
+    "20 Villancicos.html","21 Varios.html","31 Adviento.html","32 Navidad.html","33 Cuaresma.html",
+    "34 Pascua.html","35 Misa a la chilena.html"
+  ];
+
+  const contenedor = document.getElementById('botones');
+  const resultado = document.getElementById('resultado');
+  const estado = document.getElementById('estado');
+
+  // Crear botones de secciones
+  secciones.forEach(seccion => {
+    const btn = document.createElement('button');
+    btn.className = 'btn btn-primary';
+    btn.textContent = seccion.replace('.html','');
+    btn.onclick = () => verificarSeccion(seccion);
+    contenedor.appendChild(btn);
+  });
+
+  async function verificarSeccion(seccion) {
+    resultado.textContent = '';
+    estado.textContent = `Cargando ${seccion}...`;
+    try {
+      const resp = await fetch(seccion);
+      if (!resp.ok) throw new Error(`No se pudo cargar (${resp.status})`);
+      const html = await resp.text();
+      const links = [...html.matchAll(/href="([^"]+\.html)"/g)].map(m => m[1]);
+      if (links.length === 0) {
+        resultado.textContent = '⚠️ No se encontraron enlaces en esta sección.';
+        estado.textContent = '';
+        return;
+      }
+      estado.textContent = `Revisando ${links.length} enlaces...`;
+      for (const link of links) {
+        try {
+          const r = await fetch(link);
+          if (r.ok) {
+            resultado.textContent += `✅ ${link}\n`;
+          } else {
+            resultado.textContent += `❌ ${link} (${r.status})\n`;
+          }
+        } catch (e) {
+          resultado.textContent += `❌ ${link} (error de red)\n`;
+        }
+      }
+      estado.textContent = `Revisión completada (${seccion}) ✅`;
+    } catch (err) {
+      resultado.textContent = `❌ Error al cargar ${seccion}: ${err.message}`;
+      estado.textContent = '';
+    }
+  }
+  </script>
+
+</body>
+</html>

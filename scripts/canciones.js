@@ -317,6 +317,10 @@
       "ruta": "Perdón/Señor ten piedad 9 (Tomás Aragüés).html",
       "tono": "SIm"
     },
+    "Señor ten piedad 10 (Miguel Manzano)": {
+      "ruta": "Perdón/Señor ten piedad 10 (Miguel Manzano).html",
+      "tono": "MIm"
+    },
     "Señor ten piedad folclórico (1)": {
       "ruta": "Perdón/Señor ten piedad folclórico (1).html",
       "tono": "DO"
@@ -1796,6 +1800,10 @@
     "Santo Vicente Bianchi": {
       "ruta": "Santo/Santo Vicente Bianchi.html",
       "tono": "SOL"
+    },
+    "Santo Miguel Manzano": {
+      "ruta": "Santo/Santo Miguel Manzano.html",
+      "tono": "DO"
      }
     },
 
@@ -1998,6 +2006,10 @@
     "Aleluya a Cristo Rey": {
       "ruta": "Comunión/Aleluya a Cristo Rey.html",
       "tono": "REm"
+    },
+    "Aleluya, el Señor es nuestro Rey": {
+      "ruta": "Comunión/Aleluya, el Señor es nuestro Rey.html",
+      "tono": "LA"
     },
     "Aleluya gregoriano (o filii et filiae)": {
       "ruta": "Comunión/Aleluya (o filii et filiae).html",

@@ -4,7 +4,7 @@
   "description": "Cancionero Católico con Carisma Agustino",
   "start_url": "/index.html",
   "scope": "/",
-  "display": "standalone",
+  "display": "minimal-ui",
   "background_color": "#ffffff",
   "theme_color": "#3367d6",
   "orientation": "portrait-primary",

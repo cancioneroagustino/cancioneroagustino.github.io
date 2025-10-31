@@ -1131,7 +1131,7 @@
     },
     "Corpus Christi A": {
       "ruta": "Salmos/acorpuschristi.html",
-      "tono": "DO"
+      "tono": "RE"
     },
     "Corpus Christi B": {
       "ruta": "Salmos/bcorpuschristi.html",

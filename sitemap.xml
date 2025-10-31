@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
 <loc>https://www.cancionerocatolico.cl/</loc>
-<lastmod>2025-10-31T12:12:48-03:00</lastmod>
+<lastmod>2025-10-31T12:31:46-03:00</lastmod>
 </url>
 <url>
 <loc>https://www.cancionerocatolico.cl/01 Entrada.html</loc>
@@ -1398,7 +1398,7 @@
 </url>
 <url>
 <loc>https://www.cancionerocatolico.cl/Entrada/Adeste fideles.html</loc>
-<lastmod>2025-10-31T12:12:48-03:00</lastmod>
+<lastmod>2025-10-31T12:24:48-03:00</lastmod>
 </url>
 <url>
 <loc>https://www.cancionerocatolico.cl/Entrada/Al caer la tarde.html</loc>
@@ -4585,7 +4585,11 @@
 <lastmod>2025-10-31T11:54:56-03:00</lastmod>
 </url>
 <url>
+<loc>https://www.cancionerocatolico.cl/scripts/pdfjs/web/viewer-original.html</loc>
+<lastmod>2025-10-31T12:24:48-03:00</lastmod>
+</url>
+<url>
 <loc>https://www.cancionerocatolico.cl/scripts/pdfjs/web/viewer.html</loc>
-<lastmod>2025-10-31T11:54:56-03:00</lastmod>
+<lastmod>2025-10-31T12:39:02-03:00</lastmod>
 </url>
 </urlset>

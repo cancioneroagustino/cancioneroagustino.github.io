@@ -457,9 +457,12 @@ audio{
 }
 
 .partpdf {
-	width: 96%;
-	aspect-ratio: 17 / 22;
-	height: auto;
+  width: 100%;
+  height: 85vh;
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  overflow: hidden;
 }
 
     /* Mobile: botones en lista vertical */

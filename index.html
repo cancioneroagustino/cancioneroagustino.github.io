@@ -87,22 +87,28 @@ $(function(){
  </div>
 
 
- <script>
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => {
-    navigator.serviceWorker.register("scripts/service-worker.js")
-      .then(() => console.log("Service Worker registrado con éxito"))
-      .catch(err => console.error("Error al registrar el Service Worker:", err));
-  });
-}
-</script>
-
 <script>
-// Escucha mensajes del Service Worker
-if (navigator.serviceWorker) {
-  navigator.serviceWorker.addEventListener("message", event => {
-    if (event.data && event.data.type === "CACHE_COMPLETE") {
-      const msg = document.createElement("div");
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./service-worker.js')
+      .then(reg => {
+        console.log('✅ Service Worker registrado correctamente:', reg.scope);
+
+        // Intentar sincronizar todo el sitemap en segundo plano
+        if ('SyncManager' in window) {
+          reg.sync.register('cache-sitemap').catch(err => console.warn('No se pudo registrar sync:', err));
+        } else {
+          // Si el navegador no soporta SyncManager, cachea inmediatamente
+          reg.active?.postMessage({ type: "CACHE_SITEMAP" });
+        }
+      })
+      .catch(err => console.error('❌ Error al registrar el Service Worker:', err));
+  });
+
+  // Escucha mensajes del SW (por ejemplo, cuando termine el cacheo)
+  navigator.serviceWorker.addEventListener('message', event => {
+    if (event.data && event.data.type === 'CACHE_COMPLETE') {
+      const msg = document.createElement('div');
       msg.textContent = `✅ Sitio disponible sin conexión (${event.data.count} páginas guardadas).`;
       Object.assign(msg.style, {
         position: "fixed",
@@ -129,5 +135,8 @@ if (navigator.serviceWorker) {
   });
 }
 </script>
+
+
+
   </body>
  </html>

@@ -1,0 +1,22 @@
+{
+  "name": "Cancionero Católico",
+  "short_name": "Cancionero",
+  "description": "Cancionero Católico con Carisma Agustino.",
+  "start_url": "/index.html",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#3367d6",
+  "icons": [
+  {
+    "src": "/images/logo-192.png",
+    "sizes": "192x192",
+    "type": "image/png"
+  },
+  {
+    "src": "/images/logo-512.png",
+    "sizes": "512x512",
+    "type": "image/png"
+  }
+]
+}

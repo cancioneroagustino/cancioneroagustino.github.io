@@ -16,6 +16,8 @@
 <link rel="canonical" href="https://www.cancionerocatolico.cl/index.html">
 <meta property="og:image" content="images/logoagustino.png">
 <link rel="stylesheet" type="text/css" href="css/cancionero.css">
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#3367d6">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 </head>
 
@@ -83,5 +85,49 @@ $(function(){
 
 
  </div>
+
+
+ <script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("scripts/service-worker.js")
+      .then(() => console.log("Service Worker registrado con éxito"))
+      .catch(err => console.error("Error al registrar el Service Worker:", err));
+  });
+}
+</script>
+
+<script>
+// Escucha mensajes del Service Worker
+if (navigator.serviceWorker) {
+  navigator.serviceWorker.addEventListener("message", event => {
+    if (event.data && event.data.type === "CACHE_COMPLETE") {
+      const msg = document.createElement("div");
+      msg.textContent = `✅ Sitio disponible sin conexión (${event.data.count} páginas guardadas).`;
+      Object.assign(msg.style, {
+        position: "fixed",
+        bottom: "20px",
+        left: "50%",
+        transform: "translateX(-50%)",
+        background: "#28a745",
+        color: "white",
+        padding: "10px 20px",
+        borderRadius: "10px",
+        fontSize: "14px",
+        boxShadow: "0 2px 5px rgba(0,0,0,0.2)",
+        zIndex: "9999",
+        opacity: "0",
+        transition: "opacity 0.5s"
+      });
+      document.body.appendChild(msg);
+      setTimeout(() => (msg.style.opacity = "1"), 100);
+      setTimeout(() => {
+        msg.style.opacity = "0";
+        setTimeout(() => msg.remove(), 500);
+      }, 6000);
+    }
+  });
+}
+</script>
   </body>
  </html>

@@ -2007,6 +2007,10 @@
       "ruta": "Comunión/Aleluya a Cristo Rey.html",
       "tono": "REm"
     },
+    "Aleluya (o filii et filiae)": {
+      "ruta": "Comunión/Aleluya (o filii et filiae).html",
+      "tono": "FA#m"
+    },
     "Aleluya, el Señor es nuestro Rey": {
       "ruta": "Comunión/Aleluya, el Señor es nuestro Rey.html",
       "tono": "LA"

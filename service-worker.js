@@ -15,6 +15,12 @@ const CORE_ASSETS = [
   "./images/logoagustino.png",
   "./images/icon-192.png",
   "./images/icon-512.png",
+  "./fonts/Montserrat-Bold.woff2",
+  "./fonts/Montserrat-Medium.woff2",
+  "./fonts/Montserrat-SemiBoldItalic.woff2",
+  "./fonts/iosevka-term-bold.woff2",
+  "./fonts/iosevka-term-medium.woff2",
+  "./fonts/iosevka-term-regular.woff2",
   "./manifest.json",
   "./sitemap.xml"
 ];

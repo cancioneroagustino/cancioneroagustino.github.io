@@ -1,85 +1,92 @@
-const CACHE_NAME = "cancionero-v1";
+const CACHE_NAME = "cancionero-dinamico-v1";
 
-// Archivos base siempre necesarios
+// Archivos base que siempre deben estar
 const CORE_ASSETS = [
   "./",
   "./index.html",
   "./css/",
   "./scripts/",
-  "./images/",
-  "./fonts/",
-  "./manifest.json"
+  "./images/icon-192.png",
+  "./images/icon-512.png",
+  "./images/logoagustino.png",
+  "./manifest.json",
+  "./sitemap.xml"
 ];
 
-// Durante la instalación, primero cacheamos los archivos básicos
+/**
+ * Lee el sitemap.xml y devuelve una lista de rutas (excluyendo /files/)
+ */
+async function getUrlsFromSitemap() {
+  try {
+    const res = await fetch("./sitemap.xml");
+    const text = await res.text();
+    const urls = [...text.matchAll(/<loc>(.*?)<\/loc>/g)]
+      .map(m => {
+        const u = new URL(m[1]);
+        return decodeURIComponent(u.pathname.startsWith("/") ? "." + u.pathname : "./" + u.pathname);
+      })
+      .filter(path => !path.includes("/files/"));
+    console.log(`🕸️ [SW] ${urls.length} URLs encontradas en sitemap.`);
+    return urls;
+  } catch (err) {
+    console.warn("⚠️ [SW] No se pudo leer el sitemap:", err);
+    return [];
+  }
+}
+
+/**
+ * INSTALACIÓN
+ */
 self.addEventListener("install", event => {
+  console.log("🟦 [SW] Instalando...");
   event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => cache.addAll(CORE_ASSETS))
+    (async () => {
+      const cache = await caches.open(CACHE_NAME);
+      await cache.addAll(CORE_ASSETS);
+
+      // Cachear las páginas del sitemap
+      const urls = await getUrlsFromSitemap();
+      await cache.addAll(urls);
+
+      console.log("✅ [SW] Instalación completa.");
+      self.skipWaiting();
+    })()
   );
 });
 
-// Activación: limpiar versiones viejas si cambias el nombre del caché
+/**
+ * ACTIVACIÓN
+ */
 self.addEventListener("activate", event => {
+  console.log("🟨 [SW] Activando...");
   event.waitUntil(
     caches.keys().then(keys =>
-      Promise.all(keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k)))
+      Promise.all(
+        keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k))
+      )
     )
   );
+  self.clients.claim();
 });
 
-// Luego del primer uso, intentamos cachear todo el sitemap.xml
+/**
+ * FETCH: Estrategia Network First (red si hay, cache si no)
+ */
 self.addEventListener("fetch", event => {
-  event.respondWith(
-    caches.match(event.request).then(response => {
-      // Si ya está cacheado, devuelve eso
-      if (response) return response;
+  if (event.request.method !== "GET") return;
+  if (event.request.url.includes("/files/")) return; // no cachear adjuntos
 
-      // Si no, intenta obtenerlo de la red y guardar si corresponde
-      return fetch(event.request).then(networkResponse => {
-        // 🔹 NO guardar nada dentro de carpetas "files/"
-        const url = event.request.url;
-        if (!url.includes("/files/")) {
-          const cloned = networkResponse.clone();
-          caches.open(CACHE_NAME).then(cache => cache.put(event.request, cloned));
-        }
-        return networkResponse;
-      }).catch(() => {
-        // Si no hay conexión y no está cacheado, devuelve una página de error simple
-        if (event.request.destination === "document") {
-          return new Response("<h1>Sin conexión</h1><p>Esta página no está disponible sin internet.</p>", {
-            headers: { "Content-Type": "text/html" }
-          });
-        }
-      });
-    })
+  event.respondWith(
+    (async () => {
+      try {
+        const netRes = await fetch(event.request);
+        const cache = await caches.open(CACHE_NAME);
+        cache.put(event.request, netRes.clone());
+        return netRes;
+      } catch {
+        const cacheRes = await caches.match(event.request);
+        return cacheRes || caches.match("./index.html");
+      }
+    })()
   );
 });
-
-// (Opcional) Cacheo automático del sitemap en background
-self.addEventListener("sync", event => {
-  if (event.tag === "cache-sitemap") {
-    event.waitUntil(cacheAllPages());
-  }
-});
-
-// 🧩 Función que recorre el sitemap y cachea páginas
-async function cacheAllPages() {
-  const cache = await caches.open(CACHE_NAME);
-  const res = await fetch("./sitemap.xml");
-  const text = await res.text();
-
-  // Extrae todas las URLs del sitemap
-  const urls = [...text.matchAll(/<loc>(.*?)<\/loc>/g)].map(m => m[1]);
-
-  // Excluye cualquier URL que contenga "/files/"
-  const filtered = urls.filter(u => !u.includes("/files/"));
-
-  // Cachea todas las demás
-  await cache.addAll(filtered);
-
-  // Envía mensaje a las páginas abiertas
-  const clients = await self.clients.matchAll();
-  clients.forEach(client => {
-    client.postMessage({ type: "CACHE_COMPLETE", count: filtered.length });
-  });
-}

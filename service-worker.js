@@ -1,20 +1,26 @@
-const CACHE_NAME = "cancionero-dinamico-v1";
+const CACHE_NAME = "cancionero-dinamico-v2";
 
-// Archivos base que siempre deben estar
+/**
+ * 🧩 Archivos base que siempre deben estar disponibles offline
+ * (todas rutas reales, sin carpetas vacías)
+ */
 const CORE_ASSETS = [
   "./",
   "./index.html",
-  "./css/",
-  "./scripts/",
+  "./css/cancionero.css",
+  "./scripts/cancionero.js",
+  "./scripts/cancioneromenor.js",
+  "./scripts/canciones.js",
+  "./scripts/jquery.min.js",
+  "./images/logoagustino.png",
   "./images/icon-192.png",
   "./images/icon-512.png",
-  "./images/logoagustino.png",
   "./manifest.json",
   "./sitemap.xml"
 ];
 
 /**
- * Lee el sitemap.xml y devuelve una lista de rutas (excluyendo /files/)
+ * 📜 Lee el sitemap y devuelve todas las URLs (excluyendo /files/)
  */
 async function getUrlsFromSitemap() {
   try {
@@ -23,7 +29,8 @@ async function getUrlsFromSitemap() {
     const urls = [...text.matchAll(/<loc>(.*?)<\/loc>/g)]
       .map(m => {
         const u = new URL(m[1]);
-        return decodeURIComponent(u.pathname.startsWith("/") ? "." + u.pathname : "./" + u.pathname);
+        const path = decodeURIComponent(u.pathname);
+        return path.startsWith("/") ? "." + path : "./" + path;
       })
       .filter(path => !path.includes("/files/"));
     console.log(`🕸️ [SW] ${urls.length} URLs encontradas en sitemap.`);
@@ -35,57 +42,73 @@ async function getUrlsFromSitemap() {
 }
 
 /**
- * INSTALACIÓN
+ * 🧱 INSTALACIÓN — cachea los archivos base y todas las páginas del sitemap
  */
 self.addEventListener("install", event => {
   console.log("🟦 [SW] Instalando...");
   event.waitUntil(
     (async () => {
       const cache = await caches.open(CACHE_NAME);
-      await cache.addAll(CORE_ASSETS);
+
+      console.log("🟩 [SW] Cache abierto:", CACHE_NAME);
+      // Cachear archivos base con tolerancia a errores
+      await Promise.allSettled(
+        CORE_ASSETS.map(u =>
+          cache.add(u).catch(err => console.warn("❌ No se pudo cachear:", u, err))
+        )
+      );
 
       // Cachear las páginas del sitemap
       const urls = await getUrlsFromSitemap();
-      await cache.addAll(urls);
+      await Promise.allSettled(
+        urls.map(u =>
+          cache.add(u).catch(err => console.warn("❌ No se pudo cachear:", u, err))
+        )
+      );
 
-      console.log("✅ [SW] Instalación completa.");
+      console.log("✅ [SW] Instalación completa, sitio cacheado.");
       self.skipWaiting();
     })()
   );
 });
 
 /**
- * ACTIVACIÓN
+ * 🧹 ACTIVACIÓN — limpia versiones viejas del cache
  */
 self.addEventListener("activate", event => {
   console.log("🟨 [SW] Activando...");
   event.waitUntil(
     caches.keys().then(keys =>
       Promise.all(
-        keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k))
+        keys.filter(k => k !== CACHE_NAME).map(k => {
+          console.log("🧽 [SW] Borrando cache antiguo:", k);
+          return caches.delete(k);
+        })
       )
     )
   );
   self.clients.claim();
+  console.log("🟩 [SW] Activado correctamente");
 });
 
 /**
- * FETCH: Estrategia Network First (red si hay, cache si no)
+ * 🌐 FETCH — Estrategia Network First
+ * (usa la red si hay conexión, cache si no)
  */
 self.addEventListener("fetch", event => {
   if (event.request.method !== "GET") return;
-  if (event.request.url.includes("/files/")) return; // no cachear adjuntos
+  if (event.request.url.includes("/files/")) return; // no cachear adjuntos pesados
 
   event.respondWith(
     (async () => {
       try {
-        const netRes = await fetch(event.request);
+        const networkResponse = await fetch(event.request);
         const cache = await caches.open(CACHE_NAME);
-        cache.put(event.request, netRes.clone());
-        return netRes;
+        cache.put(event.request, networkResponse.clone());
+        return networkResponse;
       } catch {
-        const cacheRes = await caches.match(event.request);
-        return cacheRes || caches.match("./index.html");
+        const cachedResponse = await caches.match(event.request);
+        return cachedResponse || caches.match("./index.html");
       }
     })()
   );

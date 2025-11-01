@@ -616,7 +616,7 @@
     },
     "Domingo 10 B": {
       "ruta": "Salmos/bdom10.html",
-      "tono": "DO"
+      "tono": "FA#m"
     },
     "Domingo 11 B": {
       "ruta": "Salmos/bdom11.html",
@@ -947,7 +947,7 @@
     },
     "Dom 5 cuaresma A": {
       "ruta": "Salmos/acuaresma5.html",
-      "tono": "DO"
+      "tono": "FA#m"
     },
     "Dom 1 cuaresma B": {
       "ruta": "Salmos/bcuaresma1.html",
@@ -1211,7 +1211,7 @@
     },
     "2-noviembre: Todos los difuntos": {
       "ruta": "Salmos/todoslosdifuntos.html",
-      "tono": "DO"
+      "tono": "FA#m"
     },
     "8-diciembre: Inmaculada Concepción de la Virgen María": {
       "ruta": "Salmos/inmaculadaconcepcion.html",

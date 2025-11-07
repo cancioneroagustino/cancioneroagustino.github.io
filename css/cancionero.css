@@ -462,38 +462,42 @@ audio{
 }
 
 
-.accordion-body a.btn {
-  display: block;
-  width: 100%;
-  margin-bottom: 0.25rem; /* separación vertical */
-}
+ @media (max-width: 991px) {
+    .accordion-body a.btn {
+      display: block;
+      width: 100%;
+      margin-bottom: 0.25rem;
+    }
+  }
 
-
-
-
-@media (min-width: 992px) {
-  .accordion-button { 
-    pointer-events: none; /* desactiva clics */
-    background-color: #f8f9fa;
+  /* En escritorio: tres columnas abiertas */
+  @media (min-width: 992px) {
+    .accordion {
+      display: flex;
+      gap: 1rem;
+    }
+    .accordion-item {
+      flex: 1;
+      border-right: 1px solid #ddd;
+    }
+    .accordion-item:last-child {
+      border-right: none;
+    }
+    .accordion-button { 
+      pointer-events: none;   /* desactiva clics */
+      background-color: #f8f9fa;
+    }
+    .accordion-collapse {
+      display: block;
+      height: auto !important;
+      visibility: visible;
+    }
+    .accordion-body a.btn {
+      display: block;
+      width: 100%;
+      margin-bottom: 0.25rem;
+    }
   }
-  .accordion-collapse {
-    display: block !important;  /* siempre visible */
-    height: auto !important;
-  }
-  .accordion-body {
-    padding: 1rem;
-  }
-  .accordion .row {
-    display: flex;
-  }
-  .accordion .col-lg-4 {
-    border-right: 1px solid #ddd;
-  }
-  .accordion .col-lg-4:last-child {
-    border-right: none;
-  }
-}
-
 
 
 

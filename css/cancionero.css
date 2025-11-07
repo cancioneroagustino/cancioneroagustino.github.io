@@ -456,8 +456,8 @@ audio{
 
   /* En escritorio: tres columnas abiertas */
 @media (min-width: 992px) {
-  .accordion#accordionCiclos {
-    display: flex !important;
+  .accordion {
+    display: flex;
     gap: 1rem;
   }
   .accordion-item {
@@ -474,7 +474,7 @@ audio{
     background-color: #f8f9fa;
   }
   .accordion-collapse {
-    display: block;
+    display: block !important;
     height: auto !important;
     visibility: visible;
   }

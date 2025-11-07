@@ -461,26 +461,24 @@ audio{
   overflow: hidden;
 }
 
-/* Mobile: comportamiento normal del acordeón */
-@media (max-width: 991px) {
-  .accordion-collapse {
-    display: none;
-  }
-  .accordion-body a.btn {
-    display: block;
-    width: 100%;
-    margin-bottom: 0.25rem;
-  }
+
+.accordion-body a.btn {
+  display: block;
+  width: 100%;
+  margin-bottom: 0.25rem; /* separación vertical */
 }
+
+
+
 
 @media (min-width: 992px) {
   .accordion-button { 
-    pointer-events: none;
+    pointer-events: none; /* desactiva clics */
     background-color: #f8f9fa;
   }
   .accordion-collapse {
-    display: block;
-    height: auto;
+    display: block !important;  /* siempre visible */
+    height: auto !important;
   }
   .accordion-body {
     padding: 1rem;

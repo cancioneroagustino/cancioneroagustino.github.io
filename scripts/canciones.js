@@ -851,7 +851,7 @@
     },
     "Domingo 34 C (Cristo Rey)": {
       "ruta": "Salmos/cdom34.html",
-      "tono": "LA"
+      "tono": "DO"
     },
     "Adviento 1 A": {
       "ruta": "Salmos/aadv1.html",
@@ -859,11 +859,11 @@
     },
     "Adviento 2 A": {
       "ruta": "Salmos/aadv2.html",
-      "tono": "DO"
+      "tono": "RE"
     },
     "Adviento 3 A": {
       "ruta": "Salmos/aadv3.html",
-      "tono": "DO"
+      "tono": "FA#m"
     },
     "Adviento 4 A": {
       "ruta": "Salmos/aadv4.html",

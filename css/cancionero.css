@@ -175,8 +175,10 @@
   --bs-navbar-brand-font-size: 24px;
 }
 
-.gsc-control-cse {
-    padding: 0 !important;
+
+
+.bg-primary{
+    background-color:#0E7261;
 }
 
 .text-bg-primary{

@@ -286,25 +286,21 @@ pre {
 	text-align: center;
 }
 
+h1, h2 {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  line-height: 100%;
+  font-variant: normal;
+  vertical-align: baseline;
+}
+
 h1 {
-    font-family: 'Montserrat', sans-serif;
-    font-variant: normal;
-    font-size: 1.5rem;
-    font-weight: 700;
-    vertical-align: baseline;
-    line-height: 100%;
+    font-size: 1.5rem;;
     padding-left: 0.5rem;
     padding-right: 0,5rem;
 }
 
-h2 {
-    font-family: 'Montserrat', sans-serif;
-    font-variant: normal;
-    font-size: 1.2rem;
-    font-weight: 700;
-    vertical-align: baseline;
-    line-height: 100%;
-}
+h2 {font-size: 1.2rem;}
 
 .texto {
     color: #000000;

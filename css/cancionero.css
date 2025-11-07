@@ -171,7 +171,7 @@
 }
 
 .bg-primary{
-    background-color:#0E7261 !important;
+    background-color:#0A2846 !important;
 }
 
 .text-bg-primary{
@@ -456,16 +456,18 @@ audio{
 
   /* En escritorio: tres columnas abiertas */
 @media (min-width: 992px) {
-  .accordion {
-    display: flex;
+  .accordion#accordionCiclos {
+    display: flex !important;
     gap: 1rem;
   }
   .accordion-item {
     flex: 1;
+    margin: 0 !important;
+    border: none !important;
     border-right: 1px solid #ddd;
   }
   .accordion-item:last-child {
-    border-right: none;
+    border-right: none !important;
   }
   .accordion-button {
     pointer-events: none;

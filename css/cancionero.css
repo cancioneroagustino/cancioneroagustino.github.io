@@ -169,7 +169,7 @@
 
 
 .navbar {
-  --bs-navbar-padding-y: 0;
+  --bs-navbar-padding-y: 0,25rem;
   --bs-navbar-brand-font-size: 24px;
 }
 

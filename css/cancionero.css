@@ -479,7 +479,7 @@ audio{
     background-color: #f8f9fa;
   }
   .accordion-collapse {
-    display: block;
+    display: block !important;
     height: auto !important;
   }
   .accordion-body {

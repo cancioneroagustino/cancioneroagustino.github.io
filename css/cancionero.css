@@ -147,11 +147,6 @@
 
 
 
-@charset "UTF-8";
-
-
-
-
 
 .d-flex {
   display: flex;
@@ -174,8 +169,6 @@
   --bs-navbar-padding-y: 0;
   --bs-navbar-brand-font-size: 24px;
 }
-
-
 
 .bg-primary{
     background-color:#0E7261;

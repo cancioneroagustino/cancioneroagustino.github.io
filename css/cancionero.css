@@ -144,7 +144,10 @@
 }
 
 
-
+:root {
+  --bs-primary: #0A2846;
+  --bs-primary-rgb: 10, 40, 70; /* valores RGB equivalentes */
+}
 
 
 
@@ -170,9 +173,6 @@
   --bs-navbar-brand-font-size: 24px;
 }
 
-.bg-primary{
-    background-color:#0A2846 !important;
-}
 
 .text-bg-primary{
 	color:#fff!important;

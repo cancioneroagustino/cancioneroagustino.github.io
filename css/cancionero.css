@@ -171,7 +171,7 @@
 }
 
 .bg-primary{
-    background-color:#0E7261;
+    background-color:#0E7261 !important;
 }
 
 .text-bg-primary{
@@ -455,33 +455,33 @@ audio{
   }
 
   /* En escritorio: tres columnas abiertas */
-  @media (min-width: 992px) {
-    .accordion {
-      display: flex;
-      gap: 1rem;
-    }
-    .accordion-item {
-      flex: 1;
-      border-right: 1px solid #ddd;
-    }
-    .accordion-item:last-child {
-      border-right: none;
-    }
-    .accordion-button { 
-      pointer-events: none;   /* desactiva clics */
-      background-color: #f8f9fa;
-    }
-    .accordion-collapse {
-      display: block;
-      height: auto !important;
-      visibility: visible;
-    }
-    .accordion-body a.btn {
-      display: block;
-      width: 100%;
-      margin-bottom: 0.25rem;
-    }
+@media (min-width: 992px) {
+  .accordion {
+    display: flex;
+    gap: 1rem;
   }
+  .accordion-item {
+    flex: 1;
+    border-right: 1px solid #ddd;
+  }
+  .accordion-item:last-child {
+    border-right: none;
+  }
+  .accordion-button {
+    pointer-events: none;
+    background-color: #f8f9fa;
+  }
+  .accordion-collapse {
+    display: block;
+    height: auto !important;
+    visibility: visible;
+  }
+  .accordion-body a.btn {
+    display: block;
+    width: 100%;
+    margin-bottom: 0.25rem;
+  }
+}
 
 
 

@@ -447,11 +447,11 @@
     },
     "Domingo 2 A": {
       "ruta": "Salmos/adom02.html",
-      "tono": "DO"
+      "tono": "FA#m"
     },
     "Domingo 3 A": {
       "ruta": "Salmos/adom03.html",
-      "tono": "DO"
+      "tono": "FA#m"
     },
     "Domingo 4 A": {
       "ruta": "Salmos/adom04.html",
@@ -459,7 +459,7 @@
     },
     "Domingo 5 A": {
       "ruta": "Salmos/adom05.html",
-      "tono": "DO"
+      "tono": "RE"
     },
     "Domingo 6 A": {
       "ruta": "Salmos/adom06.html",
@@ -467,7 +467,7 @@
     },
     "Domingo 7 A": {
       "ruta": "Salmos/adom07.html",
-      "tono": "DO"
+      "tono": "REm"
     },
     "Domingo 8 A": {
       "ruta": "Salmos/adom08.html",
@@ -475,11 +475,11 @@
     },
     "Domingo 9 A": {
       "ruta": "Salmos/adom09.html",
-      "tono": "DO"
+      "tono": "RE"
     },
     "Domingo 10 A": {
       "ruta": "Salmos/adom10.html",
-      "tono": "DO"
+      "tono": "LA"
     },
     "Domingo 11 A": {
       "ruta": "Salmos/adom11.html",
@@ -584,7 +584,7 @@
     },
     "Domingo 2 B": {
       "ruta": "Salmos/bdom02.html",
-      "tono": "DO"
+      "tono": "FA#m"
     },
     "Domingo 3 B": {
       "ruta": "Salmos/bdom03.html",

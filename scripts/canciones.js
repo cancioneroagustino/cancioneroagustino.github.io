@@ -1213,9 +1213,13 @@
       "ruta": "Salmos/todoslosdifuntos.html",
       "tono": "FA#m"
     },
+    "9-noviembre: Dedicación de la basílica de Letrán": {
+      "ruta": "Salmos/basilicadeletran.html",
+      "tono": "DO"
+    },
     "8-diciembre: Inmaculada Concepción de la Virgen María": {
       "ruta": "Salmos/inmaculadaconcepcion.html",
-      "tono": "DO"
+      "tono": "FA#m"
     }
   },
 

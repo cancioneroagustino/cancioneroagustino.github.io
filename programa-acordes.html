@@ -63,91 +63,81 @@
     return { title, preInner, dataKey };
   }
 
-  // --- Insertar canción en el DOM y, si corresponde, transponer usando plugin ---
-async function insertarYCambiarSiCorresponde(container, ruta, tonoDeseado) {
-  try {
-    const { title, preInner, dataKey: tonoOriginal } = await fetchCancionData(ruta);
+  // --- Insertar canción en el DOM y aplicar transposición ---
+  async function insertarYCambiarSiCorresponde(container, ruta, tonoDeseado) {
+    try {
+      const { title, preInner, dataKey: tonoOriginal } = await fetchCancionData(ruta);
 
-    // Crear la columna bootstrap
-    const col = document.createElement("div");
-    col.className = "col-12 col-md-8 col-lg-4 align-self-center";
+      // Crear la columna bootstrap
+      const col = document.createElement("div");
+      col.className = "col-12 col-md-8 col-lg-4 align-self-center";
 
-    // Contenedor de la canción
-    const article = document.createElement("div");
-    article.className = "d-flex justify-content-center cancion-content mb-4";
+      // Contenedor de la canción
+      const article = document.createElement("div");
+      article.className = "d-flex justify-content-center cancion-content mb-4";
 
-    // Título
-    const h2 = document.createElement("h2");
-    h2.textContent = title;
-    h2.className = "col-12 text-center";
-    article.appendChild(h2);
+      // Título
+      const h2 = document.createElement("h2");
+      h2.textContent = title;
+      h2.className = "col-12 text-center";
+      article.appendChild(h2);
 
-    // Pre con la letra
-    const pre = document.createElement("pre");
-    pre.className = "letra";
-    pre.setAttribute("data-key", tonoOriginal);
-    pre.innerHTML = preInner;
-    article.appendChild(pre);
+      // Pre con la letra
+      const pre = document.createElement("pre");
+      pre.className = "letra";
+      pre.setAttribute("data-key", tonoOriginal);
+      pre.innerHTML = preInner;
+      article.appendChild(pre);
 
-    col.appendChild(article);
-    container.appendChild(col);
+      col.appendChild(article);
+      container.appendChild(col);
 
+      // Asegurar que jQuery esté cargado
+      await cargarScript("https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js");
 
-    // Asegurar que jQuery esté cargado
-    await cargarScript("https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js");
+      // Cargar el nuevo plugin unificado
+      await cargarScript("scripts/transpositor.js");
 
-    // Cargar el script adecuado
-    await cargarScript("scripts/transpositor.js");
+      // Esperar a que el plugin esté disponible
+      await new Promise((r) => setTimeout(r, 100));
 
-    // Esperar un momento para que el plugin se registre
-    await new Promise((r) => setTimeout(r, 100));
+      // Inicializar el plugin
+      if (window.jQuery && typeof jQuery.fn.transpose === "function") {
+        const $pre = jQuery(pre);
+        $pre.transpose();
 
-    // Inicializar el plugin
-    if (window.jQuery && typeof jQuery.fn.transpose === "function") {
-      const $pre = jQuery(pre);
-      $pre.transpose();
-
-      // Aplicar cambio de tono si es distinto
-      if (tonoDeseado && tonoDeseado !== tonoOriginal) {
-        const claveObjetivo = tonoDeseado.replace(/m$/i, "");
-        const $keysBlock = $pre.prev(".transpose-keys");
-        const $link = $keysBlock
-          .find("a")
-          .filter(function () {
-            return (
-              jQuery(this).text().toUpperCase() ===
-              claveObjetivo.toUpperCase()
-            );
-          })
-          .first();
-        if ($link.length) {
-          $link.trigger("click");
-        } else {
-          console.warn(
-            "No se encontró enlace de tono",
-            claveObjetivo,
-            "para",
-            ruta
-          );
+        // Aplicar cambio de tono si es distinto
+        if (tonoDeseado && tonoDeseado !== tonoOriginal) {
+          const claveObjetivo = tonoDeseado.replace(/m$/i, "");
+          const $keysBlock = $pre.prev(".transpose-keys");
+          const $link = $keysBlock
+            .find("a")
+            .filter(function () {
+              return (
+                jQuery(this).text().toUpperCase() ===
+                claveObjetivo.toUpperCase()
+              );
+            })
+            .first();
+          if ($link.length) {
+            $link.trigger("click");
+          } else {
+            console.warn("No se encontró enlace de tono", claveObjetivo, "para", ruta);
+          }
         }
+      } else {
+        console.warn("⚠️ Plugin transpose no disponible aún");
       }
-    } else {
-      console.warn("⚠️ Plugin transpose no disponible aún:", script);
+    } catch (err) {
+      console.warn("⚠️ Error menor o falta de tonalidad en:", ruta, err.message);
     }
-  } catch (err) {
-  console.warn("⚠️ Error menor o falta de tonalidad en:", ruta, err.message);
-  // No mostramos nada visual si el contenido ya se insertó correctamente.
-  // Sólo dejamos el log en consola para depuración.
-}
-}
+  }
 
-  // --- Mostrar todas las canciones juntas (modo "acordes") ---
+  // --- Mostrar todas las canciones del programa ---
   async function mostrarProgramaConAcordes() {
     const container = document.getElementById('programa-acordes-container');
 
-    // Iteramos en orden y procesamos cada canción
     for (const item of programa) {
-      // item tiene: {seccion, nombre, cancion (ruta), tono}
       await insertarYCambiarSiCorresponde(container, item.cancion, item.tono);
     }
   }

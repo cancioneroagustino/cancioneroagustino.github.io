@@ -92,17 +92,12 @@ async function insertarYCambiarSiCorresponde(container, ruta, tonoDeseado) {
     col.appendChild(article);
     container.appendChild(col);
 
-    // Determinar si usar versión mayor o menor según el tono solicitado o el original
-    const usarMenor = /m$/i.test(tonoDeseado || tonoOriginal);
-    const script = usarMenor
-      ? "scripts/transpositor.js"
-      : "scripts/transpositor.js";
 
     // Asegurar que jQuery esté cargado
     await cargarScript("https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js");
 
     // Cargar el script adecuado
-    await cargarScript(script);
+    await cargarScript("scripts/transpositor.js");
 
     // Esperar un momento para que el plugin se registre
     await new Promise((r) => setTimeout(r, 100));

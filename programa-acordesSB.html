@@ -100,7 +100,7 @@
 
       // Determinar si usar menor o mayor según la 'm' final en tonoDeseado
       const usarMenor = /m$/i.test(tonoDeseado);
-      const script = usarMenor ? 'scripts/cancioneromenor.js' : 'scripts/cancionero.js';
+      const script = usarMenor ? 'scripts/cancioneromenor.js' : 'scripts/transpositor.js';
 
       // Cargar el script correspondiente (si ya está cargado, cargarScript es no-op)
       await cargarScript(script);

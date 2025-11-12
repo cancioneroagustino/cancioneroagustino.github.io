@@ -96,7 +96,7 @@ async function insertarYCambiarSiCorresponde(container, ruta, tonoDeseado) {
     const usarMenor = /m$/i.test(tonoDeseado || tonoOriginal);
     const script = usarMenor
       ? "scripts/cancioneromenor.js"
-      : "scripts/cancionero.js";
+      : "scripts/transpositor.js";
 
     // Asegurar que jQuery esté cargado
     await cargarScript("https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js");

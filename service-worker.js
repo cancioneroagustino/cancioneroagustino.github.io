@@ -9,7 +9,7 @@ const CORE_ASSETS = [
   "./index.html",
   "./css/cancionero.css",
   "./css/bootstrap.min.css",
-  "./scripts/cancionero.js",
+  "./scripts/transpositor.js",
   "./scripts/cancioneromenor.js",
   "./scripts/canciones.js",
   "./scripts/bootstrap.bundle.min.js",

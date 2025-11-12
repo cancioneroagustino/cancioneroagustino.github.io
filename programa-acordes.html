@@ -95,7 +95,7 @@ async function insertarYCambiarSiCorresponde(container, ruta, tonoDeseado) {
     // Determinar si usar versión mayor o menor según el tono solicitado o el original
     const usarMenor = /m$/i.test(tonoDeseado || tonoOriginal);
     const script = usarMenor
-      ? "scripts/cancioneromenor.js"
+      ? "scripts/transpositor.js"
       : "scripts/transpositor.js";
 
     // Asegurar que jQuery esté cargado

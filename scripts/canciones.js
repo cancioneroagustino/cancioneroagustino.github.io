@@ -483,11 +483,11 @@
     },
     "Domingo 11 A": {
       "ruta": "Salmos/adom11.html",
-      "tono": "DO"
+      "tono": "SOL"
     },
     "Domingo 12 A": {
       "ruta": "Salmos/adom12.html",
-      "tono": "DO"
+      "tono": "MI"
     },
     "Domingo 13 A": {
       "ruta": "Salmos/adom13.html",
@@ -495,19 +495,19 @@
     },
     "Domingo 14 A": {
       "ruta": "Salmos/adom14.html",
-      "tono": "DO"
+      "tono": "REm"
     },
     "Domingo 15 A": {
       "ruta": "Salmos/adom15.html",
-      "tono": "DO"
+      "tono": "LA"
     },
     "Domingo 16 A": {
       "ruta": "Salmos/adom16.html",
-      "tono": "DO"
+      "tono": "RE"
     },
     "Domingo 17 A": {
       "ruta": "Salmos/adom17.html",
-      "tono": "DO"
+      "tono": "LAm"
     },
     "Domingo 18 A": {
       "ruta": "Salmos/adom18.html",
@@ -519,7 +519,7 @@
     },
     "Domingo 20 A": {
       "ruta": "Salmos/adom20.html",
-      "tono": "DO"
+      "tono": "RE"
     },
     "Domingo 21 A": {
       "ruta": "Salmos/adom21.html",
@@ -1095,7 +1095,7 @@
     },
     "Domingo 4 de pascua C": {
       "ruta": "Salmos/cpascua4.html",
-      "tono": "FA"
+      "tono": "RE"
     },
     "Domingo 5 de pascua C": {
       "ruta": "Salmos/cpascua5.html",

@@ -1777,7 +1777,7 @@
       "ruta": "Santo/Santo DO (2).html",
       "tono": "DO"
     },
-    "Santo Encuentro continental": {
+    "Santo Encuentro continental (Gen rosso)": {
       "ruta": "Santo/Santo Encuentro continental.html",
       "tono": "SOL"
     },
@@ -1957,6 +1957,10 @@
     "Cordero de Dios Betsaida": {
       "ruta": "Cordero/Cordero de Dios Betsaida.html",
       "tono": "RE"
+    },
+     "Cordero de Dios Frisina": {
+      "ruta": "Cordero/Cordero de Dios Frisina.html",
+      "tono": "REm"
     },
     "Cordero de Dios folclórico - Polka - (RE)": {
       "ruta": "Cordero/Cordero de Dios folclórico polka.html",

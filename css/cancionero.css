@@ -446,6 +446,27 @@ audio{
   overflow: hidden;
 }
 
+#toolbarContainer,
+#toolbar,
+#toolbarViewer,
+#toolbarViewerLeft,
+#toolbarViewerRight,
+#toolbarSidebar,
+#sidebarContainer,
+#loadingBar,
+.secondaryToolbar,
+.findbar {
+  display: none !important;
+}
+
+/* Quitar iconos flotantes del visor PDF */
+.toolbarButton,
+.download,
+#print,
+#viewFind {
+  display: none !important;
+}
+
 
  @media (max-width: 991px) {
     .accordion-body a.btn {

@@ -3187,6 +3187,14 @@
 
 
   Mariano: {
+    "Alma Redemptoris Mater": {
+      "ruta": "Marianos/Alma Redemptoris Mater.html",
+      "tono": "DO"
+    },
+    "Madre del redentor (gregoriano)": {
+      "ruta": "Marianos/Madre del redentor (gregoriano).html",
+      "tono": "DO"
+    },
     "Regina coeli": {
       "ruta": "Marianos/Regina coeli.html",
       "tono": "FA"
@@ -3203,8 +3211,12 @@
       "ruta": "Marianos/La salve.html",
       "tono": "DO"
     },
-    "Sub tuum praesidium": {
+     "Sub tuum praesidium": {
       "ruta": "Marianos/Sub tuum praesidium.html",
+      "tono": "RE"
+    },
+    "Bajo tu amparo (gregoriano)": {
+      "ruta": "Marianos/Bajo tu amparo (gregoriano).html",
       "tono": "RE"
     },
     "Alégrate, María": {

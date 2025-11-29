@@ -523,23 +523,23 @@
     },
     "Domingo 21 A": {
       "ruta": "Salmos/adom21.html",
-      "tono": "DO"
+      "tono": "LAm"
     },
     "Domingo 22 A": {
       "ruta": "Salmos/adom22.html",
-      "tono": "DO"
+      "tono": "MI"
     },
     "Domingo 23 A": {
       "ruta": "Salmos/adom23.html",
-      "tono": "DO"
+      "tono": "DO#m"
     },
     "Domingo 24 A": {
       "ruta": "Salmos/adom24.html",
-      "tono": "DO"
+      "tono": "REm"
     },
     "Domingo 25 A": {
       "ruta": "Salmos/adom25.html",
-      "tono": "DO"
+      "tono": "RE"
     },
     "Domingo 26 A": {
       "ruta": "Salmos/adom26.html",
@@ -547,27 +547,27 @@
     },
     "Domingo 27 A": {
       "ruta": "Salmos/adom27.html",
-      "tono": "DO"
+      "tono": "FA"
     },
     "Domingo 28 A": {
       "ruta": "Salmos/adom28.html",
-      "tono": "DO"
+      "tono": "LA"
     },
     "Domingo 29 A": {
       "ruta": "Salmos/adom29.html",
-      "tono": "DO"
+      "tono": "MI"
     },
     "Domingo 30 A": {
       "ruta": "Salmos/adom30.html",
-      "tono": "DO"
+      "tono": "MIm"
     },
     "Domingo 31 A": {
       "ruta": "Salmos/adom31.html",
-      "tono": "DO"
+      "tono": "LA"
     },
     "Domingo 32 A": {
       "ruta": "Salmos/adom32.html",
-      "tono": "DO"
+      "tono": "DO#m"
     },
     "Domingo 33 A": {
       "ruta": "Salmos/adom33.html",
@@ -931,7 +931,7 @@
     },
     "Dom 1 cuaresma A": {
       "ruta": "Salmos/acuaresma1.html",
-      "tono": "DO"
+      "tono": "LAm"
     },
     "Dom 2 cuaresma A": {
       "ruta": "Salmos/acuaresma2.html",

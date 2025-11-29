@@ -929,17 +929,21 @@
       "ruta": "Salmos/epifania.html",
       "tono": "DO"
     },
+    "Miércoles de ceniza": {
+      "ruta": "Salmos/miercolesdeceniza.html",
+      "tono": "DO#m"
+    },
     "Dom 1 cuaresma A": {
       "ruta": "Salmos/acuaresma1.html",
       "tono": "LAm"
     },
     "Dom 2 cuaresma A": {
       "ruta": "Salmos/acuaresma2.html",
-      "tono": "DO"
+      "tono": "SOL"
     },
     "Dom 3 cuaresma A": {
       "ruta": "Salmos/acuaresma3.html",
-      "tono": "DO"
+      "tono": "FA#m"
     },
     "Dom 4 cuaresma A": {
       "ruta": "Salmos/acuaresma4.html",
@@ -1003,7 +1007,7 @@
     },
     "Viernes Santo (Pasión del Señor)": {
       "ruta": "Salmos/pasiondelsr.html",
-      "tono": "FA#m"
+      "tono": "DO#m"
     },
     "Vigilia pascual antífonas BP": {
       "ruta": "Salmos/antifonasvigiliapascual.html",
@@ -1087,7 +1091,7 @@
     },
     "Domingo 2 de pascua C": {
       "ruta": "Salmos/cpascua2.html",
-      "tono": "LA"
+      "tono": "DO"
     },
     "Domingo 3 de pascua C": {
       "ruta": "Salmos/cpascua3.html",
@@ -1103,7 +1107,7 @@
     },
     "Domingo 6 de pascua C": {
       "ruta": "Salmos/cpascua6.html",
-      "tono": "REm"
+      "tono": "RE"
     },
     "Ascención del Señor": {
       "ruta": "Salmos/ascensiondelsr.html",

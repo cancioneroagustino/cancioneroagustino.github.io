@@ -1055,7 +1055,7 @@
     },
     "Domingo 3 de pascua A": {
       "ruta": "Salmos/apascua3.html",
-      "tono": "DO"
+      "tono": "MI"
     },
     "Domingo 4 de pascua A": {
       "ruta": "Salmos/apascua4.html",
@@ -1123,11 +1123,11 @@
     },
     "Santísima Trinidad A": {
       "ruta": "Salmos/asantisimatrinidad.html",
-      "tono": "DO"
+      "tono": "MI"
     },
     "Santísima Trinidad B": {
       "ruta": "Salmos/bsantisimatrinidad.html",
-      "tono": "DO"
+      "tono": "SOL"
     },
     "Santísima Trinidad C": {
       "ruta": "Salmos/csantisimatrinidad.html",
@@ -1151,7 +1151,7 @@
     },
     "Sagrado Corazón B": {
       "ruta": "Salmos/bsagradocorazon.html",
-      "tono": "DO"
+      "tono": "LA"
     },
     "Sagrado Corazón C": {
       "ruta": "Salmos/csagradocorazon.html",

@@ -1205,6 +1205,10 @@
       "ruta": "Salmos/sannicolas.html",
       "tono": "DO"
     },
+    "29-septiembre: Santos Arcángeles Miguel, Gabriel y Rafael": {
+      "ruta": "Salmos/santosarcangeles.html",
+      "tono": "DO"
+    },
     "10-octubre: Santo Tomás de Villanueva": {
       "ruta": "Salmos/stotomasdevillanueva.html",
       "tono": "RE"

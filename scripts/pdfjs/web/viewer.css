@@ -7458,3 +7458,51 @@ dialog :link{
     display:none;
   }
 }
+
+
+
+/* ===========================
+   VISOR PDF.JS – MODO MINIMAL
+   =========================== */
+
+/* Ocultar TODA la UI */
+#toolbarContainer,
+#toolbar,
+#toolbarViewer,
+#toolbarViewerLeft,
+#toolbarViewerRight,
+#toolbarSidebar,
+#sidebarContainer,
+#secondaryToolbar,
+#loadingBar,
+.findbar {
+  display: none !important;
+}
+
+/* Eliminar padding superior reservado para toolbar */
+#mainContainer {
+  top: 0 !important;
+}
+
+#viewerContainer {
+  top: 0 !important;
+}
+
+/* Quitar botones residuales */
+.toolbarButton,
+.download,
+#print,
+#viewFind {
+  display: none !important;
+}
+
+/* Fondo limpio */
+body {
+  background: transparent !important;
+}
+
+/* Scroll discreto */
+::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}

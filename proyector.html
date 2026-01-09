@@ -34,6 +34,14 @@ body {
   white-space: pre-wrap;
 }
 
+/* Modo preview */
+.preview {
+  max-height: 40vh;
+  overflow-y: auto;
+  border: 1px dashed rgba(0,0,0,0.3);
+  margin-top: 2rem;
+}
+
 .titulo-cancion {
   margin: 3vh 0 1.5vh 0;
   font-weight: 600;
@@ -84,7 +92,7 @@ button {
   </div>
 </div>
 
-<div id="pantalla-proyector"></div>
+<div id="pantalla-proyector" class="preview"></div>
 
 
 

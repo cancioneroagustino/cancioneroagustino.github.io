@@ -51,11 +51,21 @@ body {
 .titulo-cancion {
   margin: 3vh 0 1.5vh 0;
   font-weight: 600;
+  font-size: 0.6em;
+  opacity: 0.5;
+  margin-bottom: 3vh;
+  text-align: center;
 }
 
 button {
   margin: 0.25rem;
 }
+
+.bloque-cancion {
+  margin-bottom: 12vh; /* separación grande entre canciones */
+}
+
+
 
 #controles-tamano {
   position: fixed;
@@ -67,7 +77,7 @@ button {
 #controles-tamano button {
   display: block;
   margin-bottom: 0.3rem;
-  font-size: 1rem;
+  font-size: 0.6rem;
   padding: 0.4rem 0.6rem;
 }
 
@@ -138,7 +148,7 @@ function isChordLine(line) {
 }
 
 function procesarPre(pre) {
-  const lines = pre.textContent.split('\n');
+  const lines = pre.innerHTML.split('\n');
   return lines.filter(l => !isChordLine(l)).join('\n');
 }
 

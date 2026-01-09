@@ -29,7 +29,7 @@ body {
   text-align: center;
   padding: 5vh 6vw;
   font-family: 'Atkinson Hyperlegible', system-ui, sans-serif;
-  font-size: 6vh;
+  font-size: var(--font-size, 6vh);
   line-height: 1.25;
   white-space: pre-wrap;
 }
@@ -42,6 +42,22 @@ body {
 button {
   margin: 0.25rem;
 }
+
+#controles-tamano {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 9999;
+}
+
+#controles-tamano button {
+  display: block;
+  margin-bottom: 0.3rem;
+  font-size: 1rem;
+  padding: 0.4rem 0.6rem;
+}
+
+
 </style>
 </head>
 
@@ -156,6 +172,11 @@ function disminuirTexto() {
   aplicarTamano();
 }
 </script>
+
+<div id="controles-tamano">
+  <button onclick="aumentarTexto()">A+</button>
+  <button onclick="disminuirTexto()">A−</button>
+</div>
 
 </body>
 </html>

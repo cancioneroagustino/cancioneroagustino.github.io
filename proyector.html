@@ -79,6 +79,8 @@ button {
   margin-bottom: 0.3rem;
   font-size: 0.6rem;
   padding: 0.4rem 0.6rem;
+  color: var(--text-color);
+  border-color: var(--text-color);
 }
 
 
@@ -198,8 +200,8 @@ function disminuirTexto() {
 </script>
 
 <div id="controles-tamano">
-  <button onclick="aumentarTexto()">A+</button>
-  <button onclick="disminuirTexto()">A−</button>
+  <button class="btn-outline-secondary" onclick="aumentarTexto()">A+</button>
+  <button class="btn-outline-secondary" onclick="disminuirTexto()">A−</button>
 </div>
 
 </body>

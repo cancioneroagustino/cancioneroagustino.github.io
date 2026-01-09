@@ -12,6 +12,7 @@
 :root {
   --bg-color: #f2e6a7;
   --text-color: #1a1a1a;
+  --font-size: 6vh;
 }
 
 body {
@@ -22,6 +23,18 @@ body {
 
 #configuracion {
   padding: 2rem;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}
+
+#configuracion .btn {
+  color: var(--text-color);
+  border-color: var(--text-color);
+}
+
+#configuracion .btn:hover {
+  background-color: var(--text-color);
+  color: var(--bg-color);
 }
 
 #pantalla-proyector {
@@ -81,11 +94,11 @@ button {
   </div>
 
   <div class="mt-4">
-    <button class="btn btn-primary btn-lg" onclick="iniciarProyeccion()">Proyectar letras</button>
+    <button class="btn btn-outline-secondary btn-lg" onclick="iniciarProyeccion()">Proyectar letras</button>
   </div>
 </div>
 
-<div id="pantalla-proyector" class="preview"></div>
+<div id="pantalla-proyector"></div>
 
 
 

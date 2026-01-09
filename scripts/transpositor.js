@@ -2,8 +2,8 @@
 
   // Función para determinar si una línea es de acordes
   var isChordLine = function(line) {
-    return /(\bDO|\bRE|\bMI|\bFA|\bSOL|\bLA|\bSI)[b#]?/.test(line);
-  };
+  return /(\bDO|\bRE|\bMI|\bFA|\bSOL|\bLA|\bSI)[b#]?|\bCejillo\b|\bIntro\b|\bIntroducción\b/.test(line);
+}
 
   // Función para ocultar/mostrar acordes
   function toggleChords() {

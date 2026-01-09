@@ -33,8 +33,8 @@
 
     // Función para determinar si una línea es de acordes
     function isChordLine(line) {
-      return /(\bDO|\bRE|\bMI|\bFA|\bSOL|\bLA|\bSI)[b#]?/.test(line);
-    }
+  return /(\bDO|\bRE|\bMI|\bFA|\bSOL|\bLA|\bSI)[b#]?|\bCejillo\b|\bIntro\b|\bIntroducción\b/.test(line);
+}
 
     // Función para procesar el contenido de la canción
     function procesarCancion(contenido) {

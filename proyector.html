@@ -1,203 +1,140 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Proyector de letras</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="robots" content="noindex">
+<meta charset="utf-8">
+<title>Proyector de letras - Cancionero Católico</title>
+<meta name="robots" content="noindex">
+<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0">
+<link href="./css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="css/cancionero.css">
 
-  <!-- Fuente legible a distancia -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-color: #f2e6a7;
+  --text-color: #1a1a1a;
+}
 
-  <style>
-    :root {
-      --bg-color: #f2e6a7; /* Día (amarillo templo) */
-      --text-color: #1a1a1a;
-    }
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  margin: 0;
+}
 
-    body {
-      margin: 0;
-      font-family: 'Atkinson Hyperlegible', Arial, sans-serif;
-      background: var(--bg-color);
-      color: var(--text-color);
-    }
+#configuracion {
+  padding: 2rem;
+}
 
-    #configuracion {
-      padding: 2rem;
-      max-width: 900px;
-      margin: auto;
-    }
+#pantalla-proyector {
+  display: none;
+  padding: 5vh 6vw;
+  font-family: 'Atkinson Hyperlegible', system-ui, sans-serif;
+  font-size: 6vh;
+  line-height: 1.25;
+  white-space: pre-wrap;
+}
 
-    h1 {
-      font-size: 1.6rem;
-      margin-bottom: 1.2rem;
-    }
+.titulo-cancion {
+  margin: 3vh 0 1.5vh 0;
+  font-weight: 600;
+}
 
-    .grupo {
-      margin-bottom: 1.5rem;
-    }
-
-    .grupo button {
-      margin-right: 0.5rem;
-      padding: 0.5rem 1rem;
-      font-size: 1rem;
-      cursor: pointer;
-    }
-
-    .grupo label {
-      display: inline-block;
-      margin-right: 1rem;
-      font-size: 0.95rem;
-    }
-
-    #btnProyectar {
-      font-size: 1.2rem;
-      padding: 0.75rem 1.5rem;
-    }
-
-    /* Vista de proyección */
-    #proyeccion {
-      display: none;
-      padding: 3vh 4vw;
-      min-height: 100vh;
-    }
-
-    #letra {
-      white-space: pre-wrap;
-      font-size: 5.5vh;
-      line-height: 1.45;
-    }
-  </style>
+button {
+  margin: 0.25rem;
+}
+</style>
 </head>
+
 <body>
 
-<div id="configuracion">
-  <h1>Proyección de letras</h1>
+<div id="configuracion" class="container text-center">
+  <h1 class="titulo">Proyección de letras</h1>
 
-  <div class="grupo">
-    <strong>Presets:</strong><br><br>
-    <button onclick="presetDia()">Día</button>
-    <button onclick="presetNoche()">Noche</button>
+  <div class="mt-4">
+    <h5>Presets</h5>
+    <button class="btn btn-outline-secondary" onclick="presetDia()">Día</button>
+    <button class="btn btn-outline-secondary" onclick="presetNoche()">Noche</button>
   </div>
 
-  <div class="grupo">
-    <strong>Colores personalizados:</strong><br><br>
-    <label>
-      Fondo:
-      <input type="color" id="colorFondo" value="#f2e6a7" onchange="actualizarColores()">
-    </label>
-    <label>
-      Texto:
-      <input type="color" id="colorTexto" value="#1a1a1a" onchange="actualizarColores()">
-    </label>
+  <div class="mt-4">
+    <h5>Colores personalizados</h5>
+    <label>Fondo: <input type="color" id="bgColor" value="#f2e6a7"></label>
+    <label class="ms-3">Texto: <input type="color" id="textColor" value="#1a1a1a"></label>
   </div>
 
-  <button id="btnProyectar" onclick="iniciarProyeccion()">Proyectar letras</button>
+  <div class="mt-4">
+    <button class="btn btn-primary btn-lg" onclick="iniciarProyeccion()">Proyectar letras</button>
+  </div>
 </div>
 
-<div id="proyeccion">
-  <div id="letra"></div>
-</div>
+<div id="pantalla-proyector"></div>
 
 <script>
-  /************************************************************
-   *  LÓGICA DE EXTRACCIÓN (misma que programa-texto.html)
-   ************************************************************/
+const programa = JSON.parse(localStorage.getItem('programaMisa'));
 
-  function isChordLine(line) {
-    return /(\bDO|\bRE|\bMI|\bFA|\bSOL|\bLA|\bSI)[b#]?(m)?/.test(line);
+if (!programa || programa.length === 0) {
+  alert('No hay un programa de misa cargado.');
+  window.location.href = 'crear-programa.html';
+}
+
+function presetDia() {
+  setColors('#f2e6a7', '#1a1a1a');
+}
+
+function presetNoche() {
+  setColors('#000000', '#ffffff');
+}
+
+function setColors(bg, text) {
+  document.documentElement.style.setProperty('--bg-color', bg);
+  document.documentElement.style.setProperty('--text-color', text);
+  document.getElementById('bgColor').value = bg;
+  document.getElementById('textColor').value = text;
+}
+
+bgColor.addEventListener('input', e => {
+  document.documentElement.style.setProperty('--bg-color', e.target.value);
+});
+
+textColor.addEventListener('input', e => {
+  document.documentElement.style.setProperty('--text-color', e.target.value);
+});
+
+function isChordLine(line) {
+  return /(\bDO|\bRE|\bMI|\bFA|\bSOL|\bLA|\bSI)[b#]?/.test(line);
+}
+
+function procesarPre(pre) {
+  const lines = pre.textContent.split('\n');
+  return lines.filter(l => !isChordLine(l)).join('\n');
+}
+
+async function cargarCancion(ruta) {
+  const response = await fetch(ruta);
+  const html = await response.text();
+  const doc = new DOMParser().parseFromString(html, 'text/html');
+
+  const titulo = doc.querySelector('h1.titulo')?.innerText || '';
+  const pre = doc.querySelector('pre');
+
+  if (!pre) return '';
+
+  let salida = '';
+  if (titulo) salida += titulo + '\n\n';
+  salida += procesarPre(pre) + '\n\n';
+  return salida;
+}
+
+async function iniciarProyeccion() {
+  document.getElementById('configuracion').style.display = 'none';
+  const pantalla = document.getElementById('pantalla-proyector');
+  pantalla.style.display = 'block';
+  pantalla.textContent = '';
+
+  for (const item of programa) {
+    const texto = await cargarCancion(item.cancion);
+    pantalla.textContent += texto;
   }
-
-  function extraerLetraDesdePre(texto) {
-    const lineas = texto.split('\n');
-    const salida = [];
-
-    for (let linea of lineas) {
-      if (isChordLine(linea)) continue;
-      salida.push(linea);
-    }
-
-    return salida.join('\n').trim();
-  }
-
-  function extraerTextoCanciones(doc) {
-    const canciones = [];
-    const titulos = doc.querySelectorAll('h1.titulo');
-
-    titulos.forEach(titulo => {
-      const pre = titulo.nextElementSibling;
-      if (!pre || pre.tagName !== 'PRE') return;
-
-      const letra = extraerLetraDesdePre(pre.textContent);
-      if (letra) canciones.push(letra);
-    });
-
-    return canciones;
-  }
-
-  /************************************************************
-   *  REFORMATEO PARA PROYECCIÓN
-   ************************************************************/
-
-  function reformatearParaProyector(texto) {
-    return texto
-      .replace(/[ \t]+/g, ' ')
-      .replace(/\n{3,}/g, '\n\n')
-      .trim();
-  }
-
-  /************************************************************
-   *  FLUJO PRINCIPAL
-   ************************************************************/
-
-  let textoFinal = '';
-
-  async function cargarPrograma() {
-    const response = await fetch('programa.html');
-    const html = await response.text();
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(html, 'text/html');
-
-    const canciones = extraerTextoCanciones(doc);
-    const textoPlano = canciones.join('\n\n');
-    textoFinal = reformatearParaProyector(textoPlano);
-  }
-
-  cargarPrograma();
-
-  function iniciarProyeccion() {
-    document.getElementById('configuracion').style.display = 'none';
-    document.getElementById('proyeccion').style.display = 'block';
-    document.getElementById('letra').textContent = textoFinal;
-  }
-
-  /************************************************************
-   *  COLORES Y PRESETS
-   ************************************************************/
-
-  function aplicarColores(fondo, texto) {
-    document.documentElement.style.setProperty('--bg-color', fondo);
-    document.documentElement.style.setProperty('--text-color', texto);
-
-    document.getElementById('colorFondo').value = fondo;
-    document.getElementById('colorTexto').value = texto;
-  }
-
-  function presetDia() {
-    aplicarColores('#f2e6a7', '#1a1a1a');
-  }
-
-  function presetNoche() {
-    aplicarColores('#000000', '#ffffff');
-  }
-
-  function actualizarColores() {
-    const fondo = document.getElementById('colorFondo').value;
-    const texto = document.getElementById('colorTexto').value;
-    aplicarColores(fondo, texto);
-  }
+}
 </script>
 
 </body>

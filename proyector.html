@@ -40,11 +40,11 @@ body {
 #pantalla-proyector {
   display: none;
   text-align: center;
-  padding: 5vh 8vw;
+  padding: 5vh 6vw;
   font-family: 'Atkinson Hyperlegible', system-ui, sans-serif;
   font-size: var(--font-size, 6vh);
   line-height: 1.25;
-  white-space: normal;
+  white-space: pre-wrap;
 }
 
 
@@ -148,7 +148,7 @@ function isChordLine(line) {
 }
 
 function procesarPre(pre) {
-  const lines = pre.innerHTML.split('\n');
+  const lines = pre.textContent.split('\n');
   return lines.filter(l => !isChordLine(l)).join('\n');
 }
 
@@ -198,8 +198,8 @@ function disminuirTexto() {
 </script>
 
 <div id="controles-tamano">
-  <button class="btn-outline-secondary" onclick="aumentarTexto()">A+</button>
-  <button class="btn-outline-secondary" onclick="disminuirTexto()">A−</button>
+  <button onclick="aumentarTexto()">A+</button>
+  <button onclick="disminuirTexto()">A−</button>
 </div>
 
 </body>

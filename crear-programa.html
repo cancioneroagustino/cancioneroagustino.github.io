@@ -47,6 +47,7 @@ $(function(){
     <button id="programa-full" class="btn btn-outline-primary mb-3">Programa full (con acordes)</button>
     <button id="programa-acordes" class="btn btn-outline-primary mb-3">Lista canciones (con acordes)</button>
     <button id="programa-texto" class="btn btn-outline-primary mb-3">Lista canciones (sólo texto)</button>
+    <button id="programa-proyector" class="btn btn-outline-primary mb-3">Proyectar letra</button>
     <button id="compartir-programa" class="btn btn-outline-primary mb-3">Compartir listado</button>
   </div>
 
@@ -251,6 +252,10 @@ function cargarProgramaDesdeURL() {
       guardarPrograma();
       window.location.href = "programa-texto.html";
     });
+    document.getElementById("programa-proyector").addEventListener("click", () => {
+  guardarPrograma();
+  window.location.href = "proyector.html";
+});
 
 
         // --- Auto redirección a programa-texto si se pide ?autoTexto=1 ---

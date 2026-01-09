@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Proyección de letras</title>
+<meta name="robots" content="noindex">
+<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0">
+<link rel="stylesheet" href="css/cancionero.css">
+<style>
+  :root {
+    --bg: #F2E6B3;
+    --fg: #1A1A1A;
+  }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+  }
+
+  #config {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1.5rem;
+  }
+
+  #projection {
+    display: none;
+    width: 100vw;
+    height: 100vh;
+    overflow-y: auto;
+    padding: 5vh 6vw;
+  }
+
+  .titulo {
+    font-size: 3.2vh;
+    text-align: center;
+    margin: 6vh 0 3vh;
+    opacity: 0.85;
+  }
+
+  .letra {
+    font-size: 5.5vh;
+    line-height: 1.45;
+    white-space: normal;
+  }
+
+  .cancion {
+    margin-bottom: 10vh;
+  }
+
+  button {
+    font-size: 1.1rem;
+    padding: 0.6rem 1.2rem;
+  }
+</style>
+</head>
+<body>
+
+<div id="config">
+  <h1>Proyección de letras</h1>
+
+  <div>
+    <button id="presetDay">Día</button>
+    <button id="presetNight">Noche</button>
+  </div>
+
+  <div>
+    <label>Fondo:
+      <input type="color" id="bgColor" value="#F2E6B3">
+    </label>
+    <label>Texto:
+      <input type="color" id="textColor" value="#1A1A1A">
+    </label>
+  </div>
+
+  <button id="start">Proyectar letras</button>
+</div>
+
+<div id="projection"></div>
+<script>
+const programa = JSON.parse(localStorage.getItem('programaMisa'));
+if (!programa) {
+  alert('No hay un programa de misa guardado.');
+  window.location.href = 'crear-programa.html';
+}
+
+const canciones = programa.map(item => item.cancion);
+
+function normalizarTextoProyector(texto) {
+  return texto
+    .replace(/\t/g, " ")
+    .replace(/[ ]{2,}/g, " ")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
+}
+
+async function cargarCancion(ruta) {
+  const response = await fetch(ruta);
+  const html = await response.text();
+  const doc = new DOMParser().parseFromString(html, 'text/html');
+
+  const titulo = doc.querySelector('h1.titulo')?.innerText || '';
+  const pre = doc.querySelector('pre')?.textContent || '';
+
+  return { titulo, letra: normalizarTextoProyector(pre) };
+}
+
+async function cargarPrograma() {
+  const cont = document.getElementById('projection');
+
+  for (const ruta of canciones) {
+    const c = await cargarCancion(ruta);
+
+    const div = document.createElement('div');
+    div.className = 'cancion';
+
+    if (c.titulo) {
+      const h = document.createElement('div');
+      h.className = 'titulo';
+      h.textContent = c.titulo;
+      div.appendChild(h);
+    }
+
+    const l = document.createElement('div');
+    l.className = 'letra';
+    l.textContent = c.letra;
+    div.appendChild(l);
+
+    cont.appendChild(div);
+  }
+}
+
+/* Presets */
+presetDay.onclick = () => {
+  bgColor.value = "#F2E6B3";
+  textColor.value = "#1A1A1A";
+};
+
+presetNight.onclick = () => {
+  bgColor.value = "#000000";
+  textColor.value = "#F5F5F5";
+};
+
+start.onclick = async () => {
+  document.documentElement.style.setProperty('--bg', bgColor.value);
+  document.documentElement.style.setProperty('--fg', textColor.value);
+
+  document.getElementById('config').style.display = 'none';
+  document.getElementById('projection').style.display = 'block';
+
+  await cargarPrograma();
+};
+</script>
+</body>
+</html>

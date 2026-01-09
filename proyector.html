@@ -136,6 +136,22 @@ async function iniciarProyeccion() {
     pantalla.textContent += texto;
   }
 }
+
+let fontSize = 6; // vh
+
+function aplicarTamano() {
+  document.documentElement.style.setProperty('--font-size', fontSize + 'vh');
+}
+
+function aumentarTexto() {
+  fontSize += 0.5;
+  aplicarTamano();
+}
+
+function disminuirTexto() {
+  fontSize = Math.max(2, fontSize - 0.5);
+  aplicarTamano();
+}
 </script>
 
 </body>

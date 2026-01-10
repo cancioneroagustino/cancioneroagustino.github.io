@@ -397,10 +397,6 @@
       "ruta": "gloria/Gloria (C. Fones).html",
       "tono": "MI"
     },
-    "Gloria (Ma José Bravo y C. Fones)": {
-      "ruta": "gloria/Gloria (Ma Jose Bravo y C. Fones).html",
-      "tono": "LA"
-    },
     "Gloria Misión País - Marcelo Cid": {
       "ruta": "gloria/Gloria Mision Pais - Marcelo Cid.html",
       "tono": "RE"
@@ -427,6 +423,10 @@
     "Gloria juvenil": {
       "ruta": "gloria/Gloria juvenil.html",
       "tono": "SOL"
+    },
+    "Gloria (Ma José Bravo y C. Fones)": {
+      "ruta": "gloria/Gloria (Ma Jose Bravo y C. Fones).html",
+      "tono": "LA"
     },
     "Gloria Salesianos (Misa joven)": {
       "ruta": "gloria/Gloria Salesianos (Misa joven).html",

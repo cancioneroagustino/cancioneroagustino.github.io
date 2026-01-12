@@ -441,10 +441,6 @@
 
 
   Salmo: {
-    "Domingo 1 A (Bautismo del Señor)": {
-      "ruta": "Salmos/abaut.html",
-      "tono": "DO"
-    },
     "Domingo 2 A": {
       "ruta": "Salmos/adom02.html",
       "tono": "FA#m"
@@ -578,10 +574,7 @@
       "tono": "DO"
     },
 
-    "Domingo 1 B (Bautismo del Señor)": {
-      "ruta": "Salmos/bbaut.html",
-      "tono": "LA"
-    },
+    
     "Domingo 2 B": {
       "ruta": "Salmos/bdom02.html",
       "tono": "FA#m"
@@ -716,11 +709,6 @@
     },
 
 
-
-    "Domingo 1 C (Bautismo del Señor)": {
-      "ruta": "Salmos/cbaut.html",
-      "tono": "LA"
-    },
     "Domingo 2 C": {
       "ruta": "Salmos/cdom02.html",
       "tono": "DO"
@@ -928,6 +916,18 @@
     "Epifanía del Señor": {
       "ruta": "Salmos/epifania.html",
       "tono": "DO"
+    },
+    "Bautismo del Señor A": {
+      "ruta": "Salmos/abaut.html",
+      "tono": "DO"
+    },
+    "Bautismo del Señor B": {
+      "ruta": "Salmos/bbaut.html",
+      "tono": "LA"
+    },
+    "Bautismo del Señor C": {
+      "ruta": "Salmos/cbaut.html",
+      "tono": "LA"
     },
     "Miércoles de ceniza": {
       "ruta": "Salmos/miercolesdeceniza.html",

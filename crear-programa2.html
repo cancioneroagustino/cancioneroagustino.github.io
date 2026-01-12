@@ -180,20 +180,23 @@ function inicializarSortable() {
   const lista = document.getElementById("programa-lista");
   
   Sortable.create(lista, {
-    animation: 150, // Duración de la animación en ms
-    ghostClass: 'sortable-ghost', // Clase cuando se arrastra
+    animation: 150,
+    delay: 200,      // <--- MANTENER PRESIONADO 0.2s para arrastrar
+    delayOnTouchOnly: true, // El delay solo aplica en móviles
+    touchStartThreshold: 5, // Margen de error de movimiento antes de cancelar el delay
+    ghostClass: 'sortable-ghost',
+    
+    // Al empezar a arrastrar, podemos dar un feedback (vibración)
+    onStart: function() {
+        if (navigator.vibrate) navigator.vibrate(40);
+    },
+    
     onEnd: function (evt) {
-      // evt.oldIndex es la posición original
-      // evt.newIndex es la nueva posición
-      
-      // Reordenar el array 'programa' basado en el movimiento
       const itemMovido = programa.splice(evt.oldIndex, 1)[0];
       programa.splice(evt.newIndex, 0, itemMovido);
-      
-      // Guardar el nuevo orden y refrescar para actualizar los índices de los botones
       guardarPrograma();
       mostrarPrograma(); 
-    },
+    }
   });
 }
 

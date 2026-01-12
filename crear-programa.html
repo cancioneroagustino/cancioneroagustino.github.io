@@ -181,7 +181,17 @@ function inicializarSortable() {
   
   Sortable.create(lista, {
     animation: 150, // Duración de la animación en ms
+    delay: 200,      // <--- MANTENER PRESIONADO 0.2s para arrastrar
+    delayOnTouchOnly: true, // El delay solo aplica en móviles
+    touchStartThreshold: 5, // Margen de error de movimiento antes de cancelar el delay
     ghostClass: 'sortable-ghost', // Clase cuando se arrastra
+
+    // Al empezar a arrastrar, vibración
+    onStart: function() {
+        if (navigator.vibrate) navigator.vibrate(40);
+    },
+
+
     onEnd: function (evt) {
       // evt.oldIndex es la posición original
       // evt.newIndex es la nueva posición

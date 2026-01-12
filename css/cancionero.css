@@ -405,6 +405,18 @@ h2 {font-size: 1.2rem;}
   text-align: center;
 }
 
+.btn-eliminar {
+    background: transparent;
+    border: none;
+    color: #f00;
+    padding: 8px;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
 
 
 

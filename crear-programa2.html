@@ -159,31 +159,7 @@ $(function(){
         contTono.appendChild(btnUp);
         buttonGroup.appendChild(contTono);
 
-        // Botones mover y eliminar
-        const btnSubir = document.createElement("button");
-        btnSubir.textContent = "↑";
-        btnSubir.className = 'btn btn-outline-info btn-sm';
-        btnSubir.onclick = () => {
-          if (index > 0) {
-            [programa[index - 1], programa[index]] = [programa[index], programa[index - 1]];
-            mostrarPrograma();
-            guardarPrograma();
-          }
-        };
-        buttonGroup.appendChild(btnSubir);
-
-        const btnBajar = document.createElement("button");
-        btnBajar.textContent = "↓";
-        btnBajar.className = 'btn btn-outline-info btn-sm';
-        btnBajar.onclick = () => {
-          if (index < programa.length - 1) {
-            [programa[index + 1], programa[index]] = [programa[index], programa[index + 1]];
-            mostrarPrograma();
-            guardarPrograma();
-          }
-        };
-        buttonGroup.appendChild(btnBajar);
-
+        // Botón eliminar
         const btnEliminar = document.createElement("button");
         btnEliminar.textContent = "✕";
         btnEliminar.className = 'btn btn-outline-danger btn-sm';

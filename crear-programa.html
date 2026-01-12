@@ -8,7 +8,8 @@
 <link href="./css/bootstrap.min.css" rel="stylesheet">
 <script src="./scripts/bootstrap.bundle.min.js"></script>
 <link rel="stylesheet" type="text/css" href="css/cancionero.css">
-  <script src="https://www.cancionerocatolico.cl/scripts/jquery.min.js"></script>
+<script src="https://www.cancionerocatolico.cl/scripts/jquery.min.js"></script>
+<script src="https://www.cancionerocatolico.cl/scripts/Sortable.min.js"></script>
 </head>
 
 <body>
@@ -158,31 +159,7 @@ $(function(){
         contTono.appendChild(btnUp);
         buttonGroup.appendChild(contTono);
 
-        // Botones mover y eliminar
-        const btnSubir = document.createElement("button");
-        btnSubir.textContent = "↑";
-        btnSubir.className = 'btn btn-outline-info btn-sm';
-        btnSubir.onclick = () => {
-          if (index > 0) {
-            [programa[index - 1], programa[index]] = [programa[index], programa[index - 1]];
-            mostrarPrograma();
-            guardarPrograma();
-          }
-        };
-        buttonGroup.appendChild(btnSubir);
-
-        const btnBajar = document.createElement("button");
-        btnBajar.textContent = "↓";
-        btnBajar.className = 'btn btn-outline-info btn-sm';
-        btnBajar.onclick = () => {
-          if (index < programa.length - 1) {
-            [programa[index + 1], programa[index]] = [programa[index], programa[index + 1]];
-            mostrarPrograma();
-            guardarPrograma();
-          }
-        };
-        buttonGroup.appendChild(btnBajar);
-
+        // Botón eliminar
         const btnEliminar = document.createElement("button");
         btnEliminar.textContent = "✕";
         btnEliminar.className = 'btn btn-outline-danger btn-sm';
@@ -197,6 +174,28 @@ $(function(){
         lista.appendChild(li);
       });
     }
+
+    /* --- Inicialización de Arrastre --- */
+function inicializarSortable() {
+  const lista = document.getElementById("programa-lista");
+  
+  Sortable.create(lista, {
+    animation: 150, // Duración de la animación en ms
+    ghostClass: 'sortable-ghost', // Clase cuando se arrastra
+    onEnd: function (evt) {
+      // evt.oldIndex es la posición original
+      // evt.newIndex es la nueva posición
+      
+      // Reordenar el array 'programa' basado en el movimiento
+      const itemMovido = programa.splice(evt.oldIndex, 1)[0];
+      programa.splice(evt.newIndex, 0, itemMovido);
+      
+      // Guardar el nuevo orden y refrescar para actualizar los índices de los botones
+      guardarPrograma();
+      mostrarPrograma(); 
+    },
+  });
+}
 
     /* --- Limpiar programa --- */
     document.getElementById("limpiar-programa").addEventListener("click", () => {

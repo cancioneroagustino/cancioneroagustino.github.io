@@ -91,7 +91,8 @@ button {
 
   <div class="mt-4">
     <h5>Presets</h5>
-    <button class="btn btn-outline-secondary" onclick="presetDia()">Día</button>
+    <button class="btn btn-outline-secondary" onclick="presetDia1()">Día 1</button>
+    <button class="btn btn-outline-secondary" onclick="presetDia2()">Día 2</button>
     <button class="btn btn-outline-secondary" onclick="presetNoche()">Noche</button>
   </div>
 
@@ -123,7 +124,11 @@ if (!programa || programa.length === 0) {
   window.location.href = 'crear-programa.html';
 }
 
-function presetDia() {
+function presetDia1() {
+  setColors('#ffffff', '#000000');
+}
+
+function presetDia2() {
   setColors('#f2e6a7', '#1a1a1a');
 }
 

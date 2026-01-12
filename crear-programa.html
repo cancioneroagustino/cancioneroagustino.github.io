@@ -126,7 +126,7 @@ $(function(){
         li.textContent = `${item.seccion}: ${item.nombre} `;
 
        const buttonGroup = document.createElement('div');
-        buttonGroup.className = 'd-inline-flex justify-content-end btn-group';
+        buttonGroup.className = 'd-inline-flex justify-content-end';
 
         // Control de tono
         const contTono = document.createElement("span");
@@ -161,7 +161,7 @@ $(function(){
 
         // Botón eliminar
         const btnEliminar = document.createElement("button");
-        btnEliminar.textContent = "✕";
+        btnEliminar.textContent = "X";
         btnEliminar.className = 'btn btn-outline-danger btn-sm';
         btnEliminar.onclick = () => {
           programa.splice(index, 1);
@@ -181,17 +181,7 @@ function inicializarSortable() {
   
   Sortable.create(lista, {
     animation: 150, // Duración de la animación en ms
-    delay: 200,      // <--- MANTENER PRESIONADO 0.2s para arrastrar
-    delayOnTouchOnly: true, // El delay solo aplica en móviles
-    touchStartThreshold: 5, // Margen de error de movimiento antes de cancelar el delay
     ghostClass: 'sortable-ghost', // Clase cuando se arrastra
-
-    // Al empezar a arrastrar, vibración
-    onStart: function() {
-        if (navigator.vibrate) navigator.vibrate(40);
-    },
-
-
     onEnd: function (evt) {
       // evt.oldIndex es la posición original
       // evt.newIndex es la nueva posición
@@ -206,6 +196,14 @@ function inicializarSortable() {
     },
   });
 }
+
+/* --- Actualiza tu window.addEventListener final --- */
+window.addEventListener("DOMContentLoaded", () => {
+  actualizarListaCanciones();
+  mostrarPrograma();
+  cargarProgramaDesdeURL();
+  inicializarSortable(); // <--- Activar el arrastre aquí
+});
 
     /* --- Limpiar programa --- */
     document.getElementById("limpiar-programa").addEventListener("click", () => {

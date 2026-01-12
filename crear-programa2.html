@@ -126,7 +126,7 @@ $(function(){
         li.textContent = `${item.seccion}: ${item.nombre} `;
 
        const buttonGroup = document.createElement('div');
-        buttonGroup.className = 'd-inline-flex justify-content-end btn-group';
+        buttonGroup.className = 'd-inline-flex justify-content-end';
 
         // Control de tono
         const contTono = document.createElement("span");
@@ -161,7 +161,7 @@ $(function(){
 
         // Botón eliminar
         const btnEliminar = document.createElement("button");
-        btnEliminar.textContent = "✕";
+        btnEliminar.textContent = "X";
         btnEliminar.className = 'btn btn-outline-danger btn-sm';
         btnEliminar.onclick = () => {
           programa.splice(index, 1);

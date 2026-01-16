@@ -10,8 +10,8 @@
 
 <style>
 :root {
-  --bg-color: #f2e6a7;
-  --text-color: #1a1a1a;
+  --bg-color: #ffffff;
+  --text-color: #000000;
   --font-size: 6vh;
 }
 
@@ -93,6 +93,13 @@ button {
     <h5>Presets</h5>
     <button class="btn btn-outline-secondary" onclick="presetDia1()">Día 1</button>
     <button class="btn btn-outline-secondary" onclick="presetDia2()">Día 2</button>
+    <button class="btn btn-outline-secondary" onclick="presetDia3()">Día 3</button>
+    <button class="btn btn-outline-secondary" onclick="presetDia4()">Día 4</button>
+ </div>
+ <div>
+    <button class="btn btn-outline-secondary" onclick="presetDia5()">Día 5</button>
+    <button class="btn btn-outline-secondary" onclick="presetDia6()">Día 6</button>
+    <button class="btn btn-outline-secondary" onclick="presetDia7()">Día 7</button>
     <button class="btn btn-outline-secondary" onclick="presetNoche()">Noche</button>
   </div>
 
@@ -130,6 +137,26 @@ function presetDia1() {
 
 function presetDia2() {
   setColors('#f2e6a7', '#1a1a1a');
+}
+
+function presetDia3() {
+  setColors('#dedede', '#1a1a1a');
+}
+
+function presetDia4() {
+  setColors('#dedede', '#1a2e4f');
+}
+
+function presetDia5() {
+  setColors('#6b0f1a', '#7a1121');
+}
+
+function presetDia6() {
+  setColors('#0f3d2e', '#163c2a');
+}
+
+function presetDia7() {
+  setColors('#3a2618', '#4b1f1f');
 }
 
 function presetNoche() {

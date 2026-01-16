@@ -3323,6 +3323,10 @@
       "ruta": "Marianos/El diario de María.html",
       "tono": "LAm"
     },
+    "El consejo de María": {
+      "ruta": "Marianos/El consejo de María.html",
+      "tono": "LA"
+    },
     "Gestación de paz": {
       "ruta": "Marianos/Gestación de paz.html",
       "tono": "SOL"

@@ -110,10 +110,24 @@ button {
   </div>
 
   <div class="mt-4">
-    <button class="btn btn-outline-secondary btn-lg" onclick="iniciarProyeccion()">Proyectar letras contínuas</button>
-    <button class="btn btn-outline-secondary btn-lg" onclick="iniciarProyeccionPorBloques()">Proyectar por estrofas</button>
+
+    <button onclick="iniciarProyeccionContinua(false)">
+  Proyectar letra continua
+</button>
+
+<button onclick="iniciarProyeccionPorBloques(false)">
+  Proyectar letra por estrofas
+</button>
+
+<button onclick="iniciarProyeccionContinua(true)">
+  Proyectar letra + acordes continua
+</button>
+
+<button onclick="iniciarProyeccionPorBloques(true)">
+  Proyectar letra + acordes por estrofa
+</button>
+
   </div>
-</div>
 
 <div id="pantalla-proyector"></div>
 

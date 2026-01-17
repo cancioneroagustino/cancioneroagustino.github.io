@@ -1,133 +1,120 @@
-/*
- PROYECCION POR BLOQUES (estrofas / estribillos)
- Reutiliza la misma extracción de programa-texto.html
- Soporta dos modos:
-   - incluirAcordes = false  (letra sola)
-   - incluirAcordes = true   (letra + acordes)
-
- NO modifica el flujo de proyección continua existente.
-*/
-
-// -------- utilidades base --------
+/***************************************
+ *  UTILIDADES BÁSICAS
+ ***************************************/
 
 function isChordLine(line) {
-  return /(\bDO|\bRE|\bMI|\bFA|\bSOL|\bLA|\bSI)[b#]?/.test(line)
-      || /^\s*(Intro|Introducción|Cejillo)\b/.test(line);
+  return /(\bDO|\bRE|\bMI|\bFA|\bSOL|\bLA|\bSI)[b#]?|\bCejillo\b|\bIntro\b|\bIntroducción\b/.test(line);
 }
 
-function limpiarAcordes(texto) {
-  return texto
+function limpiarAcordes(preHTML) {
+  return preHTML
     .split('\n')
-    .filter(l => !isChordLine(l))
+    .filter(l => !isChordLine(l.trim()))
     .join('\n');
 }
 
-// -------- parsing del <pre> --------
+function obtenerTexto(preHTML, incluirAcordes) {
+  return incluirAcordes ? preHTML : limpiarAcordes(preHTML);
+}
 
-function parsearPre(preHTML, incluirAcordes) {
-  let texto = preHTML;
+/***************************************
+ *  CONSTRUCTOR DE BLOQUES
+ ***************************************/
 
-  if (!incluirAcordes) {
-    const temp = document.createElement('div');
-    temp.innerHTML = preHTML;
-    texto = limpiarAcordes(temp.textContent);
-  }
-
+function construirBloquesCancion(preHTML, titulo, incluirAcordes) {
+  const texto = obtenerTexto(preHTML, incluirAcordes);
   const lineas = texto.split('\n');
+
   const bloques = [];
-  let bloqueActual = null;
+  let bloqueActual = [];
+  let esEstribilloActual = false;
+  let estribillos = [];
+
+  function cerrarBloque() {
+    if (bloqueActual.length === 0) return;
+    bloques.push({
+      tipo: esEstribilloActual ? 'estribillo' : 'estrofa',
+      contenido: bloqueActual.join('\n')
+    });
+    bloqueActual = [];
+  }
 
   for (let linea of lineas) {
     const limpia = linea.trim();
 
-    // línea vacía → cierre de bloque
+    // Línea vacía → separación de bloques
     if (limpia === '') {
-      if (bloqueActual) {
-        bloques.push(bloqueActual);
-        bloqueActual = null;
-      }
+      cerrarBloque();
+      esEstribilloActual = false;
       continue;
     }
 
-    const esEstribillo = linea.startsWith('<b>') || linea.includes('<b>');
-
-    if (!bloqueActual) {
-      bloqueActual = {
-        tipo: esEstribillo ? 'estribillo' : 'estrofa',
-        lineas: []
-      };
+    // Inicio de estribillo
+    if (limpia.startsWith('<b>')) {
+      cerrarBloque();
+      esEstribilloActual = true;
     }
 
-    bloqueActual.lineas.push(linea);
+    bloqueActual.push(linea);
+
+    // Fin de estribillo
+    if (limpia.endsWith('</b>')) {
+      cerrarBloque();
+      esEstribilloActual = false;
+    }
   }
 
-  if (bloqueActual) bloques.push(bloqueActual);
+  cerrarBloque();
 
-  return bloques;
-}
+  // identificar estribillos
+  estribillos = bloques.filter(b => b.tipo === 'estribillo');
 
-// -------- orden musical --------
+  // Caso: múltiples estribillos → se respeta orden original
+  if (estribillos.length !== 1) {
+    return [{ tipo: 'titulo', contenido: titulo }, ...bloques];
+  }
 
-function ordenarBloques(bloques) {
-  const estribillos = bloques.filter(b => b.tipo === 'estribillo');
-  const estrofas   = bloques.filter(b => b.tipo === 'estrofa');
+  // Caso: un solo estribillo → reconstrucción litúrgica
+  const estribillo = estribillos[0];
+  const estrofas = bloques.filter(b => b.tipo === 'estrofa');
 
-  // múltiples estribillos → respetar orden original
-  if (estribillos.length > 1) return bloques;
-
-  // ningún estribillo
-  if (estribillos.length === 0) return estrofas;
-
-  const E = estribillos[0];
   const resultado = [];
+  resultado.push({ tipo: 'titulo', contenido: titulo });
 
-  // ¿parte con estribillo?
-  const iniciaConEstribillo = bloques[0].tipo === 'estribillo';
+  const estribilloPrimero = bloques[0].tipo === 'estribillo';
 
-  if (iniciaConEstribillo) resultado.push(E);
+  if (estribilloPrimero) {
+    resultado.push(estribillo);
+  }
 
-  for (const estrofa of estrofas) {
+  for (let estrofa of estrofas) {
     resultado.push(estrofa);
-    resultado.push(E);
+    resultado.push(estribillo);
   }
 
   return resultado;
 }
 
-// -------- render --------
+/***************************************
+ *  CARGA DE CANCIÓN
+ ***************************************/
 
-function renderBloque(bloque) {
-  const div = document.createElement('div');
-  div.className = bloque.tipo === 'estribillo'
-    ? 'bloque-estribillo'
-    : 'bloque-estrofa';
-
-  div.innerHTML = bloque.lineas
-    .map(l => l === '' ? '<br>' : l + '<br>')
-    .join('');
-
-  return div;
-}
-
-// -------- carga de canción --------
-
-async function cargarCancionEnBloques(ruta, incluirAcordes) {
+async function cargarCancionBloques(ruta, incluirAcordes) {
   const response = await fetch(ruta);
   const html = await response.text();
   const doc = new DOMParser().parseFromString(html, 'text/html');
 
   const titulo = doc.querySelector('h1.titulo')?.innerText || '';
-  const pre    = doc.querySelector('pre');
+  const pre = doc.querySelector('pre');
 
   if (!pre) return [];
 
-  const bloques = parsearPre(pre.innerHTML, incluirAcordes);
-  const ordenados = ordenarBloques(bloques);
-
-  return { titulo, bloques: ordenados };
+  return construirBloquesCancion(pre.innerHTML, titulo, incluirAcordes);
 }
 
-// -------- proyección pública --------
+/***************************************
+ *  PROYECCIÓN
+ ***************************************/
 
 async function iniciarProyeccionPorBloques(incluirAcordes = false) {
   document.getElementById('configuracion').style.display = 'none';
@@ -137,19 +124,26 @@ async function iniciarProyeccionPorBloques(incluirAcordes = false) {
   pantalla.innerHTML = '';
 
   for (const item of programa) {
-    const { titulo, bloques } = await cargarCancionEnBloques(item.cancion, incluirAcordes);
-
-    if (titulo) {
-      const h2 = document.createElement('h2');
-      h2.textContent = titulo;
-      pantalla.appendChild(h2);
-    }
+    const bloques = await cargarCancionBloques(item.cancion, incluirAcordes);
 
     for (const bloque of bloques) {
-      pantalla.appendChild(renderBloque(bloque));
+      const div = document.createElement('div');
+
+      if (bloque.tipo === 'titulo') {
+        div.innerHTML = `<h2>${bloque.contenido}</h2>`;
+      } else {
+        div.className = 'letra-normal';
+        div.innerHTML = bloque.contenido
+          .split('\n')
+          .map(l => l === '' ? '<br>' : `${l}<br>`)
+          .join('');
+      }
+
+      pantalla.appendChild(div);
     }
   }
 }
+
 
 
 function siguienteBloque() {

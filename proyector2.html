@@ -343,13 +343,53 @@ document.getElementById('pantalla-proyector').onclick = (e) => {
 };
 
 // 6. Colores y Tamaño
-function setColors(bg, text) {
-    document.documentElement.style.setProperty('--bg-color', bg);
-    document.documentElement.style.setProperty('--text-color', text);
+
+function presetDia1() {
+  setColors('#ffffff', '#000000');
 }
-function presetDia1() { setColors('#ffffff', '#000000'); }
-function presetNoche() { setColors('#000000', '#ffffff'); }
-// ... (puedes re-agregar tus otros presets aquí)
+
+function presetDia2() {
+  setColors('#f2e6a7', '#1a1a1a');
+}
+
+function presetDia3() {
+  setColors('#dedede', '#1a1a1a');
+}
+
+function presetDia4() {
+  setColors('#dedede', '#7a1121');
+}
+
+function presetDia5() {
+  setColors('#4B1F1F', '#F5F5F2');
+}
+
+function presetDia6() {
+  setColors('#3A2618', '#F5F5F2');
+}
+
+function presetDia7() {
+  setColors('#3A2618', '#D4B15F');
+}
+
+function presetNoche() {
+  setColors('#000000', '#ffffff');
+}
+
+function setColors(bg, text) {
+  document.documentElement.style.setProperty('--bg-color', bg);
+  document.documentElement.style.setProperty('--text-color', text);
+  document.getElementById('bgColor').value = bg;
+  document.getElementById('textColor').value = text;
+}
+
+bgColor.addEventListener('input', e => {
+  document.documentElement.style.setProperty('--bg-color', e.target.value);
+});
+
+textColor.addEventListener('input', e => {
+  document.documentElement.style.setProperty('--text-color', e.target.value);
+});
 
 let fontSize = 6;
 function aumentarTexto() { fontSize += 0.5; document.documentElement.style.setProperty('--font-size', fontSize + 'vh'); }

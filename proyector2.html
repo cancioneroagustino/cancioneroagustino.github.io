@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Proyector de letras - Cancionero Católico</title>
+<meta name="robots" content="noindex">
+<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0">
+<link href="./css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="css/cancionero.css">
+
+<style>
+:root {
+  --bg-color: #ffffff;
+  --text-color: #000000;
+  --font-size: 6vh;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  margin: 0;
+}
+
+#configuracion {
+  padding: 2rem;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}
+
+#configuracion .btn {
+  color: var(--text-color);
+  border-color: var(--text-color);
+}
+
+#configuracion .btn:hover {
+  background-color: var(--text-color);
+  color: var(--bg-color);
+}
+
+#pantalla-proyector {
+  display: none;
+  text-align: center;
+  padding: 5vh 6vw;
+  font-family: 'Atkinson Hyperlegible', system-ui, sans-serif;
+  font-size: var(--font-size, 6vh);
+  line-height: 1.25;
+  white-space: pre-wrap;
+}
+
+
+#pantalla-proyector h2 {
+  margin-bottom: 6rem;   /* ajusta a gusto */
+}
+
+
+button {
+  margin: 0.25rem;
+}
+
+.letra-normal {
+  margin-bottom: 6rem;
+}
+
+
+
+#controles-tamano {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 9999;
+}
+
+#controles-tamano button {
+  display: block;
+  margin-bottom: 0.3rem;
+  font-size: 0.6rem;
+  padding: 0.4rem 0.6rem;
+  color: var(--text-color);
+  border-color: var(--text-color);
+}
+
+
+</style>
+</head>
+
+<body>
+
+
+<div id="configuracion" class="container text-center">
+  <h1>Proyección de letras</h1>
+
+  <div class="mt-4">
+    <h5>Presets</h5>
+    <button class="btn btn-outline-secondary" onclick="presetDia1()">Día 1</button>
+    <button class="btn btn-outline-secondary" onclick="presetDia2()">Día 2</button>
+    <button class="btn btn-outline-secondary" onclick="presetDia3()">Día 3</button>
+    <button class="btn btn-outline-secondary" onclick="presetDia4()">Día 4</button>
+ </div>
+ <div>
+    <button class="btn btn-outline-secondary" onclick="presetDia5()">Día 5</button>
+    <button class="btn btn-outline-secondary" onclick="presetDia6()">Día 6</button>
+    <button class="btn btn-outline-secondary" onclick="presetDia7()">Día 7</button>
+    <button class="btn btn-outline-secondary" onclick="presetNoche()">Noche</button>
+  </div>
+
+  <div class="mt-4">
+    <h5>Colores personalizados</h5>
+    <label>Fondo: <input type="color" id="bgColor" value="#ffffff"></label>
+    <label class="ms-3">Texto: <input type="color" id="textColor" value="#1a1a1a"></label>
+  </div>
+
+  <div class="mt-4">
+    <button class="btn btn-outline-secondary btn-lg" onclick="iniciarProyeccion()">Proyectar letras contínuas</button>
+    <button class="btn btn-outline-secondary btn-lg" onclick="iniciarProyeccionPorBloques()">Proyectar por estrofas</button>
+  </div>
+</div>
+
+<div id="pantalla-proyector"></div>
+
+
+
+<script>
+
+const programa = JSON.parse(localStorage.getItem('programaMisa'));
+    if (!programa) {
+      alert('No hay un programa de misa guardado.');
+      window.location.href = 'crear-programa.html';
+    }
+
+if (!programa || programa.length === 0) {
+  alert('No hay un programa de misa cargado.');
+  window.location.href = 'crear-programa.html';
+}
+
+function presetDia1() {
+  setColors('#ffffff', '#000000');
+}
+
+function presetDia2() {
+  setColors('#f2e6a7', '#1a1a1a');
+}
+
+function presetDia3() {
+  setColors('#dedede', '#1a1a1a');
+}
+
+function presetDia4() {
+  setColors('#dedede', '#7a1121');
+}
+
+function presetDia5() {
+  setColors('#4B1F1F', '#F5F5F2');
+}
+
+function presetDia6() {
+  setColors('#3A2618', '#F5F5F2');
+}
+
+function presetDia7() {
+  setColors('#3A2618', '#D4B15F');
+}
+
+function presetNoche() {
+  setColors('#000000', '#ffffff');
+}
+
+function setColors(bg, text) {
+  document.documentElement.style.setProperty('--bg-color', bg);
+  document.documentElement.style.setProperty('--text-color', text);
+  document.getElementById('bgColor').value = bg;
+  document.getElementById('textColor').value = text;
+}
+
+bgColor.addEventListener('input', e => {
+  document.documentElement.style.setProperty('--bg-color', e.target.value);
+});
+
+textColor.addEventListener('input', e => {
+  document.documentElement.style.setProperty('--text-color', e.target.value);
+});
+
+
+    const canciones = programa.map(item => item.cancion);
+
+    // Función para determinar si una línea es de acordes
+    function isChordLine(line) {
+      return /(\bDO|\bRE|\bMI|\bFA|\bSOL|\bLA|\bSI)[b#]?/.test(line);
+    }
+
+    // Función para procesar el contenido de la canción
+    function procesarCancion(contenido) {
+      const lines = contenido.split('\n');
+      let output = '';
+      for (let line of lines) {
+        if (!isChordLine(line)) {
+          output += `<span>${line}</span>\n`;
+        }
+      }
+      return output;
+    }
+
+    async function cargarCancion(ruta) {
+      try {
+        const response = await fetch(ruta);
+        if (!response.ok) {
+          throw new Error('Error al cargar la canción');
+        }
+        const contenido = await response.text();
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(contenido, 'text/html');
+        const preContent = doc.querySelector('pre').innerHTML;
+        const title = doc.querySelector('title').innerText;
+
+        const contenidoProcesado = procesarCancion(preContent);
+        return `<h2>${title}</h2><pre class="lh-base">${contenidoProcesado}</pre></div>`;
+      } catch (error) {
+        console.error('Error:', error);
+        return '<p>Error al cargar la canción. Inténtalo de nuevo más tarde.</p>';
+      }
+    }
+
+
+
+async function iniciarProyeccion() {
+  document.getElementById('configuracion').style.display = 'none';
+
+  const pantalla = document.getElementById('pantalla-proyector');
+  pantalla.style.display = 'block';
+  pantalla.innerHTML = '';
+
+  for (const item of programa) {
+    const htmlOriginal = await cargarCancion(item.cancion);
+
+    // contenedor temporal para manipular el HTML
+    const temp = document.createElement('div');
+    temp.innerHTML = htmlOriginal;
+
+    // transformar <pre> en texto fluido
+    const pre = temp.querySelector('pre');
+    if (pre) {
+      const contenidoFluido = pre.innerHTML
+        .split('\n')
+        .map(l => l === '' ? '<br>' : `${l}<br>`)
+        .join('');
+
+      pre.outerHTML = `<div class="letra-normal">${contenidoFluido}</div>`;
+    }
+
+    pantalla.appendChild(temp);
+  }
+}
+
+
+let fontSize = 6; // vh
+
+function aplicarTamano() {
+  document.documentElement.style.setProperty('--font-size', fontSize + 'vh');
+}
+
+function aumentarTexto() {
+  fontSize += 0.5;
+  aplicarTamano();
+}
+
+function disminuirTexto() {
+  fontSize = Math.max(2, fontSize - 0.5);
+  aplicarTamano();
+}
+</script>
+
+<div id="controles-tamano">
+  <button class="btn-outline-secondary" onclick="aumentarTexto()">A+</button>
+  <button class="btn-outline-secondary" onclick="disminuirTexto()">A−</button>
+</div>
+
+<script src="scripts/proyeccion-bloques.js"></script>
+
+</body>
+</html>

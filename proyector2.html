@@ -89,7 +89,6 @@ button {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    text-align: center;
 }
 .estribillo-destacado {
     font-weight: bold;
@@ -163,33 +162,105 @@ async function cargarTodoElPrograma() {
             const pre = doc.querySelector('pre');
             if (!pre) continue;
 
-            // Limpieza de acordes
-            let lineasLimpias = pre.innerHTML.split('\n')
-                .filter(l => !isChordLine(l.replace(/<[^>]*>/g, '')))
-                .join('\n');
+            const lineas = pre.innerHTML.split('\n');
+            let bloques = [];
+            let bloqueActual = [];
+            let enModoEstribillo = false;
 
-            let bloquesRaw = lineasLimpias.split(/\n\s*\n/).filter(b => b.trim() !== "");
+            lineas.forEach((linea) => {
+                const limpiaParaAcorde = linea.replace(/<[^>]*>/g, '').trim();
+                
+                // Ignorar líneas de acordes
+                if (isChordLine(limpiaParaAcorde)) return;
 
-            let bloquesProcesados = bloquesRaw.map(b => ({
-                texto: b.replace(/<\/?span[^>]*>/gi, '').trim(),
-                esEstribillo: /<b>/i.test(b)
-            }));
+                const esVacia = limpiaParaAcorde === "";
+                const detectaInicioB = /<b>/i.test(linea);
+                const detectaFinB = /<\/b>/i.test(linea);
 
-            // Título de canción
+                // REGLA 1: Si aparece <b>, cerramos lo que hubiera antes y empezamos estribillo
+                if (detectaInicioB) {
+                    if (bloqueActual.length > 0) {
+                        bloques.push({
+                            texto: bloqueActual.join('\n').replace(/<[^>]*>/g, '').trim(),
+                            esEstribillo: false
+                        });
+                    }
+                    bloqueActual = [linea];
+                    enModoEstribillo = true;
+                    // Si el </b> está en la misma línea (estribillo de una sola línea)
+                    if (detectaFinB) {
+                        bloques.push({
+                            texto: bloqueActual.join('\n').replace(/<[^>]*>/g, '').trim(),
+                            esEstribillo: true
+                        });
+                        bloqueActual = [];
+                        enModoEstribillo = false;
+                    }
+                    return;
+                }
+
+                // REGLA 2: Si aparece </b>, cerramos el estribillo
+                if (detectaFinB) {
+                    bloqueActual.push(linea);
+                    bloques.push({
+                        texto: bloqueActual.join('\n').replace(/<[^>]*>/g, '').trim(),
+                        esEstribillo: true
+                    });
+                    bloqueActual = [];
+                    enModoEstribillo = false;
+                    return;
+                }
+
+                // REGLA 3: Línea en blanco separa estrofas normales
+                if (esVacia && !enModoEstribillo) {
+                    if (bloqueActual.length > 0) {
+                        bloques.push({
+                            texto: bloqueActual.join('\n').replace(/<[^>]*>/g, '').trim(),
+                            esEstribillo: false
+                        });
+                        bloqueActual = [];
+                    }
+                    return;
+                }
+
+                // Acumulación normal de líneas
+                if (!esVacia || enModoEstribillo) {
+                    bloqueActual.push(linea);
+                }
+            });
+
+            // Guardar último bloque residual
+            if (bloqueActual.length > 0) {
+                bloques.push({
+                    texto: bloqueActual.join('\n').replace(/<[^>]*>/g, '').trim(),
+                    esEstribillo: enModoEstribillo
+                });
+            }
+
+            // --- LÓGICA DE INTERCALADO (Misma anterior, ahora con bloques limpios) ---
             diapositivas.push({ tipo: 'titulo', contenido: titulo });
 
-            // Intercalado de estribillos
-            const estribillos = bloquesProcesados.filter(b => b.esEstribillo);
-            if (estribillos.length === 1) {
+            const estribillos = bloques.filter(b => b.esEstribillo);
+            const soloEstrofas = bloques.filter(b => !b.esEstribillo);
+
+            if (estribillos.length === 1 && soloEstrofas.length > 0) {
                 const coro = estribillos[0];
-                bloquesProcesados.forEach(bloque => {
-                    if (!bloque.esEstribillo) {
-                        diapositivas.push({ tipo: 'estrofa', texto: bloque.texto, esEstribillo: false });
+                const empiezaConCoro = bloques[0].esEstribillo;
+
+                if (empiezaConCoro) {
+                    soloEstrofas.forEach(estrofa => {
                         diapositivas.push({ tipo: 'estrofa', texto: coro.texto, esEstribillo: true });
-                    }
-                });
+                        diapositivas.push({ tipo: 'estrofa', texto: estrofa.texto, esEstribillo: false });
+                    });
+                    diapositivas.push({ tipo: 'estrofa', texto: coro.texto, esEstribillo: true });
+                } else {
+                    soloEstrofas.forEach(estrofa => {
+                        diapositivas.push({ tipo: 'estrofa', texto: estrofa.texto, esEstribillo: false });
+                        diapositivas.push({ tipo: 'estrofa', texto: coro.texto, esEstribillo: true });
+                    });
+                }
             } else {
-                bloquesProcesados.forEach(b => {
+                bloques.forEach(b => {
                     diapositivas.push({ tipo: 'estrofa', texto: b.texto, esEstribillo: b.esEstribillo });
                 });
             }

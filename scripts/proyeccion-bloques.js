@@ -146,28 +146,120 @@ async function iniciarProyeccionPorBloques(incluirAcordes = false) {
 
 
 
-function siguienteBloque() {
-  if (indiceBloque < bloquesProyeccion.length - 1) {
-    indiceBloque++;
-    renderBloqueActual();
+<script>
+/* ======================================================
+   ESTADO GLOBAL DE PROYECCIÓN
+====================================================== */
+
+let bloquesProyeccion = [];
+let indiceActual = 0;
+
+
+/* ======================================================
+   RENDER
+====================================================== */
+
+function mostrarBloque(i) {
+  const pantalla = document.getElementById('pantalla-proyector');
+  if (!bloquesProyeccion[i]) return;
+
+  pantalla.innerHTML = '';
+  pantalla.appendChild(bloquesProyeccion[i]);
+}
+
+
+/* ======================================================
+   NAVEGACIÓN
+====================================================== */
+
+function avanzarBloque() {
+  if (indiceActual < bloquesProyeccion.length - 1) {
+    indiceActual++;
+    mostrarBloque(indiceActual);
+  }
+}
+
+function retrocederBloque() {
+  if (indiceActual > 0) {
+    indiceActual--;
+    mostrarBloque(indiceActual);
   }
 }
 
 
-function bloqueAnterior() {
-  if (indiceBloque > 0) {
-    indiceBloque--;
-    renderBloqueActual();
-  }
-}
-
+/* ======================================================
+   TECLADO (PC / PEDAL)
+====================================================== */
 
 document.addEventListener('keydown', e => {
-  if (e.key === 'ArrowRight' || e.key === ' ') {
-    siguienteBloque();
+  const pantallaVisible =
+    document.getElementById('pantalla-proyector').style.display === 'block';
+
+  if (!pantallaVisible) return;
+
+  if (['ArrowRight', 'ArrowDown', ' ', 'Enter'].includes(e.key)) {
+    avanzarBloque();
+    e.preventDefault();
   }
 
-  if (e.key === 'ArrowLeft') {
-    bloqueAnterior();
+  if (['ArrowLeft', 'ArrowUp', 'Backspace'].includes(e.key)) {
+    retrocederBloque();
+    e.preventDefault();
   }
 });
+
+
+/* ======================================================
+   TOUCH (SWIPE)
+====================================================== */
+
+let touchStartX = 0;
+
+document.addEventListener('touchstart', e => {
+  touchStartX = e.changedTouches[0].screenX;
+});
+
+document.addEventListener('touchend', e => {
+  const deltaX = e.changedTouches[0].screenX - touchStartX;
+
+  if (Math.abs(deltaX) < 50) return;
+
+  if (deltaX < 0) avanzarBloque();
+  else retrocederBloque();
+});
+
+
+/* ======================================================
+   BOTONES EN PANTALLA (CELULAR)
+====================================================== */
+
+function mostrarControlesProyeccion() {
+  const controles = document.getElementById('controles-proyeccion');
+  if (controles) controles.style.display = 'flex';
+}
+
+function ocultarControlesProyeccion() {
+  const controles = document.getElementById('controles-proyeccion');
+  if (controles) controles.style.display = 'none';
+}
+
+
+/* ======================================================
+   INICIO DE PROYECCIÓN (PUNTO DE ENTRADA)
+====================================================== */
+
+async function iniciarProyeccionPorBloques() {
+  document.getElementById('configuracion').style.display = 'none';
+
+  const pantalla = document.getElementById('pantalla-proyector');
+  pantalla.style.display = 'block';
+  pantalla.innerHTML = '';
+
+  // 👉 ESTA FUNCIÓN YA LA TIENES DEFINIDA
+  // 👉 Aquí sólo la invocamos
+  bloquesProyeccion = await construirBloquesDesdePrograma(programa);
+
+  indiceActual = 0;
+  mostrarBloque(indiceActual);
+  mostrarControlesProyeccion();
+}

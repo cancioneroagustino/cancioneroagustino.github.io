@@ -37,27 +37,6 @@ body {
   color: var(--bg-color);
 }
 
-
-.btn-group .btn {
-  font-size: 1.1rem;
-  padding: 1rem;
-}
-
-
-.btn-group .btn.active,
-.btn-group .btn.active:hover,
-.btn-group .btn.active:focus {
-  background-color: var(--text-color) !important;
-  color: var(--bg-color) !important;
-  border-color: var(--text-color) !important;
-}
-
-
-.btn-group .btn:active {
-  transform: scale(0.98);
-}
-
-
 #pantalla-proyector {
   display: none;
   text-align: center;
@@ -100,26 +79,23 @@ button {
   border-color: var(--text-color);
 }
 
-
-#controles-proyeccion {
-  position: fixed;
-  bottom: 1rem;
-  left: 0;
-  right: 0;
-  display: flex;
-  justify-content: space-between;
-  padding: 0 1.5rem;
-  z-index: 9999;
+/* Clases auxiliares para la proyección por estrofas */
+.slide-flex {
+    display: flex !important;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
 }
-
-#controles-proyeccion button {
-  font-size: 1.5rem;
-  padding: 0.6rem 1.2rem;
-  background: transparent;
-  color: var(--text-color);
-  border: 2px solid var(--text-color);
+.estribillo-destacado {
+    font-weight: bold;
 }
-
+.titulo-slide {
+    font-size: 0.5em;
+    opacity: 0.6;
+    margin-bottom: 2vh;
+    text-transform: uppercase;
+}
 
 </style>
 </head>
@@ -164,18 +140,49 @@ button {
 
 
 <script>
-/* ===============================
-   PRESETS DE COLOR 
-================================ */
 
-function presetDia1() { setColors('#ffffff', '#000000'); }
-function presetDia2() { setColors('#f2e6a7', '#1a1a1a'); }
-function presetDia3() { setColors('#dedede', '#1a1a1a'); }
-function presetDia4() { setColors('#dedede', '#7a1121'); }
-function presetDia5() { setColors('#4B1F1F', '#F5F5F2'); }
-function presetDia6() { setColors('#3A2618', '#F5F5F2'); }
-function presetDia7() { setColors('#3A2618', '#D4B15F'); }
-function presetNoche() { setColors('#000000', '#ffffff'); }
+const programa = JSON.parse(localStorage.getItem('programaMisa'));
+    if (!programa) {
+      alert('No hay un programa de misa guardado.');
+      window.location.href = 'crear-programa.html';
+    }
+
+if (!programa || programa.length === 0) {
+  alert('No hay un programa de misa cargado.');
+  window.location.href = 'crear-programa.html';
+}
+
+function presetDia1() {
+  setColors('#ffffff', '#000000');
+}
+
+function presetDia2() {
+  setColors('#f2e6a7', '#1a1a1a');
+}
+
+function presetDia3() {
+  setColors('#dedede', '#1a1a1a');
+}
+
+function presetDia4() {
+  setColors('#dedede', '#7a1121');
+}
+
+function presetDia5() {
+  setColors('#4B1F1F', '#F5F5F2');
+}
+
+function presetDia6() {
+  setColors('#3A2618', '#F5F5F2');
+}
+
+function presetDia7() {
+  setColors('#3A2618', '#D4B15F');
+}
+
+function presetNoche() {
+  setColors('#000000', '#ffffff');
+}
 
 function setColors(bg, text) {
   document.documentElement.style.setProperty('--bg-color', bg);
@@ -193,18 +200,6 @@ textColor.addEventListener('input', e => {
 });
 
 
-
-const programa = JSON.parse(localStorage.getItem('programaMisa'));
-    if (!programa) {
-      alert('No hay un programa de misa guardado.');
-      window.location.href = 'crear-programa.html';
-    }
-
-if (!programa || programa.length === 0) {
-  alert('No hay un programa de misa cargado.');
-  window.location.href = 'crear-programa.html';
-}
-
     const canciones = programa.map(item => item.cancion);
 
     // Función para determinar si una línea es de acordes
@@ -212,12 +207,15 @@ if (!programa || programa.length === 0) {
       return /(\bDO|\bRE|\bMI|\bFA|\bSOL|\bLA|\bSI)[b#]?|\bCejillo\b|\bIntro\b|\bIntroducción\b/.test(line);
     }
 
+
     // Función para procesar el contenido de la canción
     function procesarCancion(contenido) {
       const lines = contenido.split('\n');
       let output = '';
       for (let line of lines) {
-        output += `<span>${line}</span>\n`;
+        if (!isChordLine(line)) {
+          output += `<span>${line}</span>\n`;
+        }
       }
       return output;
     }
@@ -242,75 +240,138 @@ if (!programa || programa.length === 0) {
       }
     }
 
+// ======================================================
+    // MODO 2: PROYECCIÓN CONTÍNUA
+    // ======================================================
+
+async function iniciarProyeccion() {
+  document.getElementById('configuracion').style.display = 'none';
+
+  const pantalla = document.getElementById('pantalla-proyector');
+  pantalla.style.display = 'block';
+  pantalla.innerHTML = '';
+
+  for (const item of programa) {
+    const htmlOriginal = await cargarCancion(item.cancion);
+
+    // contenedor temporal para manipular el HTML
+    const temp = document.createElement('div');
+    temp.innerHTML = htmlOriginal;
+
+    // transformar <pre> en texto fluido
+    const pre = temp.querySelector('pre');
+    if (pre) {
+      const contenidoFluido = pre.innerHTML
+        .split('\n')
+        .map(l => l === '' ? '<br>' : `${l}<br>`)
+        .join('');
+
+      pre.outerHTML = `<div class="letra-normal">${contenidoFluido}</div>`;
+    }
+
+    pantalla.appendChild(temp);
+  }
+}
 
 
-let slides = [];
+// ======================================================
+    // MODO 2: PROYECCIÓN POR ESTROFA
+    // ======================================================
+    let slides = [];
     let slideActual = 0;
 
-    async function iniciarProyeccion() {
+    async function ProyeccionPorEstrofa() {
+        // 1. Preparar UI
+        document.getElementById('configuracion').style.display = 'none';
+        const pantalla = document.getElementById('pantalla-proyector');
+        pantalla.style.display = 'flex'; // Activamos flex para centrar
+        pantalla.classList.add('slide-flex');
+        
+        // Agregar evento de clic para avanzar solo en este modo
+        pantalla.onclick = avanzarSlide;
+
         slides = [];
+
+        // 2. Procesar canciones
         for (const ruta of canciones) {
-            const data = await cargarCancion(ruta);
-            if (!data) continue;
+            // Usamos tu función cargarCancion para obtener el HTML crudo
+            const htmlCancion = await cargarCancion(ruta);
+            
+            // Creamos un elemento temporal para "leer" lo que generó tu función
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = htmlCancion;
+            
+            const titulo = tempDiv.querySelector('h2').innerText;
+            const preContent = tempDiv.querySelector('pre').innerHTML;
 
-            // Diapositiva de Título
-            slides.push({ tipo: 'titulo', contenido: `<h2>${data.title}</h2>`, esEstribillo: false });
+            // --- LÓGICA DE DIVISIÓN ---
+            // Revertimos los spans de procesarCancion para analizar el texto limpio
+            // y separamos por bloques usando tu estructura de <br> o \n
+            let textoCrudo = preContent.replace(/<span>/g, '').replace(/<\/span>/g, '');
+            
+            // Normalizar bloques para separar estrofas (detectando dobles saltos o negritas)
+            let bloquesRaw = textoCrudo
+                .replace(/<b>/g, '\n\n<b>')     // Forzar separación antes de negrita
+                .replace(/<\/b>/g, '</b>\n\n')  // Forzar separación después de negrita
+                .split(/\n\s*\n/);              // Separar por líneas vacías
 
-            // DIVISIÓN LÓGICA (Basada en tus antecedentes)
-            // 1. Separamos por bloques (líneas en blanco o etiquetas <b>)
-            let raw = data.preContent.replace(/<b>/g, '\n\n<b>').replace(/<\/b>/g, '</b>\n\n');
-            let bloquesRaw = raw.split(/\n\s*\n/).filter(b => b.trim() !== "");
-
-            // 2. Limpiamos acordes de cada bloque usando tu isChordLine
-            let bloquesLimpios = bloquesRaw.map(bloque => {
-                const esEst = bloque.includes('<b>');
-                const lineas = bloque.split('\n')
-                                     .filter(l => !isChordLine(l)) // Usamos tu función prístina
-                                     .join('\n')
-                                     .trim();
-                return { texto: lineas, esEstribillo: esEst };
+            // Limpiar y estructurar bloques
+            let bloques = bloquesRaw.map(b => {
+                // Quitamos acordes usando TU función isChordLine
+                const lineasLimpias = b.split('\n')
+                    .filter(line => !isChordLine(line))
+                    .join('\n')
+                    .trim();
+                return {
+                    texto: lineasLimpias,
+                    esEstribillo: b.includes('<b>')
+                };
             }).filter(b => b.texto !== "");
 
-            // 3. Aplicamos los Escenarios (1, 2 e intercalado vs Escenario 3 manual)
-            const numEstribillos = bloquesLimpios.filter(b => b.esEstribillo).length;
+            // --- LÓGICA DE ESCENARIOS (1 vs Muchos Estribillos) ---
+            const countEstribillos = bloques.filter(b => b.esEstribillo).length;
 
-            if (numEstribillos === 1) {
-                // ESCENARIOS 1 y 2: Un solo estribillo -> Intercalar
-                const idxEst = bloquesLimpios.findIndex(b => b.esEstribillo);
-                const estribillo = bloquesLimpios[idxEst];
-                const antes = bloquesLimpios.slice(0, idxEst);
-                const despues = bloquesLimpios.slice(idxEst + 1);
+            // Slide de Título
+            slides.push({ tipo: 'titulo', texto: titulo });
 
-                antes.forEach(b => slides.push({ tipo: 'letra', contenido: b.texto, esEstribillo: false, titulo: data.title }));
-                slides.push({ tipo: 'letra', contenido: estribillo.texto, esEstribillo: true, titulo: data.title });
+            if (countEstribillos === 1) {
+                // MODO AUTOMÁTICO: Intercalar
+                const idx = bloques.findIndex(b => b.esEstribillo);
+                const estribillo = bloques[idx];
+                const antes = bloques.slice(0, idx);
+                const despues = bloques.slice(idx + 1);
+
+                antes.forEach(b => slides.push({ ...b, tituloCancion: titulo }));
+                slides.push({ ...estribillo, tituloCancion: titulo });
                 despues.forEach(b => {
-                    slides.push({ tipo: 'letra', contenido: b.texto, esEstribillo: false, titulo: data.title });
-                    slides.push({ tipo: 'letra', contenido: estribillo.texto, esEstribillo: true, titulo: data.title });
+                    slides.push({ ...b, tituloCancion: titulo });
+                    slides.push({ ...estribillo, tituloCancion: titulo });
                 });
+
             } else {
-                // ESCENARIO 3: Más de un estribillo -> Proyectar tal cual
-                bloquesLimpios.forEach(b => {
-                    slides.push({ tipo: 'letra', contenido: b.texto, esEstribillo: b.esEstribillo, titulo: data.title });
-                });
+                // MODO MANUAL: Tal cual
+                bloques.forEach(b => slides.push({ ...b, tituloCancion: titulo }));
             }
         }
 
-        document.getElementById('configuracion').style.display = 'none';
-        document.getElementById('pantalla-proyector').style.display = 'flex';
+        // 3. Mostrar primera diapositiva
+        slideActual = 0;
         mostrarSlide();
     }
 
     function mostrarSlide() {
+        const pantalla = document.getElementById('pantalla-proyector');
         const slide = slides[slideActual];
-        const contenedor = document.getElementById('contenido-dinamico');
         
+        if (!slide) return;
+
         if (slide.tipo === 'titulo') {
-            contenedor.innerHTML = slide.contenido;
+            pantalla.innerHTML = `<h2 style="font-size: 8vh; opacity: 1;">${slide.texto}</h2>`;
         } else {
-            const clase = slide.esEstribillo ? 'estribillo' : '';
-            const textoHtml = slide.contenido.replace(/\n/g, '<br>');
-            contenedor.innerHTML = `
-                <div style="font-size: 0.4em; opacity: 0.5; margin-bottom: 1rem;">${slide.titulo}</div>
+            const clase = slide.esEstribillo ? 'estribillo-destacado' : '';
+            const textoHtml = slide.texto.replace(/\n/g, '<br>');
+            pantalla.innerHTML = `
+                <div class="titulo-slide">${slide.tituloCancion}</div>
                 <div class="${clase}">${textoHtml}</div>
             `;
         }
@@ -323,25 +384,25 @@ let slides = [];
         }
     }
 
-    function retrocederSlide() {
-        if (slideActual > 0) {
-            slideActual--;
-            mostrarSlide();
-        }
-    }
-
-    // Navegación por teclado
+    // Teclado
     window.addEventListener('keydown', (e) => {
-        if (e.key === "ArrowRight" || e.key === " ") avanzarSlide();
-        if (e.key === "ArrowLeft") retrocederSlide();
-        if (e.key === "Escape") location.reload();
+        // Solo si la pantalla de proyección está visible
+        if (document.getElementById('pantalla-proyector').style.display !== 'none') {
+            if (e.key === "ArrowRight" || e.key === " ") {
+                if (document.getElementById('pantalla-proyector').classList.contains('slide-flex')) {
+                    avanzarSlide();
+                }
+            }
+            if (e.key === "ArrowLeft") {
+                if (slideActual > 0 && document.getElementById('pantalla-proyector').classList.contains('slide-flex')) {
+                    slideActual--;
+                    mostrarSlide();
+                }
+            }
+            if (e.key === "Escape") location.reload();
+        }
     });
 
-    // Funciones de utilidad
-    function setColors(bg, text) {
-        document.documentElement.style.setProperty('--bg-color', bg);
-        document.documentElement.style.setProperty('--text-color', text);
-    }
 
 
 let fontSize = 6; // vh

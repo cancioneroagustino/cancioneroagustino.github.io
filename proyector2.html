@@ -80,6 +80,26 @@ button {
 }
 
 
+#controles-proyeccion {
+  position: fixed;
+  bottom: 1rem;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 1.5rem;
+  z-index: 9999;
+}
+
+#controles-proyeccion button {
+  font-size: 1.5rem;
+  padding: 0.6rem 1.2rem;
+  background: transparent;
+  color: var(--text-color);
+  border: 2px solid var(--text-color);
+}
+
+
 </style>
 </head>
 
@@ -111,7 +131,7 @@ button {
 
   <div class="mt-4">
 
-    <button onclick="iniciarProyeccionContinua(false)">
+    <button onclick="iniciarProyeccion()">
   Proyectar letra continua
 </button>
 
@@ -119,7 +139,7 @@ button {
   Proyectar letra por estrofas
 </button>
 
-<button onclick="iniciarProyeccionContinua(true)">
+<button onclick="iniciarProyeccionContinuaConAcordes()">
   Proyectar letra + acordes continua
 </button>
 

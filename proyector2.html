@@ -166,49 +166,30 @@ button {
 
 
 <script>
+/* ===============================
+   CARGA DEL PROGRAMA
+================================ */
 
 const programa = JSON.parse(localStorage.getItem('programaMisa'));
-    if (!programa) {
-      alert('No hay un programa de misa guardado.');
-      window.location.href = 'crear-programa.html';
-    }
-
 if (!programa || programa.length === 0) {
   alert('No hay un programa de misa cargado.');
   window.location.href = 'crear-programa.html';
 }
 
-function presetDia1() {
-  setColors('#ffffff', '#000000');
-}
+const canciones = programa.map(item => item.cancion);
 
-function presetDia2() {
-  setColors('#f2e6a7', '#1a1a1a');
-}
+/* ===============================
+   PRESETS DE COLOR (SIN CAMBIOS)
+================================ */
 
-function presetDia3() {
-  setColors('#dedede', '#1a1a1a');
-}
-
-function presetDia4() {
-  setColors('#dedede', '#7a1121');
-}
-
-function presetDia5() {
-  setColors('#4B1F1F', '#F5F5F2');
-}
-
-function presetDia6() {
-  setColors('#3A2618', '#F5F5F2');
-}
-
-function presetDia7() {
-  setColors('#3A2618', '#D4B15F');
-}
-
-function presetNoche() {
-  setColors('#000000', '#ffffff');
-}
+function presetDia1() { setColors('#ffffff', '#000000'); }
+function presetDia2() { setColors('#f2e6a7', '#1a1a1a'); }
+function presetDia3() { setColors('#dedede', '#1a1a1a'); }
+function presetDia4() { setColors('#dedede', '#7a1121'); }
+function presetDia5() { setColors('#4B1F1F', '#F5F5F2'); }
+function presetDia6() { setColors('#3A2618', '#F5F5F2'); }
+function presetDia7() { setColors('#3A2618', '#D4B15F'); }
+function presetNoche() { setColors('#000000', '#ffffff'); }
 
 function setColors(bg, text) {
   document.documentElement.style.setProperty('--bg-color', bg);
@@ -225,127 +206,145 @@ textColor.addEventListener('input', e => {
   document.documentElement.style.setProperty('--text-color', e.target.value);
 });
 
-
-
-
-
-
 /* ===============================
    DETECCIÓN DE ACORDES
 ================================ */
+
 function isChordLine(line) {
   return /(\bDO|\bRE|\bMI|\bFA|\bSOL|\bLA|\bSI)[b#]?|\bCejillo\b|\bIntro\b|\bIntroducción\b/.test(line);
 }
 
 /* ===============================
-   CARGA BASE (IDÉNTICA A programa-texto)
+   PROCESAMIENTO DE TEXTO
 ================================ */
-async function cargarCancion(ruta) {
-  const response = await fetch(ruta);
-  if (!response.ok) throw new Error('Error al cargar canción');
 
-  const html = await response.text();
-  const doc = new DOMParser().parseFromString(html, 'text/html');
+function procesarCancion(contenido, conAcordes) {
+  const lines = contenido.split('\n');
+  let output = '';
 
-  return {
-    titulo: doc.querySelector('title')?.innerText ?? '',
-    contenidoHTML: doc.querySelector('pre')?.innerHTML ?? ''
-  };
+  for (let line of lines) {
+    if (conAcordes || !isChordLine(line)) {
+      output += `<span>${line}</span>\n`;
+    }
+  }
+  return output;
 }
 
-/* ===============================
-   PROCESAMIENTO BASE
-================================ */
-function extraerLineas(html, conAcordes) {
-  const tmp = document.createElement('div');
-  tmp.innerHTML = html;
-
-  const raw = tmp.innerHTML.split('\n');
-
-  return raw.filter(line => {
-    if (conAcordes) return true;
-    return !isChordLine(line.replace(/<[^>]*>/g, ''));
-  });
-}
-
-/* ===============================
-   SEPARACIÓN EN ESTROFAS
-================================ */
-function separarEstrofas(lineas) {
+function separarEstrofas(htmlLineas) {
   const bloques = [];
   let actual = [];
 
-  for (const l of lineas) {
-    if (l.trim() === '') {
+  htmlLineas.split('\n').forEach(line => {
+    if (line.trim() === '') {
       if (actual.length) {
         bloques.push(actual);
         actual = [];
       }
     } else {
-      actual.push(l);
+      actual.push(line);
     }
-  }
-  if (actual.length) bloques.push(actual);
+  });
 
+  if (actual.length) bloques.push(actual);
   return bloques;
 }
 
 /* ===============================
-   RENDERIZADO
+   CARGA DE CADA CANCIÓN
 ================================ */
-function renderContinuo(titulo, lineas) {
-  return `
-    <h2>${titulo}</h2>
-    <div class="letra-normal">
-      ${lineas.map(l => l === '' ? '<br>' : `${l}<br>`).join('')}
-    </div>
-  `;
-}
 
-function renderEstrofas(titulo, bloques) {
-  return `
-    <h2>${titulo}</h2>
-    ${bloques.map(b =>
-      `<div class="letra-normal">
-         ${b.map(l => `${l}<br>`).join('')}
-       </div>`
-    ).join('')}
-  `;
+async function cargarCancion(ruta, conAcordes, porEstrofas) {
+  try {
+    const response = await fetch(ruta);
+    if (!response.ok) throw new Error('Error al cargar la canción');
+
+    const contenido = await response.text();
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(contenido, 'text/html');
+
+    const preContent = doc.querySelector('pre').innerText;
+    const title = doc.querySelector('title').innerText;
+
+    const procesado = procesarCancion(preContent, conAcordes);
+
+    if (!porEstrofas) {
+      return `<h2>${title}</h2><pre class="lh-base">${procesado}</pre>`;
+    }
+
+    const estrofas = separarEstrofas(procesado);
+    let html = `<h2>${title}</h2>`;
+
+    estrofas.forEach(e => {
+      html += `<pre class="lh-base">${e.join('\n')}</pre>`;
+    });
+
+    return html;
+
+  } catch (error) {
+    console.error(error);
+    return '<p>Error al cargar la canción.</p>';
+  }
 }
 
 /* ===============================
-   FUNCIÓN MAESTRA
+   PROYECCIÓN GENERAL
 ================================ */
-async function iniciarProyeccion() {
+
+async function iniciarProyeccion({ conAcordes, porEstrofas }) {
   document.getElementById('configuracion').style.display = 'none';
 
   const pantalla = document.getElementById('pantalla-proyector');
   pantalla.style.display = 'block';
   pantalla.innerHTML = '';
 
-  const conAcordes =
-    document.querySelector('input[name="modo-acordes"]:checked').value === 'acordes';
-
-  const porEstrofas =
-    document.querySelector('input[name="modo-estructura"]:checked').value === 'estrofas';
-
   for (const item of programa) {
-    const cancion = await cargarCancion(item.cancion);
+    const htmlOriginal = await cargarCancion(
+      item.cancion,
+      conAcordes,
+      porEstrofas
+    );
 
-    const lineas = extraerLineas(cancion.contenidoHTML, conAcordes);
+    const temp = document.createElement('div');
+    temp.innerHTML = htmlOriginal;
 
-    if (porEstrofas) {
-      const bloques = separarEstrofas(lineas);
-      pantalla.innerHTML += renderEstrofas(cancion.titulo, bloques);
-    } else {
-      pantalla.innerHTML += renderContinuo(cancion.titulo, lineas);
-    }
+    temp.querySelectorAll('pre').forEach(pre => {
+      const contenidoFluido = pre.innerHTML
+        .split('\n')
+        .map(l => l === '' ? '<br>' : `${l}<br>`)
+        .join('');
+
+      pre.outerHTML = `<div class="letra-normal">${contenidoFluido}</div>`;
+    });
+
+    pantalla.appendChild(temp);
   }
 }
 
+/* ===============================
+   FUNCIONES PARA LOS 4 MODOS
+================================ */
 
+function proyectarLetraContinua() {
+  iniciarProyeccion({ conAcordes: false, porEstrofas: false });
+}
 
-let fontSize = 6; // vh
+function proyectarLetraPorEstrofas() {
+  iniciarProyeccion({ conAcordes: false, porEstrofas: true });
+}
+
+function proyectarLetraAcordesContinua() {
+  iniciarProyeccion({ conAcordes: true, porEstrofas: false });
+}
+
+function proyectarLetraAcordesPorEstrofas() {
+  iniciarProyeccion({ conAcordes: true, porEstrofas: true });
+}
+
+/* ===============================
+   CONTROL DE TAMAÑO DE TEXTO
+================================ */
+
+let fontSize = 6;
 
 function aplicarTamano() {
   document.documentElement.style.setProperty('--font-size', fontSize + 'vh');
@@ -361,6 +360,7 @@ function disminuirTexto() {
   aplicarTamano();
 }
 </script>
+
 
 <div id="controles-tamano">
   <button class="btn btn-outline-secondary" onclick="aumentarTexto()">A+</button>

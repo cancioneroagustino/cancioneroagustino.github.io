@@ -141,125 +141,126 @@ button {
 
 <script>
 
-    // 1. CARGA DE DATOS
-    const datosMisa = localStorage.getItem('programaMisa');
-    const programa = datosMisa ? JSON.parse(datosMisa) : null;
-    
+    // 1. CARGA INICIAL DE DATOS
+    const programa = JSON.parse(localStorage.getItem('programaMisa'));
     if (!programa || programa.length === 0) {
-        alert('No hay programa cargado.');
+        alert('No hay programa guardado.');
         window.location.href = 'crear-programa.html';
     }
 
-    // Obtenemos las rutas de las canciones
-    const canciones = programa.map(item => item.cancion);
-
-    // 2. FUNCIONES DE PROCESAMIENTO
+    // 2. UTILIDADES DE PROCESAMIENTO
     function isChordLine(line) {
         return /(\bDO|\bRE|\bMI|\bFA|\bSOL|\bLA|\bSI)[b#]?|\bCejillo\b|\bIntro\b|\bIntroducción\b/.test(line);
     }
 
-    function procesarCancion(contenido) {
-        const lines = contenido.split('\n');
-        let output = '';
-        for (let line of lines) {
-            if (!isChordLine(line)) {
-                output += `<span>${line}</span>\n`;
+    // Función limpia para extraer texto sin acordes
+    function extraerLetraLimpia(htmlCrudo) {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(htmlCrudo, 'text/html');
+        const pre = doc.querySelector('pre');
+        if (!pre) return "";
+        
+        // Dividimos por líneas, filtramos acordes y quitamos spans
+        return pre.innerHTML
+            .split('\n')
+            .filter(line => !isChordLine(line.replace(/<[^>]*>/g, '')))
+            .join('\n')
+            .replace(/<\/?span[^>]*>/gi, '');
+    }
+
+    async function obtenerDatosCancion(ruta) {
+        try {
+            const response = await fetch(ruta);
+            const texto = await response.text();
+            const doc = new DOMParser().parseFromString(texto, 'text/html');
+            return {
+                titulo: doc.querySelector('title')?.innerText || "Sin título",
+                html: texto
+            };
+        } catch (e) {
+            console.error("Error en fetch:", e);
+            return null;
+        }
+    }
+
+    // 3. MODO 1: PROYECCIÓN CONTINUA
+    async function iniciarProyeccion() {
+        const pantalla = document.getElementById('pantalla-proyector');
+        document.getElementById('configuracion').style.display = 'none';
+        pantalla.style.display = 'block';
+        pantalla.classList.remove('slide-flex');
+        pantalla.innerHTML = "Cargando canciones...";
+
+        let acumulado = "";
+        for (const item of programa) {
+            const data = await obtenerDatosCancion(item.cancion);
+            if (data) {
+                const letra = extraerLetraLimpia(data.html).replace(/\n/g, '<br>');
+                acumulado += `<div class="letra-normal"><h2>${data.titulo}</h2>${letra}</div><hr>`;
             }
         }
-        return output;
+        pantalla.innerHTML = acumulado;
     }
 
-    async function cargarCancion(ruta) {
-        try {
-            console.log("Intentando cargar:", ruta); // DIAGNÓSTICO
-            const response = await fetch(ruta);
-            if (!response.ok) throw new Error('No se encontró el archivo');
-            const contenido = await response.text();
-            
-            const parser = new DOMParser();
-            const doc = parser.parseFromString(contenido, 'text/html');
-            
-            const preElement = doc.querySelector('pre');
-            const titleElement = doc.querySelector('title');
-
-            if (!preElement) throw new Error('El archivo no tiene etiqueta <pre>');
-
-            const preContent = preElement.innerHTML;
-            const title = titleElement ? titleElement.innerText : "Sin título";
-
-            const contenidoProcesado = procesarCancion(preContent);
-            return `<h2>${title}</h2><pre>${contenidoProcesado}</pre>`;
-        } catch (error) {
-            console.error('Error cargando canción:', error);
-            return null; // Retornamos null para manejar el error
-        }
-    }
-
-    // 3. MODO ESTROFAS (LÓGICA RECONSTRUIDA)
+    // 4. MODO 2: PROYECCIÓN POR ESTROFAS
     let slides = [];
     let slideActual = 0;
 
     async function ProyeccionPorEstrofa() {
-        console.log("Iniciando Proyección por Estrofas...");
         const pantalla = document.getElementById('pantalla-proyector');
-        const config = document.getElementById('configuracion');
+        document.getElementById('configuracion').style.display = 'none';
+        pantalla.innerHTML = "Procesando diapositivas...";
         
         slides = [];
-        
-        for (const ruta of canciones) {
-            const html = await cargarCancion(ruta);
-            if (!html) continue;
 
-            const temp = document.createElement('div');
-            temp.innerHTML = html;
+        for (const item of programa) {
+            const data = await obtenerDatosCancion(item.cancion);
+            if (!data) continue;
+
+            const letraLimpia = extraerLetraLimpia(data.html);
             
-            const titulo = temp.querySelector('h2').innerText;
-            const rawText = temp.querySelector('pre').innerHTML
-                                .replace(/<\/?span[^>]*>/gi, '') // Limpia spans
-                                .trim();
+            // Separar por bloques (estrofas)
+            const bloques = letraLimpia.split(/\n\s*\n/).filter(b => b.trim() !== "");
 
-            // Separar por bloques de texto (estrofas)
-            let bloques = rawText.split(/\n\s*\n/).map(b => ({
-                texto: b.trim(),
-                esEstribillo: /<b>/i.test(b)
-            })).filter(b => b.texto !== "");
+            // Diapositiva de título
+            slides.push({ tipo: 'titulo', contenido: data.titulo });
 
-            // Añadir diapositiva de título
-            slides.push({ tipo: 'titulo', texto: titulo });
-
-            // Añadir estrofas
-            bloques.forEach(b => {
-                slides.push({ ...b, tituloCancion: titulo });
+            // Diapositivas de estrofas
+            bloques.forEach(bloque => {
+                slides.push({
+                    tipo: 'estrofa',
+                    titulo: data.titulo,
+                    texto: bloque.trim(),
+                    esEstribillo: /<b>/i.test(bloque)
+                });
             });
         }
 
-        if (slides.length === 0) {
-            alert("No se pudieron generar diapositivas. Revisa la consola (F12).");
-            return;
+        if (slides.length > 0) {
+            pantalla.style.display = 'flex';
+            pantalla.classList.add('slide-flex');
+            pantalla.onclick = avanzarSlide;
+            slideActual = 0;
+            mostrarSlide();
+        } else {
+            alert("No se pudieron cargar las letras.");
+            location.reload();
         }
-
-        // Mostrar UI
-        config.style.display = 'none';
-        pantalla.style.display = 'flex';
-        pantalla.classList.add('slide-flex');
-        
-        slideActual = 0;
-        mostrarSlide();
     }
 
     function mostrarSlide() {
         const pantalla = document.getElementById('pantalla-proyector');
         const s = slides[slideActual];
-        console.log("Mostrando slide:", slideActual, s); // DIAGNÓSTICO
 
         if (s.tipo === 'titulo') {
-            pantalla.innerHTML = `<h2 style="font-size: 10vh;">${s.texto}</h2>`;
+            pantalla.innerHTML = `<h2 style="font-size: 10vh; margin:0;">${s.contenido}</h2>`;
         } else {
             const clase = s.esEstribillo ? 'estribillo-destacado' : '';
-            const textoLimpio = s.texto.replace(/<\/?b>/gi, ''); // Quita los <b> para el render final
+            // Quitamos etiquetas <b> para el texto final, los saltos \n a <br>
+            const textoFinal = s.texto.replace(/<\/?b>/gi, '').replace(/\n/g, '<br>');
             pantalla.innerHTML = `
-                <div class="titulo-slide">${s.tituloCancion}</div>
-                <div class="${clase}" style="white-space: pre-wrap;">${textoLimpio}</div>
+                <div class="titulo-slide">${s.titulo}</div>
+                <div class="${clase}" style="white-space: normal;">${textoFinal}</div>
             `;
         }
     }
@@ -269,13 +270,11 @@ button {
             slideActual++;
             mostrarSlide();
         } else {
-            if(confirm("Fin del programa. ¿Reiniciar?")) location.reload();
+            if(confirm("Fin del programa. ¿Salir?")) location.reload();
         }
     }
 
-    // Eventos
-    document.getElementById('pantalla-proyector').addEventListener('click', avanzarSlide);
-    
+    // Eventos de Teclado
     window.addEventListener('keydown', (e) => {
         if (document.getElementById('pantalla-proyector').style.display !== 'none') {
             if (e.key === "ArrowRight" || e.key === " ") avanzarSlide();
@@ -284,21 +283,9 @@ button {
         }
     });
 
-    // 4. MODO CONTINUO (Asegurado)
-    async function iniciarProyeccion() {
-        document.getElementById('configuracion').style.display = 'none';
-        const pantalla = document.getElementById('pantalla-proyector');
-        pantalla.style.display = 'block';
-        pantalla.classList.remove('slide-flex');
-        pantalla.innerHTML = "Cargando...";
 
-        let contenidoFinal = "";
-        for (const ruta of canciones) {
-            const html = await cargarCancion(ruta);
-            if (html) contenidoFinal += `<div class="letra-normal">${html}</div><hr>`;
-        }
-        pantalla.innerHTML = contenidoFinal;
-    }
+
+
 
     // 5. COLORES Y TAMAÑO
     function setColors(bg, text) {
@@ -324,24 +311,6 @@ button {
     if(textColor) textColor.addEventListener('input', e => document.documentElement.style.setProperty('--text-color', e.target.value));
 
 
-
-    // Teclado
-    window.addEventListener('keydown', (e) => {
-        if (document.getElementById('pantalla-proyector').style.display !== 'none') {
-            if (e.key === "ArrowRight" || e.key === " ") {
-                if (document.getElementById('pantalla-proyector').classList.contains('slide-flex')) {
-                    avanzarSlide();
-                }
-            }
-            if (e.key === "ArrowLeft") {
-                if (slideActual > 0 && document.getElementById('pantalla-proyector').classList.contains('slide-flex')) {
-                    slideActual--;
-                    mostrarSlide();
-                }
-            }
-            if (e.key === "Escape") location.reload();
-        }
-    });
 
     // ======================================================
     // TAMAÑO DE TEXTO

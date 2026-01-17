@@ -141,147 +141,147 @@ button {
 
 <script>
 
-    // 1. CARGA INICIAL DE DATOS
-    const programa = JSON.parse(localStorage.getItem('programaMisa'));
-    if (!programa || programa.length === 0) {
-        alert('No hay programa guardado.');
-        window.location.href = 'crear-programa.html';
-    }
+// 1. Verificación inmediata de datos
+const programaMisa = JSON.parse(localStorage.getItem('programaMisa'));
+console.log("Datos en LocalStorage:", programaMisa);
 
-    // 2. UTILIDADES DE PROCESAMIENTO
-    function isChordLine(line) {
-        return /(\bDO|\bRE|\bMI|\bFA|\bSOL|\bLA|\bSI)[b#]?|\bCejillo\b|\bIntro\b|\bIntroducción\b/.test(line);
-    }
+if (!programaMisa || programaMisa.length === 0) {
+    alert("No hay programa. Redirigiendo...");
+    window.location.href = 'crear-programa.html';
+}
 
-    // Función limpia para extraer texto sin acordes
-    function extraerLetraLimpia(htmlCrudo) {
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(htmlCrudo, 'text/html');
-        const pre = doc.querySelector('pre');
-        if (!pre) return "";
-        
-        // Dividimos por líneas, filtramos acordes y quitamos spans
-        return pre.innerHTML
-            .split('\n')
-            .filter(line => !isChordLine(line.replace(/<[^>]*>/g, '')))
-            .join('\n')
-            .replace(/<\/?span[^>]*>/gi, '');
-    }
+// 2. Variables de estado globales
+let diapositivas = [];
+let indiceActual = 0;
 
-    async function obtenerDatosCancion(ruta) {
+// 3. Función de limpieza ultra-segura
+function limpiarTexto(html) {
+    const temp = document.createElement('div');
+    temp.innerHTML = html;
+    const pre = temp.querySelector('pre');
+    if (!pre) return "";
+
+    // Expresión regular para detectar líneas de acordes (incluye variantes comunes)
+    const esAcorde = (linea) => /(\bDO|\bRE|\bMI|\bFA|\bSOL|\bLA|\bSI)[b#]?|\bCejillo\b|\bIntro\b/.test(linea);
+
+    return pre.innerHTML
+        .split('\n')
+        .map(l => l.replace(/<[^>]*>/g, '')) // Quitar Spans/Bolds de la línea
+        .filter(l => !esAcorde(l))           // Quitar si es acorde
+        .join('\n')
+        .trim();
+}
+
+// 4. EL MOTOR DE CARGA (Aquí estaba el fallo de silencio)
+async function cargarTodoElPrograma() {
+    const pantalla = document.getElementById('pantalla-proyector');
+    pantalla.style.display = 'block';
+    pantalla.innerHTML = "<h3>Cargando archivos...</h3>"; 
+
+    diapositivas = [];
+
+    for (const item of programaMisa) {
         try {
-            const response = await fetch(ruta);
-            const texto = await response.text();
-            const doc = new DOMParser().parseFromString(texto, 'text/html');
-            return {
-                titulo: doc.querySelector('title')?.innerText || "Sin título",
-                html: texto
-            };
-        } catch (e) {
-            console.error("Error en fetch:", e);
-            return null;
-        }
-    }
-
-    // 3. MODO 1: PROYECCIÓN CONTINUA
-    async function iniciarProyeccion() {
-        const pantalla = document.getElementById('pantalla-proyector');
-        document.getElementById('configuracion').style.display = 'none';
-        pantalla.style.display = 'block';
-        pantalla.classList.remove('slide-flex');
-        pantalla.innerHTML = "Cargando canciones...";
-
-        let acumulado = "";
-        for (const item of programa) {
-            const data = await obtenerDatosCancion(item.cancion);
-            if (data) {
-                const letra = extraerLetraLimpia(data.html).replace(/\n/g, '<br>');
-                acumulado += `<div class="letra-normal"><h2>${data.titulo}</h2>${letra}</div><hr>`;
-            }
-        }
-        pantalla.innerHTML = acumulado;
-    }
-
-    // 4. MODO 2: PROYECCIÓN POR ESTROFAS
-    let slides = [];
-    let slideActual = 0;
-
-    async function ProyeccionPorEstrofa() {
-        const pantalla = document.getElementById('pantalla-proyector');
-        document.getElementById('configuracion').style.display = 'none';
-        pantalla.innerHTML = "Procesando diapositivas...";
-        
-        slides = [];
-
-        for (const item of programa) {
-            const data = await obtenerDatosCancion(item.cancion);
-            if (!data) continue;
-
-            const letraLimpia = extraerLetraLimpia(data.html);
+            console.log("Cargando:", item.cancion);
+            const res = await fetch(item.cancion);
+            const html = await res.text();
             
-            // Separar por bloques (estrofas)
-            const bloques = letraLimpia.split(/\n\s*\n/).filter(b => b.trim() !== "");
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+            const titulo = doc.querySelector('title')?.innerText || "Sin título";
+            const textoLimpio = limpiarTexto(html);
 
-            // Diapositiva de título
-            slides.push({ tipo: 'titulo', contenido: data.titulo });
+            // Título de la canción
+            diapositivas.push({ tipo: 'titulo', contenido: titulo });
 
-            // Diapositivas de estrofas
+            // Dividir en estrofas (por doble salto de línea)
+            const bloques = textoLimpio.split(/\n\s*\n/);
             bloques.forEach(bloque => {
-                slides.push({
-                    tipo: 'estrofa',
-                    titulo: data.titulo,
-                    texto: bloque.trim(),
-                    esEstribillo: /<b>/i.test(bloque)
-                });
+                if(bloque.trim() !== "") {
+                    diapositivas.push({
+                        tipo: 'estrofa',
+                        titulo: titulo,
+                        texto: bloque.trim()
+                    });
+                }
             });
-        }
-
-        if (slides.length > 0) {
-            pantalla.style.display = 'flex';
-            pantalla.classList.add('slide-flex');
-            pantalla.onclick = avanzarSlide;
-            slideActual = 0;
-            mostrarSlide();
-        } else {
-            alert("No se pudieron cargar las letras.");
-            location.reload();
+        } catch (err) {
+            console.error("Error cargando " + item.cancion, err);
         }
     }
+    
+    console.log("Total diapositivas generadas:", diapositivas.length);
+}
 
-    function mostrarSlide() {
-        const pantalla = document.getElementById('pantalla-proyector');
-        const s = slides[slideActual];
-
-        if (s.tipo === 'titulo') {
-            pantalla.innerHTML = `<h2 style="font-size: 10vh; margin:0;">${s.contenido}</h2>`;
-        } else {
-            const clase = s.esEstribillo ? 'estribillo-destacado' : '';
-            // Quitamos etiquetas <b> para el texto final, los saltos \n a <br>
-            const textoFinal = s.texto.replace(/<\/?b>/gi, '').replace(/\n/g, '<br>');
-            pantalla.innerHTML = `
-                <div class="titulo-slide">${s.titulo}</div>
-                <div class="${clase}" style="white-space: normal;">${textoFinal}</div>
-            `;
-        }
-    }
-
-    function avanzarSlide() {
-        if (slideActual < slides.length - 1) {
-            slideActual++;
-            mostrarSlide();
-        } else {
-            if(confirm("Fin del programa. ¿Salir?")) location.reload();
-        }
-    }
-
-    // Eventos de Teclado
-    window.addEventListener('keydown', (e) => {
-        if (document.getElementById('pantalla-proyector').style.display !== 'none') {
-            if (e.key === "ArrowRight" || e.key === " ") avanzarSlide();
-            if (e.key === "ArrowLeft" && slideActual > 0) { slideActual--; mostrarSlide(); }
-            if (e.key === "Escape") location.reload();
-        }
+// 5. LANZADORES DE MODO
+async function iniciarProyeccion() {
+    await cargarTodoElPrograma();
+    const pantalla = document.getElementById('pantalla-proyector');
+    document.getElementById('configuracion').style.display = 'none';
+    
+    // Modo Continuo: Juntamos todo en un solo bloque
+    pantalla.classList.remove('slide-flex');
+    pantalla.style.display = 'block';
+    pantalla.style.textAlign = 'center';
+    
+    let htmlFinal = "";
+    diapositivas.forEach(d => {
+        if(d.tipo === 'titulo') htmlFinal += `<h2 style="margin-top:10vh">${d.contenido}</h2>`;
+        else htmlFinal += `<p class="letra-normal">${d.texto.replace(/\n/g, '<br>')}</p>`;
     });
+    pantalla.innerHTML = htmlFinal;
+}
+
+async function ProyeccionPorEstrofa() {
+    await cargarTodoElPrograma();
+    if (diapositivas.length === 0) {
+        alert("Error: No se pudieron procesar las letras.");
+        return;
+    }
+    document.getElementById('configuracion').style.display = 'none';
+    const pantalla = document.getElementById('pantalla-proyector');
+    pantalla.classList.add('slide-flex');
+    pantalla.style.display = 'flex';
+    
+    indiceActual = 0;
+    renderizarSlide();
+}
+
+function renderizarSlide() {
+    const pantalla = document.getElementById('pantalla-proyector');
+    const d = diapositivas[indiceActual];
+    
+    if (d.tipo === 'titulo') {
+        pantalla.innerHTML = `<h2 style="font-size: 8vh;">${d.contenido}</h2>`;
+    } else {
+        pantalla.innerHTML = `
+            <div class="titulo-slide">${d.titulo}</div>
+            <div style="white-space: pre-wrap;">${d.texto}</div>
+        `;
+    }
+}
+
+// 6. NAVEGACIÓN
+function avanzar() {
+    if (indiceActual < diapositivas.length - 1) {
+        indiceActual++;
+        renderizarSlide();
+    } else if (confirm("Fin. ¿Volver?")) {
+        location.reload();
+    }
+}
+
+document.getElementById('pantalla-proyector').onclick = () => {
+    if(document.getElementById('pantalla-proyector').classList.contains('slide-flex')) {
+        avanzar();
+    }
+};
+
+window.onkeydown = (e) => {
+    if (e.key === " " || e.key === "ArrowRight") avanzar();
+    if (e.key === "ArrowLeft" && indiceActual > 0) { indiceActual--; renderizarSlide(); }
+    if (e.key === "Escape") location.reload();
+};
 
 
 

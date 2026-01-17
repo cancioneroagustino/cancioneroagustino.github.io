@@ -178,7 +178,7 @@ button {
 </div>
 
   <div class="mt-4">
-    <button class="btn btn-outline-secondary btn-lg" onclick="proyectarDesdeSelectores()">Proyectar letras</button>
+    <button class="btn btn-outline-secondary btn-lg" onclick="iniciarProyeccion()">Proyectar letras</button>
   </div>
 </div>
 
@@ -217,33 +217,56 @@ textColor.addEventListener('input', e => {
 
 
 const programa = JSON.parse(localStorage.getItem('programaMisa'));
+    if (!programa) {
+      alert('No hay un programa de misa guardado.');
+      window.location.href = 'crear-programa.html';
+    }
+
 if (!programa || programa.length === 0) {
   alert('No hay un programa de misa cargado.');
   window.location.href = 'crear-programa.html';
 }
 
-function isChordLine(line) {
-  return /(\bDO|\bRE|\bMI|\bFA|\bSOL|\bLA|\bSI)[b#]?/i.test(line);
-}
+    const canciones = programa.map(item => item.cancion);
 
-async function cargarCancion(ruta) {
-  const response = await fetch(ruta);
-  if (!response.ok) throw new Error('Error al cargar ' + ruta);
+    // Función para determinar si una línea es de acordes
+    function isChordLine(line) {
+      return /(\bDO|\bRE|\bMI|\bFA|\bSOL|\bLA|\bSI)[b#]?/.test(line);
+    }
 
-  const html = await response.text();
+    // Función para procesar el contenido de la canción
+    function procesarCancion(contenido) {
+      const lines = contenido.split('\n');
+      let output = '';
+      for (let line of lines) {
+        if (!isChordLine(line)) {
+          output += `<span>${line}</span>\n`;
+        }
+      }
+      return output;
+    }
 
-  // EXACTAMENTE como el proyector antiguo
-  const parser = new DOMParser();
-  const doc = parser.parseFromString(html, 'text/html');
+    async function cargarCancion(ruta) {
+      try {
+        const response = await fetch(ruta);
+        if (!response.ok) {
+          throw new Error('Error al cargar la canción');
+        }
+        const contenido = await response.text();
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(contenido, 'text/html');
+        const preContent = doc.querySelector('pre').innerHTML;
+        const title = doc.querySelector('title').innerText;
 
-  const pre = doc.querySelector('pre');
-  if (!pre) {
-    console.error('NO HAY PRE EN', ruta);
-    return '';
-  }
+        const contenidoProcesado = procesarCancion(preContent);
+        return `<h2>${title}</h2><pre class="lh-base">${contenidoProcesado}</pre></div>`;
+      } catch (error) {
+        console.error('Error:', error);
+        return '<p>Error al cargar la canción. Inténtalo de nuevo más tarde.</p>';
+      }
+    }
 
-  return pre.innerHTML;
-}
+
 
 async function iniciarProyeccion() {
   document.getElementById('configuracion').style.display = 'none';
@@ -253,33 +276,29 @@ async function iniciarProyeccion() {
   pantalla.innerHTML = '';
 
   for (const item of programa) {
-    const contenidoPre = await cargarCancion(item.cancion);
-    if (!contenidoPre) continue;
+    const htmlOriginal = await cargarCancion(item.cancion);
 
-    const lineas = contenidoPre.split('\n');
+    // contenedor temporal para manipular el HTML
+    const temp = document.createElement('div');
+    temp.innerHTML = htmlOriginal;
 
-    let html = '';
-    for (const linea of lineas) {
-      if (!isChordLine(linea)) {
-        html += linea + '<br>';
-      }
+    // transformar <pre> en texto fluido
+    const pre = temp.querySelector('pre');
+    if (pre) {
+      const contenidoFluido = pre.innerHTML
+        .split('\n')
+        .map(l => l === '' ? '<br>' : `${l}<br>`)
+        .join('');
+
+      pre.outerHTML = `<div class="letra-normal">${contenidoFluido}</div>`;
     }
 
-    const bloque = document.createElement('div');
-    bloque.className = 'letra-normal';
-    bloque.innerHTML = html;
-
-    pantalla.appendChild(bloque);
+    pantalla.appendChild(temp);
   }
 }
 
 
-
-/* ===============================
-   CONTROL DE TAMAÑO DE TEXTO
-================================ */
-
-let fontSize = 6;
+let fontSize = 6; // vh
 
 function aplicarTamano() {
   document.documentElement.style.setProperty('--font-size', fontSize + 'vh');

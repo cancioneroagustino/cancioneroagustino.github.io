@@ -46,6 +46,9 @@ body {
     font-family: 'Atkinson Hyperlegible', system-ui, sans-serif;
     font-size: var(--font-size, 6vh);
     line-height: 1.25;
+    cursor: pointer; /* Indica que se puede hacer clic */
+    user-select: none; /* Evita que se seleccione el texto al hacer clics rápidos */
+    touch-action: manipulation; /* Optimiza para toques en móvil */
 }
 
 
@@ -286,27 +289,78 @@ async function ProyeccionPorEstrofa() {
 
 
 
-// 6. NAVEGACIÓN
+// --- SISTEMA DE NAVEGACIÓN UNIVERSAL ---
+
 function avanzar() {
     if (indiceActual < diapositivas.length - 1) {
         indiceActual++;
         renderizarSlide();
-    } else if (confirm("Fin. ¿Volver?")) {
-        location.reload();
+    } else {
+        if (confirm("Fin del programa. ¿Volver al inicio?")) location.reload();
     }
 }
 
-document.getElementById('pantalla-proyector').onclick = () => {
-    if(document.getElementById('pantalla-proyector').classList.contains('slide-flex')) {
-        avanzar();
+function retroceder() {
+    if (indiceActual > 0) {
+        indiceActual--;
+        renderizarSlide();
+    }
+}
+
+// A. Control por Teclado (Soporte total)
+window.onkeydown = (e) => {
+    // Si la pantalla de proyección está visible
+    if (document.getElementById('pantalla-proyector').style.display !== 'none') {
+        switch(e.key) {
+            case "ArrowRight":
+            case "Enter":
+            case " ": // Espacio
+                e.preventDefault(); // Evita que la página haga scroll con el espacio
+                avanzar();
+                break;
+            case "ArrowLeft":
+            case "Backspace":
+                e.preventDefault();
+                retroceder();
+                break;
+            case "Escape":
+                location.reload();
+                break;
+        }
     }
 };
 
-window.onkeydown = (e) => {
-    if (e.key === " " || e.key === "ArrowRight") avanzar();
-    if (e.key === "ArrowLeft" && indiceActual > 0) { indiceActual--; renderizarSlide(); }
-    if (e.key === "Escape") location.reload();
+// B. Control por Mouse (Click izquierdo avanza, Click derecho retrocede)
+document.getElementById('pantalla-proyector').onmousedown = (e) => {
+    if (e.button === 0) { // Click izquierdo
+        avanzar();
+    } else if (e.button === 2) { // Click derecho
+        e.preventDefault();
+        retroceder();
+    }
 };
+
+// Evitar que el menú contextual del click derecho moleste
+document.getElementById('pantalla-proyector').oncontextmenu = (e) => e.preventDefault();
+
+// C. Control para Móvil (Toque a la derecha o izquierda)
+let touchStartX = 0;
+document.getElementById('pantalla-proyector').addEventListener('touchstart', (e) => {
+    touchStartX = e.changedTouches[0].screenX;
+}, false);
+
+document.getElementById('pantalla-proyector').addEventListener('touchend', (e) => {
+    let touchEndX = e.changedTouches[0].screenX;
+    let pantallaAncho = window.innerWidth;
+    
+    // Si el toque fue en el tercio izquierdo de la pantalla, retrocede. 
+    // Si fue en el resto, avanza.
+    if (touchEndX < pantallaAncho / 3) {
+        retroceder();
+    } else {
+        avanzar();
+    }
+}, false);
 
 
 

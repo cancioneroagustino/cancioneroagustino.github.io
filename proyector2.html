@@ -140,65 +140,18 @@ button {
 
 
 <script>
-
-const programa = JSON.parse(localStorage.getItem('programaMisa'));
+    // ======================================================
+    // 1. LÓGICA BASE (TUS FUNCIONES PRÍSTINAS)
+    // ======================================================
+    const programa = JSON.parse(localStorage.getItem('programaMisa'));
+    
     if (!programa) {
       alert('No hay un programa de misa guardado.');
       window.location.href = 'crear-programa.html';
+    } else if (programa.length === 0) {
+      alert('No hay un programa de misa cargado.');
+      window.location.href = 'crear-programa.html';
     }
-
-if (!programa || programa.length === 0) {
-  alert('No hay un programa de misa cargado.');
-  window.location.href = 'crear-programa.html';
-}
-
-function presetDia1() {
-  setColors('#ffffff', '#000000');
-}
-
-function presetDia2() {
-  setColors('#f2e6a7', '#1a1a1a');
-}
-
-function presetDia3() {
-  setColors('#dedede', '#1a1a1a');
-}
-
-function presetDia4() {
-  setColors('#dedede', '#7a1121');
-}
-
-function presetDia5() {
-  setColors('#4B1F1F', '#F5F5F2');
-}
-
-function presetDia6() {
-  setColors('#3A2618', '#F5F5F2');
-}
-
-function presetDia7() {
-  setColors('#3A2618', '#D4B15F');
-}
-
-function presetNoche() {
-  setColors('#000000', '#ffffff');
-}
-
-function setColors(bg, text) {
-  document.documentElement.style.setProperty('--bg-color', bg);
-  document.documentElement.style.setProperty('--text-color', text);
-  document.getElementById('bgColor').value = bg;
-  document.getElementById('textColor').value = text;
-}
-
-bgColor.addEventListener('input', e => {
-  document.documentElement.style.setProperty('--bg-color', e.target.value);
-});
-
-textColor.addEventListener('input', e => {
-  document.documentElement.style.setProperty('--text-color', e.target.value);
-});
-
 
     const canciones = programa.map(item => item.cancion);
 
@@ -206,7 +159,6 @@ textColor.addEventListener('input', e => {
     function isChordLine(line) {
       return /(\bDO|\bRE|\bMI|\bFA|\bSOL|\bLA|\bSI)[b#]?|\bCejillo\b|\bIntro\b|\bIntroducción\b/.test(line);
     }
-
 
     // Función para procesar el contenido de la canción
     function procesarCancion(contenido) {
@@ -223,9 +175,7 @@ textColor.addEventListener('input', e => {
     async function cargarCancion(ruta) {
       try {
         const response = await fetch(ruta);
-        if (!response.ok) {
-          throw new Error('Error al cargar la canción');
-        }
+        if (!response.ok) throw new Error('Error al cargar la canción');
         const contenido = await response.text();
         const parser = new DOMParser();
         const doc = parser.parseFromString(contenido, 'text/html');
@@ -233,49 +183,73 @@ textColor.addEventListener('input', e => {
         const title = doc.querySelector('title').innerText;
 
         const contenidoProcesado = procesarCancion(preContent);
-        return `<h2>${title}</h2><pre class="lh-base">${contenidoProcesado}</pre></div>`;
+        // CORRECCIÓN: Quitamos el </div> sobrante al final que podía romper el parseo
+        return `<h2>${title}</h2><pre class="lh-base">${contenidoProcesado}</pre>`;
       } catch (error) {
         console.error('Error:', error);
-        return '<p>Error al cargar la canción. Inténtalo de nuevo más tarde.</p>';
+        return '<p>Error al cargar la canción.</p>';
       }
     }
 
-// ======================================================
-    // MODO 2: PROYECCIÓN CONTÍNUA
     // ======================================================
+    // 2. CONFIGURACIÓN VISUAL (PRESETS Y COLORES)
+    // ======================================================
+    function setColors(bg, text) {
+        document.documentElement.style.setProperty('--bg-color', bg);
+        document.documentElement.style.setProperty('--text-color', text);
+        document.getElementById('bgColor').value = bg;
+        document.getElementById('textColor').value = text;
+    }
+    // Tus presets
+    function presetDia1() { setColors('#ffffff', '#000000'); }
+    function presetDia2() { setColors('#f2e6a7', '#1a1a1a'); }
+    function presetDia3() { setColors('#dedede', '#1a1a1a'); }
+    function presetDia4() { setColors('#dedede', '#7a1121'); }
+    function presetDia5() { setColors('#4B1F1F', '#F5F5F2'); }
+    function presetDia6() { setColors('#3A2618', '#F5F5F2'); }
+    function presetDia7() { setColors('#3A2618', '#D4B15F'); }
+    function presetNoche() { setColors('#000000', '#ffffff'); }
 
-async function iniciarProyeccion() {
-  document.getElementById('configuracion').style.display = 'none';
+    const bgColor = document.getElementById('bgColor');
+    const textColor = document.getElementById('textColor');
+    
+    if(bgColor) bgColor.addEventListener('input', e => document.documentElement.style.setProperty('--bg-color', e.target.value));
+    if(textColor) textColor.addEventListener('input', e => document.documentElement.style.setProperty('--text-color', e.target.value));
 
-  const pantalla = document.getElementById('pantalla-proyector');
-  pantalla.style.display = 'block';
-  pantalla.innerHTML = '';
+    // ======================================================
+    // 3. MODO 1: PROYECCIÓN CONTINUA (Tu lógica original)
+    // ======================================================
+    async function iniciarProyeccion() {
+        document.getElementById('configuracion').style.display = 'none';
+        const pantalla = document.getElementById('pantalla-proyector');
+        pantalla.style.display = 'block';
+        pantalla.classList.remove('slide-flex'); 
+        pantalla.onclick = null; // Quitamos evento de click del otro modo
+        pantalla.innerHTML = '';
 
-  for (const item of programa) {
-    const htmlOriginal = await cargarCancion(item.cancion);
+        for (const ruta of canciones) {
+            const htmlOriginal = await cargarCancion(ruta);
+            const temp = document.createElement('div');
+            temp.innerHTML = htmlOriginal;
 
-    // contenedor temporal para manipular el HTML
-    const temp = document.createElement('div');
-    temp.innerHTML = htmlOriginal;
-
-    // transformar <pre> en texto fluido
-    const pre = temp.querySelector('pre');
-    if (pre) {
-      const contenidoFluido = pre.innerHTML
-        .split('\n')
-        .map(l => l === '' ? '<br>' : `${l}<br>`)
-        .join('');
-
-      pre.outerHTML = `<div class="letra-normal">${contenidoFluido}</div>`;
+            const pre = temp.querySelector('pre');
+            if (pre) {
+                const contenidoFluido = pre.innerHTML
+                    .split('\n')
+                    .map(l => l === '' ? '<br>' : `${l}<br>`)
+                    .join('');
+                pre.outerHTML = `<div class="letra-normal">${contenidoFluido}</div>`;
+            }
+            pantalla.appendChild(temp);
+            // Añadimos un separador visual
+            const hr = document.createElement('hr');
+            hr.style.cssText = "margin: 5rem 0; opacity: 0.2;";
+            pantalla.appendChild(hr);
+        }
     }
 
-    pantalla.appendChild(temp);
-  }
-}
-
-
-// ======================================================
-    // MODO 2: PROYECCIÓN POR ESTROFA
+    // ======================================================
+    // 4. MODO 2: PROYECCIÓN POR ESTROFA (Lógica Corregida)
     // ======================================================
     let slides = [];
     let slideActual = 0;
@@ -284,58 +258,57 @@ async function iniciarProyeccion() {
         // 1. Preparar UI
         document.getElementById('configuracion').style.display = 'none';
         const pantalla = document.getElementById('pantalla-proyector');
-        pantalla.style.display = 'flex'; // Activamos flex para centrar
+        pantalla.style.display = 'flex';
         pantalla.classList.add('slide-flex');
-        
-        // Agregar evento de clic para avanzar solo en este modo
         pantalla.onclick = avanzarSlide;
 
         slides = [];
 
         // 2. Procesar canciones
         for (const ruta of canciones) {
-            // Usamos tu función cargarCancion para obtener el HTML crudo
             const htmlCancion = await cargarCancion(ruta);
             
-            // Creamos un elemento temporal para "leer" lo que generó tu función
             const tempDiv = document.createElement('div');
             tempDiv.innerHTML = htmlCancion;
             
-            const titulo = tempDiv.querySelector('h2').innerText;
-            const preContent = tempDiv.querySelector('pre').innerHTML;
+            // Verificación de seguridad por si falla la carga
+            const h2 = tempDiv.querySelector('h2');
+            const pre = tempDiv.querySelector('pre');
+            if (!h2 || !pre) continue; 
 
-            // --- LÓGICA DE DIVISIÓN ---
-            // Revertimos los spans de procesarCancion para analizar el texto limpio
-            // y separamos por bloques usando tu estructura de <br> o \n
-            let textoCrudo = preContent.replace(/<span>/g, '').replace(/<\/span>/g, '');
-            
-            // Normalizar bloques para separar estrofas (detectando dobles saltos o negritas)
+            const titulo = h2.innerText;
+            const preContent = pre.innerHTML;
+
+            // --- CORRECCIÓN IMPORTANTE ---
+            // Usamos Regex insensible a mayúsculas (gi) para limpiar los spans y bolds
+            // Esto evita que falle si el navegador convierte <span> a <SPAN>
+            let textoCrudo = preContent.replace(/<\/?span[^>]*>/gi, '');
+
+            // Normalizar bloques para separar estrofas
+            // Detectamos dobles saltos O etiquetas <b> para separar
             let bloquesRaw = textoCrudo
-                .replace(/<b>/g, '\n\n<b>')     // Forzar separación antes de negrita
-                .replace(/<\/b>/g, '</b>\n\n')  // Forzar separación después de negrita
-                .split(/\n\s*\n/);              // Separar por líneas vacías
+                .replace(/<b>/gi, '\n\n<b>')     
+                .replace(/<\/b>/gi, '</b>\n\n')  
+                .split(/\n\s*\n/);              
 
             // Limpiar y estructurar bloques
             let bloques = bloquesRaw.map(b => {
-                // Quitamos acordes usando TU función isChordLine
-                const lineasLimpias = b.split('\n')
-                    .filter(line => !isChordLine(line))
-                    .join('\n')
-                    .trim();
+                // Aquí ya NO filtramos isChordLine porque cargarCancion ya lo hizo
+                // Solo limpiamos espacios
                 return {
-                    texto: lineasLimpias,
-                    esEstribillo: b.includes('<b>')
+                    texto: b.trim(),
+                    // Detectamos estribillo sin importar mayúsculas
+                    esEstribillo: /<b>/i.test(b)
                 };
             }).filter(b => b.texto !== "");
 
-            // --- LÓGICA DE ESCENARIOS (1 vs Muchos Estribillos) ---
+            // --- LÓGICA DE ESCENARIOS ---
             const countEstribillos = bloques.filter(b => b.esEstribillo).length;
 
-            // Slide de Título
             slides.push({ tipo: 'titulo', texto: titulo });
 
             if (countEstribillos === 1) {
-                // MODO AUTOMÁTICO: Intercalar
+                // MODO AUTOMÁTICO
                 const idx = bloques.findIndex(b => b.esEstribillo);
                 const estribillo = bloques[idx];
                 const antes = bloques.slice(0, idx);
@@ -347,9 +320,8 @@ async function iniciarProyeccion() {
                     slides.push({ ...b, tituloCancion: titulo });
                     slides.push({ ...estribillo, tituloCancion: titulo });
                 });
-
             } else {
-                // MODO MANUAL: Tal cual
+                // MODO MANUAL
                 bloques.forEach(b => slides.push({ ...b, tituloCancion: titulo }));
             }
         }
@@ -366,9 +338,10 @@ async function iniciarProyeccion() {
         if (!slide) return;
 
         if (slide.tipo === 'titulo') {
-            pantalla.innerHTML = `<h2 style="font-size: 8vh; opacity: 1;">${slide.texto}</h2>`;
+            pantalla.innerHTML = `<h2 style="font-size: 8vh; opacity: 1; margin-bottom:0;">${slide.texto}</h2>`;
         } else {
             const clase = slide.esEstribillo ? 'estribillo-destacado' : '';
+            // Convertimos saltos de línea a <br>
             const textoHtml = slide.texto.replace(/\n/g, '<br>');
             pantalla.innerHTML = `
                 <div class="titulo-slide">${slide.tituloCancion}</div>
@@ -386,7 +359,6 @@ async function iniciarProyeccion() {
 
     // Teclado
     window.addEventListener('keydown', (e) => {
-        // Solo si la pantalla de proyección está visible
         if (document.getElementById('pantalla-proyector').style.display !== 'none') {
             if (e.key === "ArrowRight" || e.key === " ") {
                 if (document.getElementById('pantalla-proyector').classList.contains('slide-flex')) {
@@ -403,23 +375,13 @@ async function iniciarProyeccion() {
         }
     });
 
-
-
-let fontSize = 6; // vh
-
-function aplicarTamano() {
-  document.documentElement.style.setProperty('--font-size', fontSize + 'vh');
-}
-
-function aumentarTexto() {
-  fontSize += 0.5;
-  aplicarTamano();
-}
-
-function disminuirTexto() {
-  fontSize = Math.max(2, fontSize - 0.5);
-  aplicarTamano();
-}
+    // ======================================================
+    // 5. TAMAÑO DE TEXTO
+    // ======================================================
+    let fontSize = 6;
+    function aplicarTamano() { document.documentElement.style.setProperty('--font-size', fontSize + 'vh'); }
+    function aumentarTexto() { fontSize += 0.5; aplicarTamano(); }
+    function disminuirTexto() { fontSize = Math.max(2, fontSize - 0.5); aplicarTamano(); }
 </script>
 
 

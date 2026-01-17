@@ -302,13 +302,21 @@ async function iniciarProyeccion() {
     const p = document.getElementById('pantalla-proyector');
     p.classList.remove('slide-flex');
     p.style.display = 'block';
+    p.style.textAlign = 'center';
     
-    let html = "";
+    let htmlFinal = "";
     diapositivas.forEach(d => {
-        if(d.tipo === 'titulo') html += `<h2 style="margin-top:10vh">${d.contenido}</h2>`;
-        else html += `<p style="margin-bottom:5vh">${d.texto.replace(/\n/g, '<br>')}</p>`;
+        if(d.tipo === 'titulo') {
+            htmlFinal += `<h2 style="margin-top:10vh; margin-bottom: 5vh;">${d.contenido}</h2>`;
+        } else {
+            // En modo continuo, si es estribillo, envolvemos en <b> manualmente
+            const textoConFormato = d.esEstribillo ? `<b>${d.texto}</b>` : d.texto;
+            // Reemplazamos saltos de línea por <br> y mantenemos el <b>
+            const render = textoConFormato.replace(/\n/g, '<br>');
+            htmlFinal += `<p class="letra-normal" style="margin-bottom:7vh">${render}</p>`;
+        }
     });
-    p.innerHTML = html;
+    p.innerHTML = htmlFinal;
 }
 
 // 5. Navegación Universal
@@ -328,10 +336,23 @@ window.onkeydown = (e) => {
     }
 };
 
-document.getElementById('pantalla-proyector').onmousedown = (e) => {
-    if (e.button === 0) avanzar();
-    else if (e.button === 2) { e.preventDefault(); retroceder(); }
+
+// Centralizamos la navegación para evitar saltos dobles
+document.getElementById('pantalla-proyector').onclick = (e) => {
+    // Si la pantalla no es visible, no hacer nada
+    if (document.getElementById('pantalla-proyector').style.display === 'none') return;
+
+    const pantallaAncho = window.innerWidth;
+    // Si el clic es en el primer tercio (izquierda), retrocede. Si no, avanza.
+    if (e.clientX < pantallaAncho / 3) {
+        retroceder();
+    } else {
+        avanzar();
+    }
 };
+
+// Quitamos el onmousedown anterior y mantenemos el bloqueo del menú contextual
+document.getElementById('pantalla-proyector').onmousedown = null; 
 document.getElementById('pantalla-proyector').oncontextmenu = (e) => e.preventDefault();
 
 // Soporte Móvil

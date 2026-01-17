@@ -150,3 +150,30 @@ async function iniciarProyeccionPorBloques(incluirAcordes = false) {
     }
   }
 }
+
+
+function siguienteBloque() {
+  if (indiceBloque < bloquesProyeccion.length - 1) {
+    indiceBloque++;
+    renderBloqueActual();
+  }
+}
+
+
+function bloqueAnterior() {
+  if (indiceBloque > 0) {
+    indiceBloque--;
+    renderBloqueActual();
+  }
+}
+
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === ' ') {
+    siguienteBloque();
+  }
+
+  if (e.key === 'ArrowLeft') {
+    bloqueAnterior();
+  }
+});

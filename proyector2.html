@@ -226,6 +226,9 @@ textColor.addEventListener('input', e => {
   document.documentElement.style.setProperty('--text-color', e.target.value);
 });
 
+
+
+
 /* ===============================
    DETECCIÓN DE ACORDES
 ================================ */
@@ -235,73 +238,91 @@ function isChordLine(line) {
 }
 
 /* ===============================
-   PROCESAMIENTO DE TEXTO
+   EXTRACCIÓN BASE (IDÉNTICA A LA ANTIGUA)
 ================================ */
 
-function procesarCancion(contenido, conAcordes) {
-  const lines = contenido.split('\n');
-  let output = '';
-
-  for (let line of lines) {
-    if (conAcordes || !isChordLine(line)) {
-      output += `<span>${line}</span>\n`;
-    }
-  }
-  return output;
-}
-
-function separarEstrofas(htmlLineas) {
-  const bloques = [];
-  let actual = [];
-
-  htmlLineas.split('\n').forEach(line => {
-    if (line.trim() === '') {
-      if (actual.length) {
-        bloques.push(actual);
-        actual = [];
-      }
-    } else {
-      actual.push(line);
-    }
-  });
-
-  if (actual.length) bloques.push(actual);
-  return bloques;
+function extraerLineasDesdePre(preHTML) {
+  return preHTML
+    .replace(/\r\n/g, '\n')
+    .replace(/\r/g, '\n')
+    .split('\n');
 }
 
 /* ===============================
-   CARGA DE CADA CANCIÓN
+   PROCESAMIENTO
+================================ */
+
+function aplicarFiltroAcordes(lineas, conAcordes) {
+  if (conAcordes) return lineas;
+  return lineas.filter(l => !isChordLine(l));
+}
+
+function separarEnEstrofas(lineas) {
+  const estrofas = [];
+  let actual = [];
+
+  lineas.forEach(linea => {
+    if (linea.trim() === '') {
+      if (actual.length) {
+        estrofas.push(actual);
+        actual = [];
+      }
+    } else {
+      actual.push(linea);
+    }
+  });
+
+  if (actual.length) estrofas.push(actual);
+  return estrofas;
+}
+
+/* ===============================
+   RENDER
+================================ */
+
+function renderContinuo(lineas) {
+  return `
+    <div class="letra-normal">
+      ${lineas.map(l => l === '' ? '<br>' : `${l}<br>`).join('')}
+    </div>
+  `;
+}
+
+function renderPorEstrofas(estrofas) {
+  return estrofas.map(e => `
+    <div class="letra-normal">
+      ${e.map(l => `${l}<br>`).join('')}
+    </div>
+  `).join('');
+}
+
+/* ===============================
+   CARGA DE CANCIÓN (NÚCLEO)
 ================================ */
 
 async function cargarCancion(ruta, conAcordes, porEstrofas) {
   try {
     const response = await fetch(ruta);
-    if (!response.ok) throw new Error('Error al cargar la canción');
+    if (!response.ok) throw new Error('Error al cargar canción');
 
-    const contenido = await response.text();
+    const html = await response.text();
     const parser = new DOMParser();
-    const doc = parser.parseFromString(contenido, 'text/html');
+    const doc = parser.parseFromString(html, 'text/html');
 
-    const preContent = doc.querySelector('pre').innerText;
-    const title = doc.querySelector('title').innerText;
+    const title = doc.querySelector('title')?.innerText ?? '';
+    const preHTML = doc.querySelector('pre')?.innerHTML ?? '';
 
-    const procesado = procesarCancion(preContent, conAcordes);
+    const lineas = extraerLineasDesdePre(preHTML);
+    const filtradas = aplicarFiltroAcordes(lineas, conAcordes);
 
-    if (!porEstrofas) {
-      return `<h2>${title}</h2><pre class="lh-base">${procesado}</pre>`;
-    }
+    let cuerpo = porEstrofas
+      ? renderPorEstrofas(separarEnEstrofas(filtradas))
+      : renderContinuo(filtradas);
 
-    const estrofas = separarEstrofas(procesado);
-    let html = `<h2>${title}</h2>`;
+    return `<h2>${title}</h2>${cuerpo}`;
 
-    estrofas.forEach(e => {
-      html += `<pre class="lh-base">${e.join('\n')}</pre>`;
-    });
-
-    return html;
-
-  } catch (error) {
-    console.error(error);
+  } catch (err) {
+    console.error(err);
     return '<p>Error al cargar la canción.</p>';
   }
 }
@@ -318,32 +339,24 @@ async function iniciarProyeccion({ conAcordes, porEstrofas }) {
   pantalla.innerHTML = '';
 
   for (const item of programa) {
-    const htmlOriginal = await cargarCancion(
+    const htmlCancion = await cargarCancion(
       item.cancion,
       conAcordes,
       porEstrofas
     );
 
-    const temp = document.createElement('div');
-    temp.innerHTML = htmlOriginal;
-
-    temp.querySelectorAll('pre').forEach(pre => {
-      const contenidoFluido = pre.innerHTML
-        .split('\n')
-        .map(l => l === '' ? '<br>' : `${l}<br>`)
-        .join('');
-
-      pre.outerHTML = `<div class="letra-normal">${contenidoFluido}</div>`;
-    });
-
-    pantalla.appendChild(temp);
+    const contenedor = document.createElement('div');
+    contenedor.innerHTML = htmlCancion;
+    pantalla.appendChild(contenedor);
   }
 }
 
+/* ===============================
+   SELECTORES (BOTONES TOUCH)
+================================ */
 
 function configurarSelector(id) {
   const botones = document.querySelectorAll(`#${id} .btn`);
-
   botones.forEach(btn => {
     btn.addEventListener('click', () => {
       botones.forEach(b => b.classList.remove('active'));
@@ -357,35 +370,12 @@ configurarSelector('selector-modo');
 
 function proyectarDesdeSelectores() {
   const conAcordes =
-    document.querySelector('#selector-acordes .btn.active')
-      .dataset.value === 'true';
+    document.querySelector('#selector-acordes .btn.active').dataset.value === 'true';
 
   const porEstrofas =
-    document.querySelector('#selector-modo .btn.active')
-      .dataset.value === 'true';
+    document.querySelector('#selector-modo .btn.active').dataset.value === 'true';
 
   iniciarProyeccion({ conAcordes, porEstrofas });
-}
-
-
-/* ===============================
-   FUNCIONES PARA LOS 4 MODOS
-================================ */
-
-function proyectarLetraContinua() {
-  iniciarProyeccion({ conAcordes: false, porEstrofas: false });
-}
-
-function proyectarLetraPorEstrofas() {
-  iniciarProyeccion({ conAcordes: false, porEstrofas: true });
-}
-
-function proyectarLetraAcordesContinua() {
-  iniciarProyeccion({ conAcordes: true, porEstrofas: false });
-}
-
-function proyectarLetraAcordesPorEstrofas() {
-  iniciarProyeccion({ conAcordes: true, porEstrofas: true });
 }
 
 /* ===============================

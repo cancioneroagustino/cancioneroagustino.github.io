@@ -417,5 +417,10 @@ function aumentarTexto() { fontSize += 0.5; document.documentElement.style.setPr
 function disminuirTexto() { fontSize -= 0.5; document.documentElement.style.setProperty('--font-size', fontSize + 'vh'); }
 </script>
 
+<div id="controles-tamano">
+  <button class="btn btn-outline-secondary" onclick="aumentarTexto()">A+</button>
+  <button class="btn btn-outline-secondary" onclick="disminuirTexto()">A−</button>
+</div>
+
 </body>
 </html>

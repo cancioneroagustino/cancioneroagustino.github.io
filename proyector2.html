@@ -37,6 +37,27 @@ body {
   color: var(--bg-color);
 }
 
+
+.btn-group .btn {
+  font-size: 1.1rem;
+  padding: 1rem;
+}
+
+
+.btn-group .btn.active,
+.btn-group .btn.active:hover,
+.btn-group .btn.active:focus {
+  background-color: var(--text-color) !important;
+  color: var(--bg-color) !important;
+  border-color: var(--text-color) !important;
+}
+
+
+.btn-group .btn:active {
+  transform: scale(0.98);
+}
+
+
 #pantalla-proyector {
   display: none;
   text-align: center;
@@ -134,26 +155,25 @@ button {
 <div class="mt-4">
   <h5>Modo de proyección</h5>
 
-  <div>
-    <label>
-      <input type="radio" name="modo-acordes" value="texto" checked>
+<div class="mt-4">
+  <h5>Contenido</h5>
+  <div class="btn-group w-100 mb-3" id="selector-acordes">
+    <button class="btn btn-outline-secondary active" data-value="false">
       Solo texto
-    </label>
-    <label class="ms-3">
-      <input type="radio" name="modo-acordes" value="acordes">
-      Texto con acordes
-    </label>
+    </button>
+    <button class="btn btn-outline-secondary" data-value="true">
+      Texto + acordes
+    </button>
   </div>
 
-  <div class="mt-2">
-    <label>
-      <input type="radio" name="modo-estructura" value="continuo" checked>
-      Texto continuo
-    </label>
-    <label class="ms-3">
-      <input type="radio" name="modo-estructura" value="estrofas">
+  <h5>Modo de proyección</h5>
+  <div class="btn-group w-100" id="selector-modo">
+    <button class="btn btn-outline-secondary active" data-value="false">
+      Texto contínuo
+    </button>
+    <button class="btn btn-outline-secondary" data-value="true">
       Texto por estrofa
-    </label>
+    </button>
   </div>
 </div>
 
@@ -319,6 +339,34 @@ async function iniciarProyeccion({ conAcordes, porEstrofas }) {
     pantalla.appendChild(temp);
   }
 }
+
+
+function configurarSelector(id) {
+  const botones = document.querySelectorAll(`#${id} .btn`);
+
+  botones.forEach(btn => {
+    btn.addEventListener('click', () => {
+      botones.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    });
+  });
+}
+
+configurarSelector('selector-acordes');
+configurarSelector('selector-modo');
+
+function proyectarDesdeSelectores() {
+  const conAcordes =
+    document.querySelector('#selector-acordes .btn.active')
+      .dataset.value === 'true';
+
+  const porEstrofas =
+    document.querySelector('#selector-modo .btn.active')
+      .dataset.value === 'true';
+
+  iniciarProyeccion({ conAcordes, porEstrofas });
+}
+
 
 /* ===============================
    FUNCIONES PARA LOS 4 MODOS

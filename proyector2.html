@@ -38,13 +38,14 @@ body {
 }
 
 #pantalla-proyector {
-  display: none;
-  text-align: center;
-  padding: 5vh 6vw;
-  font-family: 'Atkinson Hyperlegible', system-ui, sans-serif;
-  font-size: var(--font-size, 6vh);
-  line-height: 1.25;
-  white-space: pre-wrap;
+    display: none; /* Se cambia a flex en JS */
+    text-align: center;
+    width: 100%;
+    min-height: 100vh; /* Ocupa toda la altura */
+    padding: 5vh 6vw;
+    font-family: 'Atkinson Hyperlegible', system-ui, sans-serif;
+    font-size: var(--font-size, 6vh);
+    line-height: 1.25;
 }
 
 
@@ -91,10 +92,7 @@ button {
     font-weight: bold;
 }
 .titulo-slide {
-    font-size: 0.5em;
-    opacity: 0.6;
-    margin-bottom: 2vh;
-    text-transform: uppercase;
+    display: none;
 }
 
 </style>
@@ -169,45 +167,86 @@ function limpiarTexto(html) {
         .trim();
 }
 
-// 4. EL MOTOR DE CARGA (Aquí estaba el fallo de silencio)
+// 4. EL MOTOR DE CARGA 
 async function cargarTodoElPrograma() {
-    const pantalla = document.getElementById('pantalla-proyector');
-    pantalla.style.display = 'block';
-    pantalla.innerHTML = "<h3>Cargando archivos...</h3>"; 
-
     diapositivas = [];
 
     for (const item of programaMisa) {
         try {
-            console.log("Cargando:", item.cancion);
             const res = await fetch(item.cancion);
             const html = await res.text();
             
             const parser = new DOMParser();
             const doc = parser.parseFromString(html, 'text/html');
             const titulo = doc.querySelector('title')?.innerText || "Sin título";
-            const textoLimpio = limpiarTexto(html);
+            
+            // 1. Extraer bloques manteniendo el formato original para detectar <b>
+            const pre = doc.querySelector('pre');
+            if (!pre) continue;
 
-            // Título de la canción
+            // Limpiamos acordes pero mantenemos etiquetas <b><span> para el análisis
+            let lineasLimpias = pre.innerHTML.split('\n')
+                .filter(l => !isChordLine(l.replace(/<[^>]*>/g, '')))
+                .join('\n');
+
+            // 2. Dividir por estrofas (doble salto de línea)
+            let bloquesRaw = lineasLimpias.split(/\n\s*\n/).filter(b => b.trim() !== "");
+
+            // 3. Identificar cuáles son estribillos
+            let bloquesProcesados = bloquesRaw.map(b => {
+                return {
+                    texto: b.replace(/<\/?span[^>]*>/gi, '').trim(),
+                    esEstribillo: /<b>/i.test(b)
+                };
+            });
+
+            // --- LÓGICA DE INTERCALADO ---
+            const estribillos = bloquesProcesados.filter(b => b.esEstribillo);
+            
+            // Diapositiva de Título
             diapositivas.push({ tipo: 'titulo', contenido: titulo });
 
-            // Dividir en estrofas (por doble salto de línea)
-            const bloques = textoLimpio.split(/\n\s*\n/);
-            bloques.forEach(bloque => {
-                if(bloque.trim() !== "") {
-                    diapositivas.push({
-                        tipo: 'estrofa',
-                        titulo: titulo,
-                        texto: bloque.trim()
+            if (estribillos.length === 1) {
+                // Si hay exactamente UN estribillo, lo intercalamos
+                const elEstribillo = estribillos[0];
+                bloquesProcesados.forEach(bloque => {
+                    if (!bloque.esEstribillo) {
+                        diapositivas.push({ tipo: 'estrofa', texto: bloque.texto, esEstribillo: false });
+                        diapositivas.push({ tipo: 'estrofa', texto: elEstribillo.texto, esEstribillo: true });
+                    }
+                });
+            } else {
+                // Si hay varios o ninguno, los ponemos en orden natural
+                bloquesProcesados.forEach(bloque => {
+                    diapositivas.push({ 
+                        tipo: 'estrofa', 
+                        texto: bloque.texto, 
+                        esEstribillo: bloque.esEstribillo 
                     });
-                }
-            });
+                });
+            }
+
         } catch (err) {
-            console.error("Error cargando " + item.cancion, err);
+            console.error("Error cargando canción:", err);
         }
     }
+}
+
+function renderizarSlide() {
+    const pantalla = document.getElementById('pantalla-proyector');
+    const d = diapositivas[indiceActual];
     
-    console.log("Total diapositivas generadas:", diapositivas.length);
+    // Limpieza final de etiquetas para mostrar solo texto
+    const textoParaMostrar = d.texto ? d.texto.replace(/<\/?b>/gi, '').replace(/\n/g, '<br>') : "";
+
+    if (d.tipo === 'titulo') {
+        pantalla.innerHTML = `<h2 style="font-size: 8vh; margin:0;">${d.contenido}</h2>`;
+    } else {
+        const estiloEstribillo = d.esEstribillo ? 'font-weight: bold;' : '';
+        pantalla.innerHTML = `
+            <div style="${estiloEstribillo} width: 100%;">${textoParaMostrar}</div>
+        `;
+    }
 }
 
 // 5. LANZADORES DE MODO
@@ -244,19 +283,8 @@ async function ProyeccionPorEstrofa() {
     renderizarSlide();
 }
 
-function renderizarSlide() {
-    const pantalla = document.getElementById('pantalla-proyector');
-    const d = diapositivas[indiceActual];
-    
-    if (d.tipo === 'titulo') {
-        pantalla.innerHTML = `<h2 style="font-size: 8vh;">${d.contenido}</h2>`;
-    } else {
-        pantalla.innerHTML = `
-            <div class="titulo-slide">${d.titulo}</div>
-            <div style="white-space: pre-wrap;">${d.texto}</div>
-        `;
-    }
-}
+
+
 
 // 6. NAVEGACIÓN
 function avanzar() {

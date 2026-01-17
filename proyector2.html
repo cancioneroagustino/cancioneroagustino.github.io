@@ -239,9 +239,7 @@ if (!programa || programa.length === 0) {
       const lines = contenido.split('\n');
       let output = '';
       for (let line of lines) {
-        if (!isChordLine(line)) {
-          output += `<span>${line}</span>\n`;
-        }
+        output += `<span>${line}</span>\n`;
       }
       return output;
     }

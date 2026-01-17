@@ -187,6 +187,13 @@ textColor.addEventListener('input', e => {
       return /(\bDO|\bRE|\bMI|\bFA|\bSOL|\bLA|\bSI)[b#]?/.test(line);
     }
 
+    function filtrarAcordes(texto) {
+  return texto
+    .split('\n')
+    .filter(line => !isChordLine(line))
+    .join('\n');
+}
+
     // Función para procesar el contenido de la canción
     function procesarCancion(contenido) {
       const lines = contenido.split('\n');
@@ -238,6 +245,36 @@ async function iniciarProyeccion() {
     // transformar <pre> en texto fluido
     const pre = temp.querySelector('pre');
     if (pre) {
+      const textoSinAcordes = filtrarAcordes(pre.textContent);
+
+      const contenidoFluido = textoSinAcordes
+        .split('\n')
+        .map(l => l === '' ? '<br>' : `${l}<br>`)
+        .join('');
+
+      pre.outerHTML = `<div class="letra-normal">${contenidoFluido}</div>`;
+    }
+
+    pantalla.appendChild(temp);
+  }
+}
+
+
+async function iniciarProyeccionContinuaConAcordes() {
+  document.getElementById('configuracion').style.display = 'none';
+
+  const pantalla = document.getElementById('pantalla-proyector');
+  pantalla.style.display = 'block';
+  pantalla.innerHTML = '';
+
+  for (const item of programa) {
+    const htmlOriginal = await cargarCancion(item.cancion);
+
+    const temp = document.createElement('div');
+    temp.innerHTML = htmlOriginal;
+
+    const pre = temp.querySelector('pre');
+    if (pre) {
       const contenidoFluido = pre.innerHTML
         .split('\n')
         .map(l => l === '' ? '<br>' : `${l}<br>`)
@@ -249,6 +286,7 @@ async function iniciarProyeccion() {
     pantalla.appendChild(temp);
   }
 }
+
 
 
 let fontSize = 6; // vh

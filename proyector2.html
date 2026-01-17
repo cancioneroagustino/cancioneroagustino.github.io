@@ -131,23 +131,36 @@ button {
 
   <div class="mt-4">
 
-    <button class="btn btn-outline-secondary btn-lg" onclick="iniciarProyeccion()">
-  Proyectar letra continua
-</button>
+<div class="mt-4">
+  <h5>Modo de proyección</h5>
 
-<button class="btn btn-outline-secondary btn-lg" onclick="iniciarProyeccionPorBloques(false)">
-  Proyectar letra por estrofas
-</button>
-
-<button class="btn btn-outline-secondary btn-lg" onclick="iniciarProyeccionContinuaConAcordes()">
-  Proyectar letra + acordes continua
-</button>
-
-<button class="btn btn-outline-secondary btn-lg" onclick="iniciarProyeccionPorBloques(true)">
-  Proyectar letra + acordes por estrofa
-</button>
-
+  <div>
+    <label>
+      <input type="radio" name="modo-acordes" value="texto" checked>
+      Solo texto
+    </label>
+    <label class="ms-3">
+      <input type="radio" name="modo-acordes" value="acordes">
+      Texto con acordes
+    </label>
   </div>
+
+  <div class="mt-2">
+    <label>
+      <input type="radio" name="modo-estructura" value="continuo" checked>
+      Texto continuo
+    </label>
+    <label class="ms-3">
+      <input type="radio" name="modo-estructura" value="estrofas">
+      Texto por estrofa
+    </label>
+  </div>
+</div>
+
+  <div class="mt-4">
+    <button class="btn btn-outline-secondary btn-lg" onclick="iniciarProyeccion()">Proyectar letras</button>
+  </div>
+</div>
 
 <div id="pantalla-proyector"></div>
 
@@ -213,54 +226,96 @@ textColor.addEventListener('input', e => {
 });
 
 
-    const canciones = programa.map(item => item.cancion);
 
-    // Función para determinar si una línea es de acordes
-    function isChordLine(line) {
-      return /(\bDO|\bRE|\bMI|\bFA|\bSOL|\bLA|\bSI)[b#]?/.test(line);
-    }
 
-    function filtrarAcordes(texto) {
-  return texto
-    .split('\n')
-    .filter(line => !isChordLine(line))
-    .join('\n');
+
+
+/* ===============================
+   DETECCIÓN DE ACORDES
+================================ */
+function isChordLine(line) {
+  return /(\bDO|\bRE|\bMI|\bFA|\bSOL|\bLA|\bSI)[b#]?|\bCejillo\b|\bIntro\b|\bIntroducción\b/.test(line);
 }
 
-    // Función para procesar el contenido de la canción
-    function procesarCancion(contenido) {
-      const lines = contenido.split('\n');
-      let output = '';
-      for (let line of lines) {
-        if (!isChordLine(line)) {
-          output += `<span>${line}</span>\n`;
-        }
+/* ===============================
+   CARGA BASE (IDÉNTICA A programa-texto)
+================================ */
+async function cargarCancion(ruta) {
+  const response = await fetch(ruta);
+  if (!response.ok) throw new Error('Error al cargar canción');
+
+  const html = await response.text();
+  const doc = new DOMParser().parseFromString(html, 'text/html');
+
+  return {
+    titulo: doc.querySelector('title')?.innerText ?? '',
+    contenidoHTML: doc.querySelector('pre')?.innerHTML ?? ''
+  };
+}
+
+/* ===============================
+   PROCESAMIENTO BASE
+================================ */
+function extraerLineas(html, conAcordes) {
+  const tmp = document.createElement('div');
+  tmp.innerHTML = html;
+
+  const raw = tmp.innerHTML.split('\n');
+
+  return raw.filter(line => {
+    if (conAcordes) return true;
+    return !isChordLine(line.replace(/<[^>]*>/g, ''));
+  });
+}
+
+/* ===============================
+   SEPARACIÓN EN ESTROFAS
+================================ */
+function separarEstrofas(lineas) {
+  const bloques = [];
+  let actual = [];
+
+  for (const l of lineas) {
+    if (l.trim() === '') {
+      if (actual.length) {
+        bloques.push(actual);
+        actual = [];
       }
-      return output;
+    } else {
+      actual.push(l);
     }
+  }
+  if (actual.length) bloques.push(actual);
 
-    async function cargarCancion(ruta) {
-      try {
-        const response = await fetch(ruta);
-        if (!response.ok) {
-          throw new Error('Error al cargar la canción');
-        }
-        const contenido = await response.text();
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(contenido, 'text/html');
-        const preContent = doc.querySelector('pre').innerHTML;
-        const title = doc.querySelector('title').innerText;
+  return bloques;
+}
 
-        const contenidoProcesado = procesarCancion(preContent);
-        return `<h2>${title}</h2><pre class="lh-base">${contenidoProcesado}</pre></div>`;
-      } catch (error) {
-        console.error('Error:', error);
-        return '<p>Error al cargar la canción. Inténtalo de nuevo más tarde.</p>';
-      }
-    }
+/* ===============================
+   RENDERIZADO
+================================ */
+function renderContinuo(titulo, lineas) {
+  return `
+    <h2>${titulo}</h2>
+    <div class="letra-normal">
+      ${lineas.map(l => l === '' ? '<br>' : `${l}<br>`).join('')}
+    </div>
+  `;
+}
 
+function renderEstrofas(titulo, bloques) {
+  return `
+    <h2>${titulo}</h2>
+    ${bloques.map(b =>
+      `<div class="letra-normal">
+         ${b.map(l => `${l}<br>`).join('')}
+       </div>`
+    ).join('')}
+  `;
+}
 
-
+/* ===============================
+   FUNCIÓN MAESTRA
+================================ */
 async function iniciarProyeccion() {
   document.getElementById('configuracion').style.display = 'none';
 
@@ -268,55 +323,23 @@ async function iniciarProyeccion() {
   pantalla.style.display = 'block';
   pantalla.innerHTML = '';
 
-  for (const item of programa) {
-    const htmlOriginal = await cargarCancion(item.cancion);
+  const conAcordes =
+    document.querySelector('input[name="modo-acordes"]:checked').value === 'acordes';
 
-    // contenedor temporal para manipular el HTML
-    const temp = document.createElement('div');
-    temp.innerHTML = htmlOriginal;
-
-    // transformar <pre> en texto fluido
-    const pre = temp.querySelector('pre');
-    if (pre) {
-      const textoSinAcordes = filtrarAcordes(pre.textContent);
-
-      const contenidoFluido = textoSinAcordes
-        .split('\n')
-        .map(l => l === '' ? '<br>' : `${l}<br>`)
-        .join('');
-
-      pre.outerHTML = `<div class="letra-normal">${contenidoFluido}</div>`;
-    }
-
-    pantalla.appendChild(temp);
-  }
-}
-
-
-async function iniciarProyeccionContinuaConAcordes() {
-  document.getElementById('configuracion').style.display = 'none';
-
-  const pantalla = document.getElementById('pantalla-proyector');
-  pantalla.style.display = 'block';
-  pantalla.innerHTML = '';
+  const porEstrofas =
+    document.querySelector('input[name="modo-estructura"]:checked').value === 'estrofas';
 
   for (const item of programa) {
-    const htmlOriginal = await cargarCancion(item.cancion);
+    const cancion = await cargarCancion(item.cancion);
 
-    const temp = document.createElement('div');
-    temp.innerHTML = htmlOriginal;
+    const lineas = extraerLineas(cancion.contenidoHTML, conAcordes);
 
-    const pre = temp.querySelector('pre');
-    if (pre) {
-      const contenidoFluido = pre.innerHTML
-        .split('\n')
-        .map(l => l === '' ? '<br>' : `${l}<br>`)
-        .join('');
-
-      pre.outerHTML = `<div class="letra-normal">${contenidoFluido}</div>`;
+    if (porEstrofas) {
+      const bloques = separarEstrofas(lineas);
+      pantalla.innerHTML += renderEstrofas(cancion.titulo, bloques);
+    } else {
+      pantalla.innerHTML += renderContinuo(cancion.titulo, lineas);
     }
-
-    pantalla.appendChild(temp);
   }
 }
 
@@ -340,8 +363,8 @@ function disminuirTexto() {
 </script>
 
 <div id="controles-tamano">
-  <button class="btn-outline-secondary" onclick="aumentarTexto()">A+</button>
-  <button class="btn-outline-secondary" onclick="disminuirTexto()">A−</button>
+  <button class="btn btn-outline-secondary" onclick="aumentarTexto()">A+</button>
+  <button class="btn btn-outline-secondary" onclick="disminuirTexto()">A−</button>
 </div>
 
 <script src="scripts/proyeccion-bloques.js"></script>

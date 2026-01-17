@@ -240,11 +240,17 @@ function isChordLine(line) {
    EXTRACCIÓN BASE (IDÉNTICA A LA ANTIGUA)
 ================================ */
 
-function extraerLineasDesdePre(preHTML) {
-  return preHTML
+function extraerTextoPreDesdeHTML(html) {
+  const match = html.match(/<pre[^>]*>([\s\S]*?)<\/pre>/i);
+  if (!match) return '';
+
+  return match[1]
     .replace(/\r\n/g, '\n')
     .replace(/\r/g, '\n')
-    .split('\n');
+    .replace(/&nbsp;/g, ' ')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&amp;/g, '&');
 }
 
 /* ===============================
@@ -302,29 +308,31 @@ function renderPorEstrofas(estrofas) {
 async function cargarCancion(ruta, conAcordes, porEstrofas) {
   try {
     const response = await fetch(ruta);
-    if (!response.ok) throw new Error('Error al cargar canción');
+    if (!response.ok) throw new Error('No se pudo cargar ' + ruta);
 
     const html = await response.text();
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(html, 'text/html');
 
-    const title = doc.querySelector('title')?.innerText ?? '';
-    const preHTML = doc.querySelector('pre')?.innerHTML ?? '';
+    const textoPre = extraerTextoPreDesdeHTML(html);
+    if (!textoPre.trim()) {
+      console.warn('PRE vacío en:', ruta);
+      return '<p>(Canción sin contenido)</p>';
+    }
 
-    const lineas = extraerLineasDesdePre(preHTML);
-    const filtradas = aplicarFiltroAcordes(lineas, conAcordes);
+    const lineas = textoPre.split('\n');
+    const filtradas = conAcordes ? lineas : lineas.filter(l => !isChordLine(l));
 
-    let cuerpo = porEstrofas
+    const cuerpo = porEstrofas
       ? renderPorEstrofas(separarEnEstrofas(filtradas))
       : renderContinuo(filtradas);
 
-    return `<h2>${title}</h2>${cuerpo}`;
+    return cuerpo;
 
   } catch (err) {
     console.error(err);
     return '<p>Error al cargar la canción.</p>';
   }
 }
+
 
 /* ===============================
    PROYECCIÓN GENERAL

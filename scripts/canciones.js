@@ -3403,6 +3403,10 @@
       "ruta": "Marianos/Madre peregrina.html",
       "tono": "DO"
     },
+    "Magnificat (Hmna. Glenda)": {
+      "ruta": "Marianos/Magnificat (Hmna. Glenda).html",
+      "tono": "REm"
+    },
     "Maravillas": {
       "ruta": "Marianos/Maravillas.html",
       "tono": "DO"

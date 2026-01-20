@@ -3243,9 +3243,13 @@
       "ruta": "Marianos/Auxiliadora de la Iglesia.html",
       "tono": "RE"
     },
-    "Ave María (F. Schubert)": {
+    "Ave Maria (F. Schubert)": {
       "ruta": "Marianos/Ave María (F. Schubert).html",
       "tono": "LA"
+    },
+    "Ave Maria (Gounod)": {
+      "ruta": "Marianos/Ave María (Gounod).html",
+      "tono": "DO"
     },
     "Ave María (un día)": {
       "ruta": "Marianos/Ave María (un día).html",

@@ -3331,6 +3331,10 @@
       "ruta": "Marianos/El consejo de María.html",
       "tono": "LA"
     },
+    "El Señor hizo en mí maravillas": {
+      "ruta": "Marianos/El Señor hizo en mí maravillas.html",
+      "tono": "MIm"
+    },
     "Gestación de paz": {
       "ruta": "Marianos/Gestación de paz.html",
       "tono": "SOL"

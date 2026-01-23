@@ -2161,7 +2161,7 @@
     },
     "Como en Caná": {
       "ruta": "Comunión/Como en Caná.html",
-      "tono": "DO"
+      "tono": "LA"
     },
     "Cómo le cantaré": {
       "ruta": "Comunión/Cómo le cantaré.html",

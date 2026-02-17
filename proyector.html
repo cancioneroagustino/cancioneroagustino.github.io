@@ -97,6 +97,18 @@ button {
     display: none;
 }
 
+/* Estado base: visible */
+#pantalla-proyector > div, 
+#pantalla-proyector > h2 {
+    transition: opacity 0.2s ease-in-out;
+    opacity: 1;
+}
+
+/* Clase para el desvanecimiento */
+.fade-out {
+    opacity: 0 !important;
+}
+
 </style>
 </head>
 
@@ -276,6 +288,11 @@ function renderizarSlide() {
     const d = diapositivas[indiceActual];
     if (!d) return;
 
+// Inicia el desvanecimiento (Fade Out)
+    pantalla.classList.add('fade-out');
+
+// 2. Esperar a que el texto sea invisible para cambiarlo
+    setTimeout(() => {
     if (d.tipo === 'titulo') {
         pantalla.innerHTML = `<h2 style="font-size: 8vh; margin:0;">${d.contenido}</h2>`;
     }
@@ -288,6 +305,10 @@ function renderizarSlide() {
         const textoLimpio = d.texto.replace(/\n/g, '<br>');
         pantalla.innerHTML = `<div style="${negrita} width: 100%;">${textoLimpio}</div>`;
     }
+
+// Quitamos el desvanecimiento para que aparezca el nuevo texto (Fade In)
+        pantalla.classList.remove('fade-out');
+    }, 200); // 200ms coincide con el tiempo del CSS
 }
 
 // 4. Modos de Inicio

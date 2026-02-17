@@ -305,25 +305,32 @@ async function ProyeccionPorEstrofa() {
 
 async function iniciarProyeccion() {
     await cargarTodoElPrograma();
+    if (diapositivas.length === 0) return alert("No hay letras");
+
     document.getElementById('configuracion').style.display = 'none';
     const p = document.getElementById('pantalla-proyector');
+    
     p.classList.remove('slide-flex');
     p.style.display = 'block';
     p.style.textAlign = 'center';
     
     let htmlFinal = "";
     diapositivas.forEach(d => {
-        if(d.tipo === 'titulo') {
+        // Ignoramos el slide de "fin" en el modo continuo para que no añada espacio vacío
+        if (d.tipo === 'titulo') {
             htmlFinal += `<h2 style="margin-top:10vh; margin-bottom: 5vh;">${d.contenido}</h2>`;
-        } else {
-            // En modo continuo, si es estribillo, envolvemos en <b> manualmente
-            const textoConFormato = d.esEstribillo ? `<b>${d.texto}</b>` : d.texto;
-            // Reemplazamos saltos de línea por <br> y mantenemos el <b>
+        } else if (d.tipo === 'estrofa') {
+            // Verificamos que d.texto exista
+            const textoSeguro = d.texto || "";
+            const textoConFormato = d.esEstribillo ? `<b>${textoSeguro}</b>` : textoSeguro;
             const render = textoConFormato.replace(/\n/g, '<br>');
             htmlFinal += `<p class="letra-normal" style="margin-bottom:7vh">${render}</p>`;
         }
     });
+    
     p.innerHTML = htmlFinal;
+    // Resetear scroll al inicio por si acaso
+    window.scrollTo(0,0);
 }
 
 // 5. Navegación Universal
@@ -417,6 +424,23 @@ function setColors(bg, text) {
   document.getElementById('bgColor').value = bg;
   document.getElementById('textColor').value = text;
 }
+
+// Definir los elementos antes de usarlos
+const inputBg = document.getElementById('bgColor');
+const inputText = document.getElementById('textColor');
+
+if(inputBg) {
+    inputBg.addEventListener('input', e => {
+        document.documentElement.style.setProperty('--bg-color', e.target.value);
+    });
+}
+
+if(inputText) {
+    inputText.addEventListener('input', e => {
+        document.documentElement.style.setProperty('--text-color', e.target.value);
+    });
+}
+
 
 bgColor.addEventListener('input', e => {
   document.documentElement.style.setProperty('--bg-color', e.target.value);

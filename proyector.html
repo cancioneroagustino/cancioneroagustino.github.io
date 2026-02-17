@@ -97,10 +97,9 @@ button {
     display: none;
 }
 
-/* Estado base: visible */
-#pantalla-proyector > div, 
-#pantalla-proyector > h2 {
-    transition: opacity 0.2s ease-in-out;
+/* El contenedor siempre está listo para transicionar su opacidad */
+#pantalla-proyector {
+    transition: opacity 0.3s ease-in-out; 
     opacity: 1;
 }
 
@@ -308,7 +307,7 @@ function renderizarSlide() {
 
 // Quitamos el desvanecimiento para que aparezca el nuevo texto (Fade In)
         pantalla.classList.remove('fade-out');
-    }, 200); // 200ms coincide con el tiempo del CSS
+    }, 300); // 200ms coincide con el tiempo del CSS
 }
 
 // 4. Modos de Inicio

@@ -2583,9 +2583,13 @@
       "ruta": "Comunión/Me tocaste, Jesús.html",
       "tono": "SOL"
     },
-    "Mi Buen Pastor": {
+    "Mi Buen Pastor (Colegio Mayor P. Kentenich)": {
       "ruta": "Comunión/Mi Buen Pastor.html",
       "tono": "DO"
+    },
+    "Mi Buen Pastor (Misión País)": {
+      "ruta": "Comunión/Mi Buen Pastor (MP).html",
+      "tono": "SOL"
     },
     "Milagro de amor": {
       "ruta": "Comunión/Milagro de amor.html",
@@ -3550,6 +3554,10 @@
     "Si pide María (las bodas de Caná)": {
       "ruta": "Marianos/Si pide María.html",
       "tono": "SOL"
+    },
+    "Tarde de Viernes Santo": {
+      "ruta": "Marianos/Tarde de Viernes Santo.html",
+      "tono": "MIm"
     },
     "Tu secreto, María": {
       "ruta": "Marianos/Tu secreto, María.html",

@@ -175,10 +175,6 @@
 
 .gcse-search, 
 .gsc-control-cse {
-  padding: 0 !important;
-  margin: 0 !important;
-  background-color: transparent !important;
-  border: none !important;
   width: 250px !important;
 }
 

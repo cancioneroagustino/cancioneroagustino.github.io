@@ -169,8 +169,16 @@
 
 
 .navbar {
-  --bs-navbar-padding-y: 0,25rem;
+  --bs-navbar-padding-y: 0.25rem;
   --bs-navbar-brand-font-size: 24px;
+}
+
+.gcse-search, 
+.gsc-control-cse {
+  padding: 0 !important;
+  margin: 0 !important;
+  background-color: transparent !important;
+  border: none !important;
 }
 
 

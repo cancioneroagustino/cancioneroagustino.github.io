@@ -2541,7 +2541,7 @@
     },
     "La fiesta del Señor": {
       "ruta": "Comunión/La fiesta del Señor.html",
-      "tono": "RE"
+      "tono": "SOL"
     },
     "La oración": {
       "ruta": "Comunión/La oración.html",

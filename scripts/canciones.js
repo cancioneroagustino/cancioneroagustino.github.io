@@ -2591,6 +2591,10 @@
       "ruta": "Comunión/Mi Buen Pastor (MP).html",
       "tono": "SOL"
     },
+    "Mi Dios está vivo": {
+      "ruta": "Comunión/Mi Dios está vivo.html",
+      "tono": "SOL"
+    },
     "Milagro de amor": {
       "ruta": "Comunión/Milagro de amor.html",
       "tono": "SOL"

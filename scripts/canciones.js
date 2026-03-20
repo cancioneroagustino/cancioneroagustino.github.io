@@ -2631,6 +2631,10 @@
       "ruta": "Comunión/Oh Cristo, Tú reinarás.html",
       "tono": "DO"
     },
+    "Oh, misericordia": {
+      "ruta": "Comunión/Oh, misericordia.html",
+      "tono": "SOL"
+    },
     "Oh, Sagrado Corazón": {
       "ruta": "Comunión/Oh, Sagrado Corazón.html",
       "tono": "SOL"
@@ -2642,6 +2646,10 @@
     "Oración al Cristo del Calvario": {
       "ruta": "Comunión/Oración al Cristo del Calvario.html",
       "tono": "MIm"
+    },
+    "Oración de confianza": {
+      "ruta": "Comunión/Oración de confianza.html",
+      "tono": "DO"
     },
     "Oración de unidad": {
       "ruta": "Comunión/Oración de unidad.html",
@@ -4004,6 +4012,10 @@
     "Mensajero de la vida": {
       "ruta": "Varios/Mensajero de la vida.html",
       "tono": "RE"
+    },
+    "Oración a San Miguel Arcángel": {
+      "ruta": "Varios/Oración a San Miguel Arcángel.html",
+      "tono": ""
     },
     "Oración a la Sagrada Familia": {
       "ruta": "Varios/Oración a la Sagrada Familia.html",

@@ -1,38 +1,14 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="utf-8">
-    <title>Programa con Acordes - Cancionero Católico</title>
-    <meta name="robots" content="noindex">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="./css/bootstrap.min.css" rel="stylesheet">
-    <script src="./scripts/bootstrap.bundle.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="css/cancionero.css">
-    
-    <script src="https://www.cancionerocatolico.cl/scripts/jquery.min.js"></script>
-    <script src="scripts/transpositor.js"></script>
-
-    <style>
-    /* Centrado global de la canción manteniendo alineación interna */
-    .cancion-wrapper {
-        display: flex;
-        flex-direction: column;
-        align-items: center; /* Centra el bloque h2 + pre en la pantalla */
-        width: 100%;
-    }
-    .letra {
-        display: inline-block; /* Hace que el pre se ajuste a su línea más larga */
-        text-align: left;      /* Mantiene los acordes sobre las letras */
-        margin: 0 auto;
-        background: transparent;
-        border: none;
-        font-family: monospace;
-    }
-    /* Ocultar botones internos automáticos en el listado */
-    .cancion-wrapper .d-flex.justify-content-center.gap-2.mb-3 {
-        display: none !important;
-    }
-</style>
+<meta charset="utf-8">
+<title>Programa con Acordes - Cancionero Católico</title>
+<meta name="robots" content="noindex">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="./css/bootstrap.min.css" rel="stylesheet">
+<script src="./scripts/bootstrap.bundle.min.js"></script>
+<link rel="stylesheet" type="text/css" href="css/cancionero.css">
+<script src="https://www.cancionerocatolico.cl/scripts/jquery.min.js"></script>
 </head>
 
 <body>
@@ -43,95 +19,132 @@
     });
   </script>
 
-  <div id="global-controls" class="d-flex justify-content-center mt-4"></div>
-
-  <div id="programa-acordes-container" class="d-flex flex-column mt-3"></div>
+  <div id="programa-acordes-container" class="d-flex flex-column mt-5"></div>
 
   <script>
-const programa = JSON.parse(localStorage.getItem('programaMisa'));
-if (!programa || programa.length === 0) {
+  // --- Lee el programa desde localStorage ---
+  const programa = JSON.parse(localStorage.getItem('programaMisa'));
+  if (!programa || programa.length === 0) {
     alert('No hay un programa de misa guardado.');
     window.location.href = 'crear-programa.html';
-}
+  }
 
-async function fetchCancionData(ruta) {
+  // --- Helper: cargar un script solo una vez ---
+  function cargarScript(src) {
+    return new Promise((resolve, reject) => {
+      if (document.querySelector(`script[src="${src}"]`)) return resolve();
+      const s = document.createElement("script");
+      s.src = src;
+      s.onload = resolve;
+      s.onerror = () => reject(new Error('Error cargando ' + src));
+      document.head.appendChild(s);
+    });
+  }
+
+  // --- Cargar y obtener title + contenido del <pre id="letra"> (sin modificar) ---
+  async function fetchCancionData(ruta) {
     const res = await fetch(ruta);
     if (!res.ok) throw new Error('Error al cargar ' + ruta);
     const text = await res.text();
     const parser = new DOMParser();
     const doc = parser.parseFromString(text, 'text/html');
-    const title = doc.querySelector('title') ? doc.querySelector('title').innerText : 'Sin título';
+
+    // Título
+    const titleEl = doc.querySelector('title');
+    const title = titleEl ? titleEl.innerText : 'Sin título';
+
+    // Pre con id="letra" (extraemos su innerHTML y su data-key)
     const pre = doc.querySelector('pre#letra');
-    if (!pre) throw new Error('No se encontró <pre id="letra">');
-    return { title, preInner: pre.innerHTML, dataKey: pre.getAttribute('data-key') || '' };
-}
+    if (!pre) throw new Error('No se encontró <pre id="letra"> en ' + ruta);
 
-async function insertarYCambiarSiCorresponde(container, ruta, tonoDeseado) {
+    const preInner = pre.innerHTML;
+    const dataKey = pre.getAttribute('data-key') || '';
+
+    return { title, preInner, dataKey };
+  }
+
+  // --- Insertar canción en el DOM y aplicar transposición ---
+  async function insertarYCambiarSiCorresponde(container, ruta, tonoDeseado) {
     try {
-        const { title, preInner, dataKey: tonoOriginal } = await fetchCancionData(ruta);
+      const { title, preInner, dataKey: tonoOriginal } = await fetchCancionData(ruta);
 
-        // Contenedor principal de la canción (Wrapper para centrado)
-        const col = $('<div class="col-12 mb-5 cancion-wrapper"></div>');
-        
-        const h2 = $('<h2 class="text-center"></h2>').text(title);
-        const pre = $('<pre class="letra"></pre>')
-                    .attr("data-key", tonoOriginal)
-                    .html(preInner);
+      // Crear la columna bootstrap
+      const col = document.createElement("div");
+      col.className = "col-12 col-md-8 col-lg-4 align-self-center";
 
-        col.append(h2).append(pre);
-        $(container).append(col);
+      // Contenedor de la canción
+      const article = document.createElement("div");
+      article.className = "d-flex justify-content-center cancion-content mb-4";
 
-        // Inicializar el plugin en esta canción específica
-        pre.transpose();
+      // Título
+      const h2 = document.createElement("h2");
+      h2.textContent = title;
+      h2.className = "col-12 text-center";
+      article.appendChild(h2);
 
-        // Aplicar cambio de tono si es necesario
+      // Pre con la letra
+      const pre = document.createElement("pre");
+      pre.className = "letra";
+      pre.setAttribute("data-key", tonoOriginal);
+      pre.innerHTML = preInner;
+      article.appendChild(pre);
+
+      col.appendChild(article);
+      container.appendChild(col);
+
+      // Asegurar que jQuery esté cargado
+      await cargarScript("https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js");
+
+      // Cargar el nuevo plugin unificado
+      await cargarScript("scripts/transpositor.js");
+
+      // Esperar a que el plugin esté disponible
+      await new Promise((r) => setTimeout(r, 100));
+
+      // Inicializar el plugin
+      if (window.jQuery && typeof jQuery.fn.transpose === "function") {
+        const $pre = jQuery(pre);
+        $pre.transpose();
+
+        // Aplicar cambio de tono si es distinto
         if (tonoDeseado && tonoDeseado !== tonoOriginal) {
-            const claveObjetivo = tonoDeseado.replace(/m$/i, "").toUpperCase();
-            // Buscamos en la barra de tonalidades que el plugin acaba de inyectar
-            const $link = col.find(".transpose-keys a").filter(function() {
-                return ($(this).data('original-note') || $(this).text()).toUpperCase() === claveObjetivo;
-            }).first();
-
-            if ($link.length) $link.trigger("click");
+          const claveObjetivo = tonoDeseado.replace(/m$/i, "");
+          const $keysBlock = $pre.prev(".transpose-keys");
+          const $link = $keysBlock
+            .find("a")
+            .filter(function () {
+              return (
+                jQuery(this).text().toUpperCase() ===
+                claveObjetivo.toUpperCase()
+              );
+            })
+            .first();
+          if ($link.length) {
+            $link.trigger("click");
+          } else {
+            console.warn("No se encontró enlace de tono", claveObjetivo, "para", ruta);
+          }
         }
+      } else {
+        console.warn("⚠️ Plugin transpose no disponible aún");
+      }
     } catch (err) {
-        console.warn("Error en canción:", ruta, err);
+      console.warn("⚠️ Error menor o falta de tonalidad en:", ruta, err.message);
     }
-}
+  }
 
-function setupGlobalInterface() {
-    const $btnNotation = $('<button id="toggleNotationButton" class="btn btn-acordes btn-sm" data-format="Solfeo">Notación ABC</button>');
-    $('#global-controls').empty().append($btnNotation);
-
-    $btnNotation.on('click', function() {
-        const isABC = $(this).data('format') === 'ABC';
-        $(this).data('format', isABC ? 'Solfeo' : 'ABC')
-               .text(isABC ? 'Notación ABC' : 'Notación DoReMi');
-        
-        // Ejecución forzada: refreshNotation() debe estar disponible globalmente en transpositor.js
-        if (typeof refreshNotation === "function") {
-            refreshNotation();
-        }
-    });
-}
-
-async function mostrarProgramaConAcordes() {
+  // --- Mostrar todas las canciones del programa ---
+  async function mostrarProgramaConAcordes() {
     const container = document.getElementById('programa-acordes-container');
-    setupGlobalInterface();
 
     for (const item of programa) {
-        await insertarYCambiarSiCorresponde(container, item.cancion, item.tono);
+      await insertarYCambiarSiCorresponde(container, item.cancion, item.tono);
     }
+  }
 
-    // Asegurar que si el botón global ya estaba en ABC, las canciones nuevas se conviertan
-    if ($('#toggleNotationButton').data('format') === 'ABC') {
-        refreshNotation();
-    }
-}
-
-$(function() {
-    mostrarProgramaConAcordes();
-});
-</script>
+  // Ejecutar
+  mostrarProgramaConAcordes();
+  </script>
 </body>
 </html>
+  

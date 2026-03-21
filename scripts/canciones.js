@@ -3740,15 +3740,15 @@
     },
     "Secuencia de Pascua": {
       "ruta": "Liturgias especiales/Secuencia de Pascua.html",
-      "tono": ""
+      "tono": "REm"
     },
     "Secuencia de Pentecostés (gregoriano-español)": {
       "ruta": "Liturgias especiales/Secuencia de Pentecostés (gregoriano-español).html",
-      "tono": ""
+      "tono": "REm"
     },
     "Secuencia de Pentecostés (gregoriano-latin)": {
       "ruta": "Liturgias especiales/Secuencia de Pentecostés (gregoriano-latin).html",
-      "tono": ""
+      "tono": "REm"
     },
     "Secuencia de Pentecostés (Coro Seminario Mayor)": {
       "ruta": "Liturgias especiales/Secuencia de Pentecostés (Coro Seminario Mayor).html",

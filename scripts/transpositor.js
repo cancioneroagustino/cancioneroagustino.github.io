@@ -1,361 +1,199 @@
 (function($) {
 
-var solfeoToABC = { "DO": "C", "RE": "D", "MI": "E", "FA": "F", "SOL": "G", "LA": "A", "SI": "B" };
-var abcToSolfeo = { "C": "DO", "D": "RE", "E": "MI", "F": "FA", "G": "SOL", "A": "LA", "B": "SI" };
+    var solfeoToABC = { "DO": "C", "RE": "D", "MI": "E", "FA": "F", "SOL": "G", "LA": "A", "SI": "B" };
+    var abcToSolfeo = { "C": "DO", "D": "RE", "E": "MI", "F": "FA", "G": "SOL", "A": "LA", "B": "SI" };
 
-  // Función para determinar si una línea es de acordes
-  var isChordLine = function(line) {
-  return /(\bDO|\bRE|\bMI|\bFA|\bSOL|\bLA|\bSI)[b#]?|\bCejillo\b|\bIntro\b|\bIntroducción\b/.test(line);
-}
-
-  // Función para ocultar/mostrar acordes
-  function toggleChords() {
-    $('#letra span').each(function() {
-      var lineText = $(this).text();
-      if (isChordLine(lineText)) {
-        $(this).toggle(); // Alterna la visibilidad del elemento
-      }
-    });
-  }
-
-  // Asociar la función al evento de clic del botón
-  $('#toggleChordsButton').click(function() {
-    toggleChords();
-  });
-
-  $.fn.transpose = function(options) {
-    var opts = $.extend({}, $.fn.transpose.defaults, options);
-    
-    var currentKey = null;
-
-    var isMinorMode = false; // ← nueva bandera para distinguir modo menor
-    
-    var keys = [
-      { name: 'LAb',  value: 0,   type: 'F' },
-      { name: 'LA',   value: 1,   type: 'N' },
-      { name: 'LA#',  value: 2,   type: 'S' },
-      { name: 'SIb',  value: 2,   type: 'F' },
-      { name: 'SI',   value: 3,   type: 'N' },
-      { name: 'DO',   value: 4,   type: 'N' },
-      { name: 'DO#',  value: 5,   type: 'S' },
-      { name: 'REb',  value: 5,   type: 'F' },
-      { name: 'RE',   value: 6,   type: 'N' },
-      { name: 'RE#',  value: 7,   type: 'S' },
-      { name: 'MIb',  value: 7,   type: 'F' },
-      { name: 'MI',   value: 8,   type: 'N' },
-      { name: 'FA',   value: 9,   type: 'N' },
-      { name: 'FA#',  value: 10,  type: 'S' },
-      { name: 'SOLb',  value: 10,  type: 'F' },
-      { name: 'SOL',   value: 11,  type: 'N' },
-      { name: 'SOL#',  value: 0,   type: 'S' }
-    ];
-  
-    var getKeyByName = function (name) {
-        if (name.charAt(name.length-1) == "m") {
-          name = name.substring(0, name.length-1);
-        }
-        for (var i = 0; i < keys.length; i++) {
-            if (name == keys[i].name) {
-                return keys[i];
-            }
-        }
+    // 2. Función de determinación de línea de acordes
+    var isChordLine = function(line) {
+        return /(\bDO|\bRE|\bMI|\bFA|\bSOL|\bLA|\bSI)[b#]?|\bCejillo\b|\bIntro\b|\bIntroducción\b/.test(line);
     };
 
-    var getChordRoot = function (input) {
-        var ind = 2;
-        console.log("getChordRoot: "+input);
-        if(input.substring(0,2)=="SO"){
-            ind=3;}
-        if (input.length > ind && (input.charAt(ind) == "b" || input.charAt(ind) == "#"))
-            return input.substr(0, ind+1);
-        else
+
+    function refreshNotation() {
+        var isABC = $('#toggleNotationButton').data('format') === 'ABC';
+        
+
+        $('#letra span.c').each(function() {
+            var $el = $(this);
+            var text = $el.text();
+            var map = isABC ? solfeoToABC : abcToSolfeo;
+            $.each(map, function(orig, dest) {
+                if (text.indexOf(orig) === 0) {
+                    $el.text(text.replace(orig, dest));
+                    return false; 
+                }
+            });
+        });
+
+        $('.transpose-keys a').each(function() {
+            var $el = $(this);
+            var text = $el.text();
+            var map = isABC ? solfeoToABC : abcToSolfeo;
+            $.each(map, function(orig, dest) {
+                if (text.indexOf(orig) === 0) {
+                    $el.text(text.replace(orig, dest));
+                    return false;
+                }
+            });
+        });
+    }
+
+    $.fn.transpose = function(options) {
+        var opts = $.extend({}, $.fn.transpose.defaults, options);
+        var currentKey = null;
+        var isMinorMode = false;
+        
+        var keys = [
+            { name: 'LAb', value: 0, type: 'F' }, { name: 'LA', value: 1, type: 'N' },
+            { name: 'LA#', value: 2, type: 'S' }, { name: 'SIb', value: 2, type: 'F' },
+            { name: 'SI', value: 3, type: 'N' }, { name: 'DO', value: 4, type: 'N' },
+            { name: 'DO#', value: 5, type: 'S' }, { name: 'REb', value: 5, type: 'F' },
+            { name: 'RE', value: 6, type: 'N' }, { name: 'RE#', value: 7, type: 'S' },
+            { name: 'MIb', value: 7, type: 'F' }, { name: 'MI', value: 8, type: 'N' },
+            { name: 'FA', value: 9, type: 'N' }, { name: 'FA#', value: 10, type: 'S' },
+            { name: 'SOLb', value: 10, type: 'F' }, { name: 'SOL', value: 11, type: 'N' },
+            { name: 'SOL#', value: 0, type: 'S' }
+        ];
+
+        var getKeyByName = function (name) {
+            if (name.endsWith("m")) name = name.slice(0, -1);
+            for (var i = 0; i < keys.length; i++) {
+                if (name == keys[i].name) return keys[i];
+            }
+        };
+
+        var getChordRoot = function (input) {
+            var ind = input.startsWith("SO") ? 3 : 2;
+            if (input.length > ind && (input.charAt(ind) == "b" || input.charAt(ind) == "#"))
+                return input.substr(0, ind+1);
             return input.substr(0, ind);
-    };
+        };
 
-    var getNewKey = function (oldKey, delta, targetKey) {
-        console.log("oldKey: "+oldKey + " - delta: " + delta);
-        var keyValue = getKeyByName(oldKey).value + delta;
-        console.log(keyValue);
-        if (keyValue > 11) {
-            keyValue -= 12;
-        } else if (keyValue < 0) {
-            keyValue += 12;
-        }
-        
-      var i = 0;
-      // Decide si usar sostenidos o bemoles según modo
-      var sharpSet = isMinorMode
-        ? ["LA","LA#","SI","DO#","RE#","MI","FA#","SOL#"]   // menores
-        : ["LA","LA#","SI","DO","DO#","RE","RE#","MI","FA#","SOL","SOL#"]; // mayores
+        var getNewKey = function (oldKey, delta, targetKey) {
+            var keyValue = getKeyByName(oldKey).value + delta;
+            if (keyValue > 11) keyValue -= 12; else if (keyValue < 0) keyValue += 12;
+            
+            var sharpSet = isMinorMode 
+                ? ["LA","LA#","SI","DO#","RE#","MI","FA#","SOL#"] 
+                : ["LA","LA#","SI","DO","DO#","RE","RE#","MI","FA#","SOL","SOL#"];
 
-      if ([0,2,5,7,10].includes(keyValue)) {
-        if (sharpSet.includes(targetKey.name)) {
-          for (;i<keys.length;i++)
-            if (keys[i].value==keyValue && keys[i].type=="S") return keys[i];
-        }
-        for (i=0;i<keys.length;i++)
-          if (keys[i].value==keyValue && keys[i].type=="F") return keys[i];
-      } else {
-        for (i=0;i<keys.length;i++)
-          if (keys[i].value==keyValue) return keys[i];
-      }
-    };
-
-
-    var getDelta = function (oldIndex, newIndex) {
-        if (oldIndex > newIndex)
-            return 0 - (oldIndex - newIndex);
-        else if (oldIndex < newIndex)
-            return 0 + (newIndex - oldIndex);
-        else
-            return 0;
-    };
-
-    var transposeSong = function (target, key) {
-        var newKey = getKeyByName(key);
-
-        if (currentKey.name == newKey.name) {
-          return;
-        }
-
-        var delta = getDelta(currentKey.value, newKey.value);
-        
-        $("span.c", target).each(function (i, el) {
-            transposeChord(el, delta, newKey);
-        });
-        
-        currentKey = newKey;
-    };
-
-    // ---- ESPACIADO INTELIGENTE SOLO EN LA FUNCIÓN DE TRANSPOSICIÓN ----
-    var transposeChord = function (selector, delta, targetKey) {
-        var el = $(selector);
-
-        // Guardar longitud original del acorde + espacios a la derecha
-        if (!el.data("orig-block-len")) {
-            // Calcula cuántos espacios siguen al acorde en la línea original
-            var next = el[0].nextSibling;
-            var spaces = 0;
-            if (next && next.nodeType === 3) { // nodo de texto
-                var m = next.nodeValue.match(/^(\s+)/);
-                if (m) spaces = m[1].length;
-            }
-            el.data("orig-block-len", el.text().length + spaces);
-        }
-
-        var originalBlockLen = el.data("orig-block-len");
-        var oldChord = el.text();
-        var oldChordRoot = getChordRoot(oldChord);
-        var newChordRoot = getNewKey(oldChordRoot, delta, targetKey);
-        var newChord = newChordRoot.name + oldChord.substr(oldChordRoot.length);
-
-        // Calcular cuántos espacios se necesitan a la derecha
-        var spacesNeeded = originalBlockLen - newChord.length;
-        if (spacesNeeded < 0) spacesNeeded = 0;
-
-        // Modificar el texto del acorde y los espacios a la derecha (en el nodo de texto siguiente)
-        el.text(newChord);
-
-        var next = el[0].nextSibling;
-        if (next && next.nodeType === 3) {
-        // Si el texto siguiente empieza con una barra o guion, no agregar espacios
-    if (/^[\s]*[\/-]/.test(next.nodeValue)) {
-        // No tocamos los espacios antes de la barra
-    } else {
-        // Reemplaza los espacios por los nuevos
-        next.nodeValue = " ".repeat(spacesNeeded) + next.nodeValue.replace(/^\s+/, "");
-    }
-        } else if (spacesNeeded > 0) {
-            // Si no hay nodo de texto, agrégalo
-            el.after(document.createTextNode(" ".repeat(spacesNeeded)));
-        }
-    };
-
-    var getNewWhiteSpaceLength = function (a, b, c) {
-        if (a > b)
-            return (c + (a - b));
-        else if (a < b)
-            return (c - (b - a));
-        else
-            return c;
-    };
-
-    var makeString = function (s, repeat) {
-        var o = [];
-        for (var i = 0; i < repeat; i++) o.push(s);
-        return o.join("");
-    }
-    
-
-    var wrapChords = function (input) {
-        return input.replace(opts.chordReplaceRegex, "<span class='c'>$1</span>");
-    };
-    
-    return $(this).each(function() {
-    
-      var startKey = $(this).attr("data-key");
-      if (!startKey || $.trim(startKey) == "") {
-        startKey = opts.key;
-      }
-
-      if (!startKey || $.trim(startKey) == "") {
-        throw("Starting key not defined.");
-        return this;
-      }
-
-
-      // --- Detecta modo menor por la "m" final ---
-      isMinorMode = startKey.endsWith("m");
-
-      currentKey = getKeyByName(startKey);
-
-      // Build tranpose links ===========================================
-      var keyLinks = [];
-      var allowedKeys = ['DO', 'REb', 'RE', 'MIb', 'MI', 'FA', 'FA#', 'SOL', 'LAb', 'LA', 'SIb', 'SI'];
-      $(keys).each(function(i, key) {
-        if (allowedKeys.indexOf(key.name) !== -1) {
-          if (currentKey.name == key.name)
-              keyLinks.push("<a href='#' class='selected'>" + key.name + "</a>");
-          else
-              keyLinks.push("<a href='#'>" + key.name + "</a>");
-      }
-      });
-
-      var $this = $(this);
-      var keysHtml = $("<div class='transpose-keys justify-content-md-center'></div>");
-      keysHtml.html(keyLinks.join(""));
-      $("a", keysHtml).click(function(e) {
-          e.preventDefault();
-          var $thisLink = $(this);
-          // Asegurarse de que la notación esté en Solfeo para la transposición
-          var currentFormat = $('#toggleNotationButton').data('format');
-          if (currentFormat === 'ABC') {
-            $('#toggleNotationButton').data('format', 'Solfeo'); // Temp reset
-            refreshNotation();
-          }
-
-          transposeSong($this, $thisLink.html());
-          $(".transpose-keys a").removeClass("selected");
-          $thisLink.addClass("selected");
-          // 3. Si ABC activado, reconvertir la notación
-          if (currentFormat === 'ABC') {
-            $('#toggleNotationButton').data('format', 'ABC');
-            refreshNotation();
-        }
-          return false;
-      });
-
-          $('#toggleNotationButton').click(function() {
-            var isABC = $(this).data('format') === 'ABC';
-            $(this).data('format', isABC ? 'Solfeo' : 'ABC');
-            $(this).text(isABC ? 'Notación ABC' : 'Notación DoReMi');
-            refreshNotation();
-        });
-      
-      $(this).before(keysHtml);
-
-      var output = [];
-      var lines = $(this).html().split("\n");
-      var line, tmp = "";
-
-      for (var i = 0; i < lines.length; i++) {
-          line = lines[i];
-
-          if (isChordLine(line))
-              output.push("<span>" + wrapChords(line) + "</span>");
-          else
-              output.push("<span>" + line + "</span>");
-      };
-
-      $(this).html(output.join("\n"));
-    });
-  };
-
-
-
-  $.fn.transpose.defaults = {
-    chordRegex: /^(\bDO|\bRE|\bMI|\bFA|\bSOL|\bLA|\bSI)[b\#]?(2|4|5|6|7|9|11|13|6\/9|7\-5|7\-9|7\#5|7\#9|7\+5|7\+9|7b5|7b9|7sus2|7sus4|add2|add4|add9|aug|°|dim|Ø|dim7|mb5|m7b5|m\/maj7|m6|m7|m7b5|m9|m11|m13|maj7|maj9|maj11|maj13|m|sus|sus2|sus4)*(\/[A-G][b\#]*)*$/,
-    chordReplaceRegex: /((\bDO|\bRE|\bMI|\bFA|\bSOL|\bLA|\bSI)[b\#]?(2|4|5|6|7|9|11|13|6\/9|7\-5|7\-9|7\#5|7\#9|7\+5|7\+9|7b5|7b9|7sus2|7sus4|add2|add4|add9|aug|°|dim|Ø|dim7|mb5|m7b5|m\/maj7|m6|m7|m7b5|m9|m11|m13|maj7|maj9|maj11|maj13|m|sus|sus2|sus4)*)/g
-  };
-
-
-// Cambio de notación
-var notationMap = {
-    "DO": "C", "RE": "D", "MI": "E", "FA": "F", "SOL": "G", "LA": "A", "SI": "B"
-};
-
-function toggleNotation() {
-    var button = $('#toggleNotationButton');
-    var isABC = button.data('format') === 'ABC';
-    
-    $('#letra span.c').each(function() {
-        var text = $(this).text();
-        
-        $.each(notationMap, function(solfeo, abc) {
-            if (isABC) {
-                // De ABC a Solfeo: Buscamos la letra (ej. "C") y reemplazamos por "DO"
-                // Usamos una Regex simple para asegurar que no reemplace partes de palabras
-                var regex = new RegExp("^" + abc, "g"); 
-                if (text.startsWith(abc)) {
-                    text = text.replace(regex, solfeo);
-                    return false; // break
-                }
-            } else {
-                // De Solfeo a ABC: Buscamos "DO" y reemplazamos por "C"
-                var regex = new RegExp("^" + solfeo, "g");
-                if (text.startsWith(solfeo)) {
-                    text = text.replace(regex, abc);
-                    return false; // break
+            for (var i=0; i<keys.length; i++) {
+                if (keys[i].value == keyValue) {
+                    if ([0,2,5,7,10].includes(keyValue)) {
+                        var expectedType = sharpSet.includes(targetKey.name) ? "S" : "F";
+                        if (keys[i].type == expectedType) return keys[i];
+                    } else {
+                        return keys[i];
+                    }
                 }
             }
+            return getKeyByName(oldKey); // Fallback
+        };
+
+        var transposeSong = function (target, keyName) {
+            var newKey = getKeyByName(keyName);
+            if (!newKey || currentKey.name == newKey.name) return;
+            var delta = newKey.value - currentKey.value;
+            $("span.c", target).each(function () {
+                var el = $(this);
+                if (!el.data("orig-block-len")) {
+                    var next = el[0].nextSibling;
+                    var spaces = (next && next.nodeType === 3) ? (next.nodeValue.match(/^(\s+)/) || ["",""])[1].length : 0;
+                    el.data("orig-block-len", el.text().length + spaces);
+                }
+                var oldChord = el.text();
+                var oldRoot = getChordRoot(oldChord);
+                var newRoot = getNewKey(oldRoot, delta, newKey);
+                var newChord = newRoot.name + oldChord.substr(oldRoot.length);
+                var spacesNeeded = Math.max(0, el.data("orig-block-len") - newChord.length);
+                el.text(newChord);
+                var next = el[0].nextSibling;
+                if (next && next.nodeType === 3) {
+                    if (!/^[\s]*[\/-]/.test(next.nodeValue)) {
+                        next.nodeValue = " ".repeat(spacesNeeded) + next.nodeValue.replace(/^\s+/, "");
+                    }
+                }
+            });
+            currentKey = newKey;
+        };
+
+        return $(this).each(function() {
+            var $this = $(this);
+            var startKey = $this.attr("data-key") || opts.key;
+            if (!startKey) return;
+
+            isMinorMode = startKey.endsWith("m");
+            currentKey = getKeyByName(startKey);
+
+            // Generar Menú Filtrado
+            var keyLinks = [];
+            var allowed = ['DO', 'REb', 'RE', 'MIb', 'MI', 'FA', 'FA#', 'SOL', 'LAb', 'LA', 'SIb', 'SI'];
+            $(keys).each(function(i, k) {
+                if (allowed.includes(k.name)) {
+                    var sel = (currentKey.name == k.name) ? "class='selected'" : "";
+                    keyLinks.push("<a href='#' " + sel + ">" + k.name + "</a>");
+                }
+            });
+
+            var keysHtml = $("<div class='transpose-keys justify-content-md-center'></div>").html(keyLinks.join(""));
+            
+            keysHtml.on('click', 'a', function(e) {
+                e.preventDefault();
+                var $link = $(this);
+                var targetText = $link.text();
+
+                // Traducción reversa si estamos en ABC para que el motor entienda
+                if ($('#toggleNotationButton').data('format') === 'ABC') {
+                    $.each(abcToSolfeo, function(abc, sol) {
+                        if (targetText.startsWith(abc)) { targetText = targetText.replace(abc, sol); return false; }
+                    });
+                    // Reset temporal para transponer
+                    $('#toggleNotationButton').data('format', 'Solfeo');
+                    refreshNotation();
+                    $('#toggleNotationButton').data('format', 'ABC');
+                }
+
+                transposeSong($this, targetText);
+                $(".transpose-keys a").removeClass("selected");
+                $link.addClass("selected");
+                refreshNotation();
+            });
+
+            $this.before(keysHtml);
+
+            // Procesar texto inicial
+            var lines = $this.html().split("\n");
+            var output = lines.map(function(line) {
+                return "<span>" + (isChordLine(line) ? opts.wrapChords(line) : line) + "</span>";
+            });
+            $this.html(output.join("\n"));
         });
-        $(this).text(text);
-    });
+    };
 
-    // Cambio de estado del botón
-    if (isABC) {
-        button.text('Notación ABC').data('format', 'Solfeo');
-    } else {
-        button.text('Notación DoReMi').data('format', 'ABC');
-    }
-}
+    $.fn.transpose.defaults = {
+        key: "DO",
+        wrapChords: function(input) {
+            return input.replace(/((\bDO|\bRE|\bMI|\bFA|\bSOL|\bLA|\bSI)[b\#]?(2|4|5|6|7|9|11|13|6\/9|7\-5|7\-9|7\#5|7\#9|7\+5|7\+9|7b5|7b9|7sus2|7sus4|add2|add4|add9|aug|°|dim|Ø|dim7|mb5|m7b5|m\/maj7|m6|m7|m7b5|m9|m11|m13|maj7|maj9|maj11|maj13|m|sus|sus2|sus4)*)/g, "<span class='c'>$1</span>")
+        }
+    };
 
-function refreshNotation() {
-    var isABC = $('#toggleNotationButton').data('format') === 'ABC';
-    
-    // 1. Traducir acordes en la canción
-    $('#letra span.c').each(function() {
-        var $el = $(this);
-        var text = $el.text();
-        $.each(isABC ? solfeoToABC : abcToSolfeo, function(orig, dest) {
-            if (text.startsWith(orig)) {
-                $el.text(text.replace(orig, dest));
-                return false; 
-            }
-        });
-    });
-
-    // 2. Traducir los botones del menú de transposición
-    $('.transpose-keys a').each(function() {
-        var $el = $(this);
-        var text = $el.text();
-        $.each(isABC ? solfeoToABC : abcToSolfeo, function(orig, dest) {
-            if (text.startsWith(orig)) {
-                $el.text(text.replace(orig, dest));
-                return false;
-            }
-        });
-    });
-}
-
-
-
-$(function() {
-        $(".btn").show();
+    //Inicialización y Eventos de botones externos
+    $(function() {
         $("#letra").transpose();
-        
-    });    
 
+        $('#toggleChordsButton').click(function() {
+            $('#letra span').each(function() {
+                if (isChordLine($(this).text())) $(this).toggle();
+            });
+        });
 
-    
+        $('#toggleNotationButton').click(function() {
+            var $btn = $(this);
+            var isCurrentlyABC = $btn.data('format') === 'ABC';
+            $btn.data('format', isCurrentlyABC ? 'Solfeo' : 'ABC');
+            $btn.text(isCurrentlyABC ? 'Notación ABC' : 'Notación DoReMi');
+            refreshNotation();
+        });
+    });
+
 })(jQuery);

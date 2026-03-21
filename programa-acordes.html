@@ -13,17 +13,26 @@
     <script src="scripts/transpositor.js"></script>
 
     <style>
-        /* Estilo para que el listado se vea bien centrado */
-        .cancion-content {
-            flex-direction: column;
-            align-items: center;
-        }
-        /* Ocultamos los botones automáticos que el plugin inyecta por defecto 
-           para que no se repitan en cada canción del listado */
-        .cancion-content .d-flex.justify-content-center.gap-2.mb-3 {
-            display: none !important;
-        }
-    </style>
+    /* Centrado global de la canción manteniendo alineación interna */
+    .cancion-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center; /* Centra el bloque h2 + pre en la pantalla */
+        width: 100%;
+    }
+    .letra {
+        display: inline-block; /* Hace que el pre se ajuste a su línea más larga */
+        text-align: left;      /* Mantiene los acordes sobre las letras */
+        margin: 0 auto;
+        background: transparent;
+        border: none;
+        font-family: monospace;
+    }
+    /* Ocultar botones internos automáticos en el listado */
+    .cancion-wrapper .d-flex.justify-content-center.gap-2.mb-3 {
+        display: none !important;
+    }
+</style>
 </head>
 
 <body>
@@ -32,146 +41,91 @@
     $(function(){
       $("#nav-placeholder").load("navbar.html");
     });
-  </script>
-
-  <div id="global-controls" class="d-flex justify-content-center mt-4"></div>
-
-  <div id="programa-acordes-container" class="d-flex flex-column mt-3"></div>
-
   <script>
-  // --- Lee el programa desde localStorage (Intacto) ---
-  const programa = JSON.parse(localStorage.getItem('programaMisa'));
-  if (!programa || programa.length === 0) {
+const programa = JSON.parse(localStorage.getItem('programaMisa'));
+if (!programa || programa.length === 0) {
     alert('No hay un programa de misa guardado.');
     window.location.href = 'crear-programa.html';
-  }
+}
 
-  // --- Helper: cargar datos de la canción (Intacto) ---
-  async function fetchCancionData(ruta) {
+async function fetchCancionData(ruta) {
     const res = await fetch(ruta);
     if (!res.ok) throw new Error('Error al cargar ' + ruta);
     const text = await res.text();
     const parser = new DOMParser();
     const doc = parser.parseFromString(text, 'text/html');
-
-    const titleEl = doc.querySelector('title');
-    const title = titleEl ? titleEl.innerText : 'Sin título';
-
+    const title = doc.querySelector('title') ? doc.querySelector('title').innerText : 'Sin título';
     const pre = doc.querySelector('pre#letra');
-    if (!pre) throw new Error('No se encontró <pre id="letra"> en ' + ruta);
+    if (!pre) throw new Error('No se encontró <pre id="letra">');
+    return { title, preInner: pre.innerHTML, dataKey: pre.getAttribute('data-key') || '' };
+}
 
-    const preInner = pre.innerHTML;
-    const dataKey = pre.getAttribute('data-key') || '';
-
-    return { title, preInner, dataKey };
-  }
-
-  // --- Insertar canción en el DOM y aplicar transposición (Corregido) ---
-  async function insertarYCambiarSiCorresponde(container, ruta, tonoDeseado) {
+async function insertarYCambiarSiCorresponde(container, ruta, tonoDeseado) {
     try {
-      const { title, preInner, dataKey: tonoOriginal } = await fetchCancionData(ruta);
+        const { title, preInner, dataKey: tonoOriginal } = await fetchCancionData(ruta);
 
-      // Estructura DOM simplificada y unificada
-      const col = document.createElement("div");
-      col.className = "col-12 col-md-8 col-lg-6 align-self-center mb-5"; // Ajuste de ancho y margen
-
-      const article = document.createElement("div");
-      article.className = "cancion-content";
-
-      const h2 = document.createElement("h2");
-      h2.textContent = title;
-      h2.className = "text-center mb-3";
-      article.appendChild(h2);
-
-      const pre = document.createElement("pre");
-      pre.className = "letra"; // Clase unificada
-      pre.setAttribute("data-key", tonoOriginal);
-      pre.innerHTML = preInner;
-      article.appendChild(pre);
-
-      col.appendChild(article);
-      container.appendChild(col);
-
-      // --- MODIFICACIÓN 3: Inicialización Directa con jQuery Global ---
-      // Como ya cargamos los scripts arriba, no necesitamos promesas ni timeouts aquí.
-      if (typeof jQuery.fn.transpose === "function") {
-        const $pre = jQuery(pre);
+        // Contenedor principal de la canción (Wrapper para centrado)
+        const col = $('<div class="col-12 mb-5 cancion-wrapper"></div>');
         
-        // Inicializamos el plugin. 
-        // Nota: Los estilos CSS arriba ocultarán los botones automáticos indeseados.
-        $pre.transpose();
+        const h2 = $('<h2 class="text-center"></h2>').text(title);
+        const pre = $('<pre class="letra"></pre>')
+                    .attr("data-key", tonoOriginal)
+                    .html(preInner);
 
-        // Lógica de cambio de tono original (Intacta)
+        col.append(h2).append(pre);
+        $(container).append(col);
+
+        // Inicializar el plugin en esta canción específica
+        pre.transpose();
+
+        // Aplicar cambio de tono si es necesario
         if (tonoDeseado && tonoDeseado !== tonoOriginal) {
-          const claveObjetivo = tonoDeseado.replace(/m$/i, "");
-          const $keysBlock = $pre.prev(".transpose-keys"); // Usamos el selector correcto
-          const $link = $keysBlock
-            .find("a")
-            .filter(function () {
-              return (
-                jQuery(this).data('original-note').toUpperCase() === // Validación robusta con data
-                claveObjetivo.toUpperCase()
-              );
-            })
-            .first();
-          if ($link.length) {
-            $link.trigger("click");
-          } else {
-            console.warn("No se encontró enlace de tono", claveObjetivo, "para", ruta);
-          }
+            const claveObjetivo = tonoDeseado.replace(/m$/i, "").toUpperCase();
+            // Buscamos en la barra de tonalidades que el plugin acaba de inyectar
+            const $link = col.find(".transpose-keys a").filter(function() {
+                return ($(this).data('original-note') || $(this).text()).toUpperCase() === claveObjetivo;
+            }).first();
+
+            if ($link.length) $link.trigger("click");
         }
-      }
     } catch (err) {
-      console.warn("⚠️ Error menor o falta de tonalidad en:", ruta, err.message);
+        console.warn("Error en canción:", ruta, err);
     }
-  }
+}
 
-  // --- MODIFICACIÓN 4: Configuración de la Interfaz Global ---
-  function setupGlobalInterface() {
-    // 1. Inyectamos UN SOLO botón global de Notación
+function setupGlobalInterface() {
     const $btnNotation = $('<button id="toggleNotationButton" class="btn btn-acordes btn-sm" data-format="Solfeo">Notación ABC</button>');
-    $('#global-controls').append($btnNotation);
+    $('#global-controls').empty().append($btnNotation);
 
-    // 2. Definimos su evento para que afecte a TODO el listado
-    $btnNotation.click(function() {
-        var $btn = $(this);
-        var isCurrentlyABC = $btn.data('format') === 'ABC';
+    $btnNotation.on('click', function() {
+        const isABC = $(this).data('format') === 'ABC';
+        $(this).data('format', isABC ? 'Solfeo' : 'ABC')
+               .text(isABC ? 'Notación ABC' : 'Notación DoReMi');
         
-        // Cambiamos el estado
-        $btn.data('format', isCurrentlyABC ? 'Solfeo' : 'ABC');
-        // Cambiamos el texto del botón
-        $btn.text(isCurrentlyABC ? 'Notación ABC' : 'Notación DoReMi');
-        
-        // Ejecutamos la función de refresco visual unificada (que ya existe en transpositor.js)
+        // Ejecución forzada: refreshNotation() debe estar disponible globalmente en transpositor.js
         if (typeof refreshNotation === "function") {
             refreshNotation();
         }
     });
-  }
+}
 
-  // --- Mostrar todas las canciones del programa ---
-  async function mostrarProgramaConAcordes() {
+async function mostrarProgramaConAcordes() {
     const container = document.getElementById('programa-acordes-container');
-
-    // 1. Configuramos la interfaz global UNA VEZ
     setupGlobalInterface();
 
-    // 2. Procesamos las canciones secuencialmente
     for (const item of programa) {
-      await insertarYCambiarSiCorresponde(container, item.cancion, item.tono);
+        await insertarYCambiarSiCorresponde(container, item.cancion, item.tono);
     }
-    
-    // 3. Al finalizar, nos aseguramos de que todo esté en la notación correcta
-    // por si el usuario ya presionó el botón mientras cargaban
-    if (typeof refreshNotation === "function") {
+
+    // Asegurar que si el botón global ya estaba en ABC, las canciones nuevas se conviertan
+    if ($('#toggleNotationButton').data('format') === 'ABC') {
         refreshNotation();
     }
-  }
+}
 
-  // Ejecutar
-  $(function() {
-      mostrarProgramaConAcordes();
-  });
-  </script>
+$(function() {
+    mostrarProgramaConAcordes();
+});
+</script>
 </body>
 </html>

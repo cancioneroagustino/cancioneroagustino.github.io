@@ -3,65 +3,61 @@
     var solfeoToABC = { "DO": "C", "RE": "D", "MI": "E", "FA": "F", "SOL": "G", "LA": "A", "SI": "B" };
     var abcToSolfeo = { "C": "DO", "D": "RE", "E": "MI", "F": "FA", "G": "SOL", "A": "LA", "B": "SI" };
 
-    // 2. Función de determinación de línea de acordes
-    var isChordLine = function(line) {
-        return /(\bDO|\bRE|\bMI|\bFA|\bSOL|\bLA|\bSI)[b#]?|\bCejillo\b|\bIntro\b|\bIntroducción\b/.test(line);
-    };
-
+    // --- CAPA VISUAL: SOBRESCRIBE SIN DEJAR RASTROS ---
     function refreshNotation() {
-    var isABC = $('#toggleNotationButton').data('format') === 'ABC';
-    var map = isABC ? solfeoToABC : abcToSolfeo;
-    
-    // 1. Traducir acordes en la canción
-    $('#letra span.c').each(function() {
-        var $el = $(this);
-        var oldText = $el.text();
-        var newText = oldText;
+        var isABC = $('#toggleNotationButton').data('format') === 'ABC';
+        
+        // 1. Actualizar acordes en la canción
+        $('#letra span.c').each(function() {
+            var $el = $(this);
+            // Prioridad al dato guardado internamente (siempre en Solfeo)
+            var currentChord = $el.data('current-chord') || $el.text();
+            var displayChord = currentChord;
 
-        // Ordenamos las llaves por longitud (SOL antes que SO) para evitar reemplazos parciales
-        var keys = Object.keys(map).sort(function(a, b) { return b.length - a.length; });
-
-        $.each(keys, function(i, orig) {
-            // Usamos una comprobación estricta: debe empezar con la nota 
-            // Y lo que sigue NO debe ser otra letra de nota (evita procesar dos veces)
-            if (oldText.indexOf(orig) === 0) {
-                var dest = map[orig];
-                newText = dest + oldText.substring(orig.length);
-                return false; 
+            if (isABC) {
+                $.each(solfeoToABC, function(sol, abc) {
+                    if (currentChord.indexOf(sol) === 0) {
+                        displayChord = currentChord.replace(sol, abc);
+                        return false;
+                    }
+                });
             }
-        });
+            
+            // Calculamos desplazamiento antes de sobrescribir
+            var diff = $el.text().length - displayChord.length;
+            $el.text(displayChord);
 
-        if (oldText !== newText) {
-            var diff = oldText.length - newText.length;
-            $el.text(newText);
-
+            // Ajuste de espacios (mantenemos tu lógica de alineación)
             var next = $el[0].nextSibling;
             if (next && next.nodeType === 3) {
                 var spacesMatch = next.nodeValue.match(/^(\s+)/);
                 var currentSpaces = spacesMatch ? spacesMatch[1].length : 0;
-                var newSpacesCount = currentSpaces + diff;
-                if (newSpacesCount < 0) newSpacesCount = 0;
+                var newSpacesCount = Math.max(0, currentSpaces + diff);
                 next.nodeValue = " ".repeat(newSpacesCount) + next.nodeValue.replace(/^\s+/, "");
             }
-        }
-    });
-
-    // 2. Traducir los botones del menú (Sin duplicar letras)
-    $('.transpose-keys a').each(function() {
-        var $el = $(this);
-        var text = $el.text();
-        var keys = Object.keys(map).sort(function(a, b) { return b.length - a.length; });
-        
-        $.each(keys, function(i, orig) {
-            if (text === orig || text.indexOf(orig) === 0) {
-                // Reemplazo total para los botones para que no se acumulen restos
-                $el.text(text.replace(orig, map[orig]));
-                return false;
-            }
         });
-    });
-}
 
+        // 2. Actualizar botones de tonalidad (Uso de data-original-note para evitar escaneo)
+        $('.transpose-keys a').each(function() {
+            var $el = $(this);
+            var note = $el.data('original-note'); 
+            var displayNote = note;
+
+            if (isABC) {
+                $.each(solfeoToABC, function(sol, abc) {
+                    if (note.indexOf(sol) === 0) {
+                        displayNote = note.replace(sol, abc);
+                        return false;
+                    }
+                });
+            }
+            $el.text(displayNote);
+        });
+    }
+
+    var isChordLine = function(line) {
+        return /(\bDO|\bRE|\bMI|\bFA|\bSOL|\bLA|\bSI)[b#]?|\bCejillo\b|\bIntro\b|\bIntroducción\b/.test(line);
+    }
 
     $.fn.transpose = function(options) {
         var opts = $.extend({}, $.fn.transpose.defaults, options);
@@ -81,7 +77,7 @@
         ];
 
         var getKeyByName = function (name) {
-            if (name.endsWith("m")) name = name.slice(0, -1);
+            if (name.endsWith("m")) name = name.substring(0, name.length-1);
             for (var i = 0; i < keys.length; i++) {
                 if (name == keys[i].name) return keys[i];
             }
@@ -97,156 +93,107 @@
         var getNewKey = function (oldKey, delta, targetKey) {
             var keyValue = getKeyByName(oldKey).value + delta;
             if (keyValue > 11) keyValue -= 12; else if (keyValue < 0) keyValue += 12;
-            
-            var sharpSet = isMinorMode 
-                ? ["LA","LA#","SI","DO#","RE#","MI","FA#","SOL#"] 
-                : ["LA","LA#","SI","DO","DO#","RE","RE#","MI","FA#","SOL","SOL#"];
-
+            var sharpSet = isMinorMode ? ["LA","LA#","SI","DO#","RE#","MI","FA#","SOL#"] : ["LA","LA#","SI","DO","DO#","RE","RE#","MI","FA#","SOL","SOL#"];
             for (var i=0; i<keys.length; i++) {
                 if (keys[i].value == keyValue) {
                     if ([0,2,5,7,10].includes(keyValue)) {
-                        var expectedType = sharpSet.includes(targetKey.name) ? "S" : "F";
-                        if (keys[i].type == expectedType) return keys[i];
-                    } else {
-                        return keys[i];
-                    }
+                        var type = sharpSet.indexOf(targetKey.name) !== -1 ? "S" : "F";
+                        if (keys[i].type == type) return keys[i];
+                    } else return keys[i];
                 }
             }
-            return getKeyByName(oldKey); // Fallback
         };
 
-        var transposeSong = function (target, keyName) {
-            var newKey = getKeyByName(keyName);
-            if (!newKey || currentKey.name == newKey.name) return;
+        var transposeSong = function (target, key) {
+            var newKey = getKeyByName(key);
+            if (currentKey.name == newKey.name) return;
             var delta = newKey.value - currentKey.value;
-            $("span.c", target).each(function () {
-                var el = $(this);
-                if (!el.data("orig-block-len")) {
-                    var next = el[0].nextSibling;
-                    var spaces = (next && next.nodeType === 3) ? (next.nodeValue.match(/^(\s+)/) || ["",""])[1].length : 0;
-                    el.data("orig-block-len", el.text().length + spaces);
-                }
-                var oldChord = el.text();
+            $("span.c", target).each(function (i, el) {
+                var $el = $(el);
+                var oldChord = $el.data('current-chord') || $el.text(); // Leer siempre de la "caja fuerte"
                 var oldRoot = getChordRoot(oldChord);
                 var newRoot = getNewKey(oldRoot, delta, newKey);
                 var newChord = newRoot.name + oldChord.substr(oldRoot.length);
-                var spacesNeeded = Math.max(0, el.data("orig-block-len") - newChord.length);
-                el.text(newChord);
-                var next = el[0].nextSibling;
-                if (next && next.nodeType === 3) {
-                    if (!/^[\s]*[\/-]/.test(next.nodeValue)) {
-                        next.nodeValue = " ".repeat(spacesNeeded) + next.nodeValue.replace(/^\s+/, "");
-                    }
-                }
+                
+                // Guardamos el nuevo valor en Solfeo internamente
+                $el.data('current-chord', newChord);
             });
             currentKey = newKey;
+            refreshNotation(); // La capa visual decide qué mostrar
         };
 
         return $(this).each(function() {
             var $this = $(this);
             var startKey = $this.attr("data-key") || opts.key;
-            if (!startKey) return;
-
             isMinorMode = startKey.endsWith("m");
             currentKey = getKeyByName(startKey);
 
-            // Generar Menú Filtrado
             var keyLinks = [];
             var allowed = ['DO', 'REb', 'RE', 'MIb', 'MI', 'FA', 'FA#', 'SOL', 'LAb', 'LA', 'SIb', 'SI'];
-            $(keys).each(function(i, k) {
-                if (allowed.includes(k.name)) {
-                    var sel = (currentKey.name == k.name) ? "class='selected'" : "";
-                    keyLinks.push("<a href='#' " + sel + ">" + k.name + "</a>");
+            $(keys).each(function(i, key) {
+                if (allowed.indexOf(key.name) !== -1) {
+                    var sel = (currentKey.name == key.name) ? "class='selected'" : "";
+                    // Guardamos la nota original para que el botón no se "contamine"
+                    keyLinks.push("<a href='#' " + sel + " data-original-note='" + key.name + "'>" + key.name + "</a>");
                 }
             });
 
             var keysHtml = $("<div class='transpose-keys justify-content-md-center'></div>").html(keyLinks.join(""));
-            
-            keysHtml.on('click', 'a', function(e) {
+            keysHtml.find("a").click(function(e) {
                 e.preventDefault();
-                var $link = $(this);
-                var targetText = $link.text();
-
-                // Traducción reversa si estamos en ABC para que el motor entienda
-                if ($('#toggleNotationButton').data('format') === 'ABC') {
-                    $.each(abcToSolfeo, function(abc, sol) {
-                        if (targetText.startsWith(abc)) { targetText = targetText.replace(abc, sol); return false; }
-                    });
-                    // Reset temporal para transponer
-                    $('#toggleNotationButton').data('format', 'Solfeo');
-                    refreshNotation();
-                    $('#toggleNotationButton').data('format', 'ABC');
-                }
-
-                transposeSong($this, targetText);
+                transposeSong($this, $(this).data('original-note'));
                 $(".transpose-keys a").removeClass("selected");
-                $link.addClass("selected");
-                refreshNotation();
+                $(this).addClass("selected");
+                return false;
             });
 
             $this.before(keysHtml);
 
-            // Procesar texto inicial
+            var output = [];
             var lines = $this.html().split("\n");
-            var output = lines.map(function(line) {
-                return "<span>" + (isChordLine(line) ? opts.wrapChords(line) : line) + "</span>";
-            });
+            for (var i = 0; i < lines.length; i++) {
+                var line = lines[i];
+                if (isChordLine(line)) {
+                    var wrapped = line.replace(opts.chordReplaceRegex, function(match) {
+                        return "<span class='c' data-current-chord='" + match + "'>" + match + "</span>";
+                    });
+                    output.push("<span>" + wrapped + "</span>");
+                } else output.push("<span>" + line + "</span>");
+            }
             $this.html(output.join("\n"));
         });
     };
 
     $.fn.transpose.defaults = {
-        wrapChords: function(input) {
-            return input.replace(/((\bDO|\bRE|\bMI|\bFA|\bSOL|\bLA|\bSI)[b\#]?(2|4|5|6|7|9|11|13|6\/9|7\-5|7\-9|7\#5|7\#9|7\+5|7\+9|7b5|7b9|7sus2|7sus4|add2|add4|add9|aug|°|dim|Ø|dim7|mb5|m7b5|m\/maj7|m6|m7|m7b5|m9|m11|m13|maj7|maj9|maj11|maj13|m|sus|sus2|sus4)*)/g, "<span class='c'>$1</span>")
-        }
+        key: "DO",
+        chordReplaceRegex: /((\bDO|\bRE|\bMI|\bFA|\bSOL|\bLA|\bSI)[b\#]?(2|4|5|6|7|9|11|13|6\/9|7\-5|7\-9|7\#5|7\#9|7\+5|7\+9|7b5|7b9|7sus2|7sus4|add2|add4|add9|aug|°|dim|Ø|dim7|mb5|m7b5|m\/maj7|m6|m7|m7b5|m9|m11|m13|maj7|maj9|maj11|maj13|m|sus|sus2|sus4)*)/g
     };
 
-    //Inicialización y Eventos de botones externos
     $(function() {
-        // --- INYECCIÓN DE BOTONES ---
-        // Creamos el contenedor de botones dinámicamente
-        var $buttonContainer = $('<div class="d-flex justify-content-center gap-2 mb-3"></div>');
-        
-        var $btnChords = $('<button id="toggleChordsButton" class="btn btn-acordes btn-sm" data-bs-toggle="button">Ocultar acordes</button>');
-        var $btnNotation = $('<button id="toggleNotationButton" class="btn btn-acordes btn-sm" data-format="Solfeo">Notación ABC</button>');
-        
-        $buttonContainer.append($btnChords).append($btnNotation);
-        
-        // Los insertamos antes del div #letra
-        $("#letra").before($buttonContainer);
+        var $letra = $("#letra");
+        if ($letra.length) {
+            var $container = $('<div class="d-flex justify-content-center gap-2 mb-3"></div>');
+            var $btnChords = $('<button id="toggleChordsButton" class="btn btn-acordes btn-sm">Ocultar acordes</button>');
+            var $btnNotation = $('<button id="toggleNotationButton" class="btn btn-acordes btn-sm" data-format="Solfeo">Notación ABC</button>');
+            $container.append($btnChords).append($btnNotation);
+            $letra.before($container);
 
-        // --- INICIALIZACIÓN DEL PLUGIN ---
-        $("#letra").transpose();
+            $letra.transpose();
 
-        // --- EVENTOS DE LOS BOTONES INYECTADOS ---
-        
-        // Botón Mostrar/Ocultar
-        $('#toggleChordsButton').click(function() {
-            var $btn = $(this);
-            var isHidden = $btn.hasClass('active'); // Bootstrap toggle state
-            
-            $('#letra span').each(function() {
-                if (isChordLine($(this).text())) {
-                    $(this).toggle();
-                }
+            $('#toggleChordsButton').click(function() {
+                var isHidden = $(this).data('hidden');
+                $('#letra span').each(function() {
+                    if (isChordLine($(this).text())) $(this).toggle(!!isHidden);
+                });
+                $(this).data('hidden', !isHidden).text(isHidden ? "Ocultar acordes" : "Mostrar acordes");
             });
-            
-            // Cambiamos el texto según el estado
-            $btn.text(isHidden ? "Mostrar acordes" : "Ocultar acordes");
-        });
 
-        // Botón Cambio de Notación
-        $('#toggleNotationButton').click(function() {
-            var $btn = $(this);
-            var isCurrentlyABC = $btn.data('format') === 'ABC';
-            
-            // Cambiamos el estado
-            $btn.data('format', isCurrentlyABC ? 'Solfeo' : 'ABC');
-            // Cambiamos el texto del botón para indicar qué pasará si se presiona de nuevo
-            $btn.text(isCurrentlyABC ? 'Notación ABC' : 'Notación DoReMi');
-            
-            refreshNotation();
-        });
+            $('#toggleNotationButton').click(function() {
+                var isABC = $(this).data('format') === 'ABC';
+                $(this).data('format', isABC ? 'Solfeo' : 'ABC').text(isABC ? 'Notación ABC' : 'Notación DoReMi');
+                refreshNotation();
+            });
+        }
     });
 
 })(jQuery);

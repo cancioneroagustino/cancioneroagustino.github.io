@@ -41,6 +41,12 @@
     $(function(){
       $("#nav-placeholder").load("navbar.html");
     });
+  </script>
+
+  <div id="global-controls" class="d-flex justify-content-center mt-4"></div>
+
+  <div id="programa-acordes-container" class="d-flex flex-column mt-3"></div>
+
   <script>
 const programa = JSON.parse(localStorage.getItem('programaMisa'));
 if (!programa || programa.length === 0) {

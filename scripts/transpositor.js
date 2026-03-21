@@ -1,5 +1,8 @@
 (function($) {
 
+var solfeoToABC = { "DO": "C", "RE": "D", "MI": "E", "FA": "F", "SOL": "G", "LA": "A", "SI": "B" };
+var abcToSolfeo = { "C": "DO", "D": "RE", "E": "MI", "F": "FA", "G": "SOL", "A": "LA", "B": "SI" };
+
   // Función para determinar si una línea es de acordes
   var isChordLine = function(line) {
   return /(\bDO|\bRE|\bMI|\bFA|\bSOL|\bLA|\bSI)[b#]?|\bCejillo\b|\bIntro\b|\bIntroducción\b/.test(line);
@@ -208,11 +211,14 @@
 
       // Build tranpose links ===========================================
       var keyLinks = [];
+      var allowedKeys = ['DO', 'REb', 'RE', 'MIb', 'MI', 'FA', 'FA#', 'SOL', 'LAb', 'LA', 'SIb', 'SI'];
       $(keys).each(function(i, key) {
+        if (allowedKeys.indexOf(key.name) !== -1) {
           if (currentKey.name == key.name)
               keyLinks.push("<a href='#' class='selected'>" + key.name + "</a>");
           else
               keyLinks.push("<a href='#'>" + key.name + "</a>");
+      }
       });
 
       var $this = $(this);
@@ -220,11 +226,31 @@
       keysHtml.html(keyLinks.join(""));
       $("a", keysHtml).click(function(e) {
           e.preventDefault();
-          transposeSong($this, $(this).html());
+          var $thisLink = $(this);
+          // Asegurarse de que la notación esté en Solfeo para la transposición
+          var currentFormat = $('#toggleNotationButton').data('format');
+          if (currentFormat === 'ABC') {
+            $('#toggleNotationButton').data('format', 'Solfeo'); // Temp reset
+            refreshNotation();
+          }
+
+          transposeSong($this, $thisLink.html());
           $(".transpose-keys a").removeClass("selected");
-          $(this).addClass("selected");
+          $thisLink.addClass("selected");
+          // 3. Si ABC activado, reconvertir la notación
+          if (currentFormat === 'ABC') {
+            $('#toggleNotationButton').data('format', 'ABC');
+            refreshNotation();
+        }
           return false;
       });
+
+          $('#toggleNotationButton').click(function() {
+            var isABC = $(this).data('format') === 'ABC';
+            $(this).data('format', isABC ? 'Solfeo' : 'ABC');
+            $(this).text(isABC ? 'Notación ABC' : 'Notación DoReMi');
+            refreshNotation();
+        });
       
       $(this).before(keysHtml);
 
@@ -253,10 +279,83 @@
   };
 
 
+// Cambio de notación
+var notationMap = {
+    "DO": "C", "RE": "D", "MI": "E", "FA": "F", "SOL": "G", "LA": "A", "SI": "B"
+};
+
+function toggleNotation() {
+    var button = $('#toggleNotationButton');
+    var isABC = button.data('format') === 'ABC';
+    
+    $('#letra span.c').each(function() {
+        var text = $(this).text();
+        
+        $.each(notationMap, function(solfeo, abc) {
+            if (isABC) {
+                // De ABC a Solfeo: Buscamos la letra (ej. "C") y reemplazamos por "DO"
+                // Usamos una Regex simple para asegurar que no reemplace partes de palabras
+                var regex = new RegExp("^" + abc, "g"); 
+                if (text.startsWith(abc)) {
+                    text = text.replace(regex, solfeo);
+                    return false; // break
+                }
+            } else {
+                // De Solfeo a ABC: Buscamos "DO" y reemplazamos por "C"
+                var regex = new RegExp("^" + solfeo, "g");
+                if (text.startsWith(solfeo)) {
+                    text = text.replace(regex, abc);
+                    return false; // break
+                }
+            }
+        });
+        $(this).text(text);
+    });
+
+    // Cambio de estado del botón
+    if (isABC) {
+        button.text('Notación ABC').data('format', 'Solfeo');
+    } else {
+        button.text('Notación DoReMi').data('format', 'ABC');
+    }
+}
+
+function refreshNotation() {
+    var isABC = $('#toggleNotationButton').data('format') === 'ABC';
+    
+    // 1. Traducir acordes en la canción
+    $('#letra span.c').each(function() {
+        var $el = $(this);
+        var text = $el.text();
+        $.each(isABC ? solfeoToABC : abcToSolfeo, function(orig, dest) {
+            if (text.startsWith(orig)) {
+                $el.text(text.replace(orig, dest));
+                return false; 
+            }
+        });
+    });
+
+    // 2. Traducir los botones del menú de transposición
+    $('.transpose-keys a').each(function() {
+        var $el = $(this);
+        var text = $el.text();
+        $.each(isABC ? solfeoToABC : abcToSolfeo, function(orig, dest) {
+            if (text.startsWith(orig)) {
+                $el.text(text.replace(orig, dest));
+                return false;
+            }
+        });
+    });
+}
+
+
+
 $(function() {
         $(".btn").show();
         $("#letra").transpose();
         
     });    
+
+
     
 })(jQuery);

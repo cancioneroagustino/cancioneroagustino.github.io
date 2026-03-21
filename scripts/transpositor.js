@@ -171,7 +171,6 @@
     };
 
     $.fn.transpose.defaults = {
-        key: "DO",
         wrapChords: function(input) {
             return input.replace(/((\bDO|\bRE|\bMI|\bFA|\bSOL|\bLA|\bSI)[b\#]?(2|4|5|6|7|9|11|13|6\/9|7\-5|7\-9|7\#5|7\#9|7\+5|7\+9|7b5|7b9|7sus2|7sus4|add2|add4|add9|aug|°|dim|Ø|dim7|mb5|m7b5|m\/maj7|m6|m7|m7b5|m9|m11|m13|maj7|maj9|maj11|maj13|m|sus|sus2|sus4)*)/g, "<span class='c'>$1</span>")
         }
@@ -179,19 +178,48 @@
 
     //Inicialización y Eventos de botones externos
     $(function() {
+        // --- INYECCIÓN DE BOTONES ---
+        // Creamos el contenedor de botones dinámicamente
+        var $buttonContainer = $('<div class="d-flex justify-content-center gap-2 mb-3"></div>');
+        
+        var $btnChords = $('<button id="toggleChordsButton" class="btn btn-acordes btn-sm" data-bs-toggle="button">Ocultar acordes</button>');
+        var $btnNotation = $('<button id="toggleNotationButton" class="btn btn-acordes btn-sm" data-format="Solfeo">Notación ABC</button>');
+        
+        $buttonContainer.append($btnChords).append($btnNotation);
+        
+        // Los insertamos antes del div #letra
+        $("#letra").before($buttonContainer);
+
+        // --- INICIALIZACIÓN DEL PLUGIN ---
         $("#letra").transpose();
 
+        // --- EVENTOS DE LOS BOTONES INYECTADOS ---
+        
+        // Botón Mostrar/Ocultar
         $('#toggleChordsButton').click(function() {
+            var $btn = $(this);
+            var isHidden = $btn.hasClass('active'); // Bootstrap toggle state
+            
             $('#letra span').each(function() {
-                if (isChordLine($(this).text())) $(this).toggle();
+                if (isChordLine($(this).text())) {
+                    $(this).toggle();
+                }
             });
+            
+            // Cambiamos el texto según el estado
+            $btn.text(isHidden ? "Mostrar acordes" : "Ocultar acordes");
         });
 
+        // Botón Cambio de Notación
         $('#toggleNotationButton').click(function() {
             var $btn = $(this);
             var isCurrentlyABC = $btn.data('format') === 'ABC';
+            
+            // Cambiamos el estado
             $btn.data('format', isCurrentlyABC ? 'Solfeo' : 'ABC');
+            // Cambiamos el texto del botón para indicar qué pasará si se presiona de nuevo
             $btn.text(isCurrentlyABC ? 'Notación ABC' : 'Notación DoReMi');
+            
             refreshNotation();
         });
     });

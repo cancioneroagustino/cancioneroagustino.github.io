@@ -3724,7 +3724,7 @@
     },
     "Pregón Pascual (gregoriano)": {
       "ruta": "Liturgias especiales/Pregón Pascual (gregoriano).html",
-      "tono": ""
+      "tono": "LAm"
     },
     "Pregón Pascual (Camino Neocatecumenal)": {
       "ruta": "Liturgias especiales/Pregón Pascual (Camino Neocatecumenal).html",
@@ -3760,7 +3760,7 @@
     },
     "Secuencia de Corpus Christi": {
       "ruta": "Liturgias especiales/Secuencia de Corpus Christi.html",
-      "tono": ""
+      "tono": "SOL"
     },
     "Secuencia de Corpus Christi (breve)": {
       "ruta": "Liturgias especiales/Secuencia de Corpus Christi (breve).html",

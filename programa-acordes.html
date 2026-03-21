@@ -110,15 +110,10 @@
         if (tonoDeseado && tonoDeseado !== tonoOriginal) {
           const claveObjetivo = tonoDeseado.replace(/m$/i, "");
           const $keysBlock = $pre.prev(".transpose-keys");
-          const $link = $keysBlock
-            .find("a")
-            .filter(function () {
-              return (
-                jQuery(this).text().toUpperCase() ===
-                claveObjetivo.toUpperCase()
-              );
-            })
-            .first();
+          const $link = $keysBlock.find("a").filter(function () {
+                // Buscamos coincidencia en el atributo data que pusimos en el plugin
+                return (jQuery(this).data('original-note') || jQuery(this).text()).toUpperCase() === claveObjetivo.toUpperCase();
+            }).first();
           if ($link.length) {
             $link.trigger("click");
           } else {

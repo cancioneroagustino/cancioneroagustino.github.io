@@ -4,11 +4,11 @@
     var abcToSolfeo = { "C": "DO", "D": "RE", "E": "MI", "F": "FA", "G": "SOL", "A": "LA", "B": "SI" };
 
     // --- CAPA VISUAL: SOBRESCRIBE SIN DEJAR RASTROS ---
-    function refreshNotation() {
+    window.refreshNotation = function() {
         var isABC = $('#toggleNotationButton').data('format') === 'ABC';
         
         // 1. Actualizar acordes en la canción
-        $('#letra span.c').each(function() {
+        $('span.c').each(function() {
             var $el = $(this);
             // Prioridad al dato guardado internamente (siempre en Solfeo)
             var currentChord = $el.data('current-chord') || $el.text();
@@ -105,22 +105,24 @@
         };
 
         var transposeSong = function (target, key) {
-            var newKey = getKeyByName(key);
-            if (currentKey.name == newKey.name) return;
-            var delta = newKey.value - currentKey.value;
-            $("span.c", target).each(function (i, el) {
-                var $el = $(el);
-                var oldChord = $el.data('current-chord') || $el.text(); // Leer siempre de la "caja fuerte"
-                var oldRoot = getChordRoot(oldChord);
-                var newRoot = getNewKey(oldRoot, delta, newKey);
-                var newChord = newRoot.name + oldChord.substr(oldRoot.length);
-                
-                // Guardamos el nuevo valor en Solfeo internamente
-                $el.data('current-chord', newChord);
-            });
-            currentKey = newKey;
-            refreshNotation(); // La capa visual decide qué mostrar
-        };
+    var newKey = getKeyByName(key);
+    if (!currentKey || currentKey.name == newKey.name) return;
+    
+    // Cálculo de delta simple pero efectivo
+    var delta = newKey.value - currentKey.value;
+    
+    $(target).find("span.c").each(function (i, el) { // Cambiado a .find para mayor precisión
+        var $el = $(el);
+        var oldChord = $el.data('current-chord') || $el.text();
+        var oldRoot = getChordRoot(oldChord);
+        var newRoot = getNewKey(oldRoot, delta, newKey);
+        var newChord = newRoot.name + oldChord.substr(oldRoot.length);
+        
+        $el.data('current-chord', newChord);
+    });
+    currentKey = newKey;
+    window.refreshNotation(); // Llamamos a la versión global
+};
 
         return $(this).each(function() {
             var $this = $(this);

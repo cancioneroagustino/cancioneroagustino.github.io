@@ -13,41 +13,55 @@
     var isABC = $('#toggleNotationButton').data('format') === 'ABC';
     var map = isABC ? solfeoToABC : abcToSolfeo;
     
-    // 1. Traducir acordes en la canción manteniendo alineación
+    // 1. Traducir acordes en la canción
     $('#letra span.c').each(function() {
         var $el = $(this);
         var oldText = $el.text();
         var newText = oldText;
 
-        // Buscamos la coincidencia para traducir
-        $.each(map, function(orig, dest) {
+        // Ordenamos las llaves por longitud (SOL antes que SO) para evitar reemplazos parciales
+        var keys = Object.keys(map).sort(function(a, b) { return b.length - a.length; });
+
+        $.each(keys, function(i, orig) {
+            // Usamos una comprobación estricta: debe empezar con la nota 
+            // Y lo que sigue NO debe ser otra letra de nota (evita procesar dos veces)
             if (oldText.indexOf(orig) === 0) {
-                newText = oldText.replace(orig, dest);
+                var dest = map[orig];
+                newText = dest + oldText.substring(orig.length);
                 return false; 
             }
         });
 
         if (oldText !== newText) {
-            // Calculamos la diferencia de caracteres (ej: SOL -> G es -2)
             var diff = oldText.length - newText.length;
-            
-            // Aplicamos el nuevo texto
             $el.text(newText);
 
-            // Ajustamos los espacios en el nodo de texto siguiente (igual que en tu transpositor)
             var next = $el[0].nextSibling;
             if (next && next.nodeType === 3) {
                 var spacesMatch = next.nodeValue.match(/^(\s+)/);
                 var currentSpaces = spacesMatch ? spacesMatch[1].length : 0;
-                
-                // Si diff es positivo (ej: 2), sumamos 2 espacios. Si es negativo, restamos.
                 var newSpacesCount = currentSpaces + diff;
                 if (newSpacesCount < 0) newSpacesCount = 0;
-                
                 next.nodeValue = " ".repeat(newSpacesCount) + next.nodeValue.replace(/^\s+/, "");
             }
         }
     });
+
+    // 2. Traducir los botones del menú (Sin duplicar letras)
+    $('.transpose-keys a').each(function() {
+        var $el = $(this);
+        var text = $el.text();
+        var keys = Object.keys(map).sort(function(a, b) { return b.length - a.length; });
+        
+        $.each(keys, function(i, orig) {
+            if (text === orig || text.indexOf(orig) === 0) {
+                // Reemplazo total para los botones para que no se acumulen restos
+                $el.text(text.replace(orig, map[orig]));
+                return false;
+            }
+        });
+    });
+}
 
     // 2. Traducir los botones del menú superior
     $('.transpose-keys a').each(function() {

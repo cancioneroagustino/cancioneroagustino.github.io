@@ -8,7 +8,6 @@
         return /(\bDO|\bRE|\bMI|\bFA|\bSOL|\bLA|\bSI)[b#]?|\bCejillo\b|\bIntro\b|\bIntroducción\b/.test(line);
     };
 
-
     function refreshNotation() {
     var isABC = $('#toggleNotationButton').data('format') === 'ABC';
     var map = isABC ? solfeoToABC : abcToSolfeo;
@@ -63,18 +62,6 @@
     });
 }
 
-    // 2. Traducir los botones del menú superior
-    $('.transpose-keys a').each(function() {
-        var $el = $(this);
-        var text = $el.text();
-        $.each(map, function(orig, dest) {
-            if (text.indexOf(orig) === 0) {
-                $el.text(text.replace(orig, dest));
-                return false;
-            }
-        });
-    });
-}
 
     $.fn.transpose = function(options) {
         var opts = $.extend({}, $.fn.transpose.defaults, options);

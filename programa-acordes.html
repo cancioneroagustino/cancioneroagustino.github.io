@@ -132,6 +132,26 @@
   async function mostrarProgramaConAcordes() {
     const container = document.getElementById('programa-acordes-container');
 
+    // --- INSERTAR BOTÓN GLOBAL AL INICIO ---
+    const $controles = $('<div class="container text-center mb-5"></div>');
+    const $btnNotacion = $('<button id="toggleNotationButton" class="btn btn-acordes btn-sm" data-format="Solfeo">Notación ABC</button>');
+    
+    $controles.append($btnNotacion);
+    $(container).before($controles); // Lo pone arriba del listado
+
+    // Evento del botón
+    $btnNotacion.on('click', function() {
+        const isABC = $(this).data('format') === 'ABC';
+        $(this).data('format', isABC ? 'Solfeo' : 'ABC')
+               .text(isABC ? 'Notación ABC' : 'Notación DoReMi');
+        
+        // Gracias a que hicimos la función global, esto refrescará TODO el listado
+        if (typeof window.refreshNotation === "function") {
+            window.refreshNotation();
+        }
+    });
+    // ---------------------------------------
+
     for (const item of programa) {
       await insertarYCambiarSiCorresponde(container, item.cancion, item.tono);
     }

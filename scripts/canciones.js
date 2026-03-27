@@ -3722,20 +3722,12 @@
       "ruta": "Liturgias especiales/Oh, Cruz fiel y venerable.html",
       "tono": "LAm"
     },
-    "Pregón Pascual gregoriano, forma larga para ordenados": {
-      "ruta": "Liturgias especiales/Pregón Pascual gregoriano FL ordenados.html",
+    "Pregón Pascual gregoriano, forma larga": {
+      "ruta": "Liturgias especiales/Pregón Pascual gregoriano forma larga.html",
       "tono": "LAm"
     },
-    "Pregón Pascual gregoriano, forma breve para ordenados": {
-      "ruta": "Liturgias especiales/Pregón Pascual gregoriano FB ordenados.html",
-      "tono": "LAm"
-    },
-    "Pregón Pascual gregoriano, forma larga para laicos": {
-      "ruta": "Liturgias especiales/Pregón Pascual gregoriano FL laicos.html",
-      "tono": "LAm"
-    },
-    "Pregón Pascual gregoriano, forma breve para laicos": {
-      "ruta": "Liturgias especiales/Pregón Pascual gregoriano FB laicos.html",
+    "Pregón Pascual gregoriano, forma breve": {
+      "ruta": "Liturgias especiales/Pregón Pascual gregoriano forma breve.html",
       "tono": "LAm"
     },
     "Pregón Pascual (Camino Neocatecumenal)": {

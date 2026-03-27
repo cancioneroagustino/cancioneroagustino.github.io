@@ -7506,3 +7506,20 @@ body {
   width: 0;
   height: 0;
 }
+
+
+#btn-abrir-nuevo {
+    background-color: #007bff !important; /* Azul estándar o el color de tu app */
+    color: white !important;
+    border-radius: 50% !important;
+    font-size: 24px !important;
+    font-weight: bold !important;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3) !important;
+    opacity: 0.9 !important; /* Un poco de transparencia para no ser invasivo */
+    transition: transform 0.2s ease;
+}
+
+#btn-abrir-nuevo:active {
+    transform: scale(0.9);
+    background-color: #0056b3 !important;
+}

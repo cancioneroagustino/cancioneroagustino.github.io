@@ -772,5 +772,31 @@ See https://github.com/adobe-type-tools/cmap-resources
 
     </div> <!-- outerContainer -->
     <div id="printContainer"></div>
+<script>
+(function() {
+    // Crear el botón
+    const btn = document.createElement('a');
+    btn.id = 'btn-abrir-nuevo'; // ID para el CSS
+    btn.innerHTML = '↗'; // Icono de "abrir en pestaña"
+    btn.target = '_blank';
+    btn.href = window.location.href; // Captura la URL del PDF actual
+    
+    // Estilos funcionales inyectados
+    Object.assign(btn.style, {
+        position: 'fixed',
+        bottom: '25px',    // Lo movemos abajo para no tapar el título del PDF
+        right: '25px',
+        zIndex: '10000',
+        width: '50px',
+        height: '50px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        textDecoration: 'none'
+    });
+
+    document.body.appendChild(btn);
+})();
+</script>
   </body>
 </html>

@@ -1009,7 +1009,7 @@
       "ruta": "Salmos/pasiondelsr.html",
       "tono": "DO#m"
     },
-    "Vigilia pascual antífonas BP": {
+    "Vigilia pascual antífonas v. Buen Pastor": {
       "ruta": "Salmos/antifonasvigiliapascual.html",
       "tono": "DO"
     },
@@ -3736,10 +3736,6 @@
     },
     "Pregón Pascual (Fernando Leiva)": {
       "ruta": "Liturgias especiales/Pregón Pascual (Fernando Leiva).html",
-      "tono": "DO"
-    },
-    "Salmos Vigilia Psscual (versión Buen Pastor)": {
-      "ruta": "Liturgias especiales/SalmosVP.html",
       "tono": "DO"
     },
     "Secuencia de Pascua": {

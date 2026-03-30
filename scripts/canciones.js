@@ -3567,6 +3567,14 @@
       "ruta": "Marianos/Si pide María.html",
       "tono": "SOL"
     },
+    "Stabat Mater (latín)": {
+      "ruta": "Marianos/Stabat Mater.html",
+      "tono": "SOL"
+    },
+    "Stabat Mater (español)": {
+      "ruta": "Marianos/Stabat Mater esp.html",
+      "tono": "SOL"
+    },
     "Tarde de Viernes Santo": {
       "ruta": "Marianos/Tarde de Viernes Santo.html",
       "tono": "MIm"

@@ -23,6 +23,11 @@ $(function(){
   <main class="container mt-4 text-center">
     <h1 class="titulo">CREAR PROGRAMA DE MISA</h1>
 
+    <div class="search-box-container">
+      <input type="text" id="globalSearch" placeholder="🔍 Buscar canción por nombre..." autocomplete="off">
+      <div id="searchSuggestions" class="suggestions-panel"></div>
+    </div>
+
     <!-- Formulario 1: Selección de sección -->
     <form id="form-seccion" class="mt-4">
       <label for="seccion-select">Sección:</label>
@@ -83,6 +88,77 @@ $(function(){
         selectCancion.appendChild(option);
       }
     }
+
+   //código buscador
+   document.addEventListener('DOMContentLoaded', () => {
+    const buscador = document.getElementById('globalSearch');
+    const sugerencias = document.getElementById('searchSuggestions');
+    const seccionSelect = document.getElementById("seccion-select");
+    const cancionSelect = document.getElementById("cancion-select");
+
+    // 1. Crear el catálogo (usando tu variable 'canciones')
+    const catalogo = [];
+    for (const [nombreSeccion, listaDeCanciones] of Object.entries(canciones)) {
+        for (const nombreCancion in listaDeCanciones) {
+            catalogo.push({ 
+                nombre: nombreCancion, 
+                seccion: nombreSeccion 
+            });
+        }
+    }
+
+    // 2. Lógica de búsqueda
+    buscador.addEventListener('input', () => {
+        const txt = buscador.value.toLowerCase().trim();
+        sugerencias.innerHTML = '';
+
+        if (txt.length < 2) return;
+
+        const matches = catalogo.filter(c => c.nombre.toLowerCase().includes(txt));
+
+        matches.forEach(item => {
+            const div = document.createElement('div');
+            div.className = 'suggestion-item';
+            
+            // Mostramos siempre la sección para dar contexto (Solución punto 2)
+            div.innerHTML = `
+                <div style="display: flex; flex-direction: column;">
+                    <span style="font-weight: 500;">${item.nombre}</span>
+                    <small style="color: #666; font-size: 0.75em;">${item.seccion}</small>
+                </div>
+                <span class="category-tag">${item.seccion}</span>
+            `;
+            
+            div.onclick = () => {
+                // Sincronizar los selects invisibles
+                seccionSelect.value = item.seccion;
+                actualizarListaCanciones(); // Tu función que llena el segundo select
+                cancionSelect.value = item.nombre;
+
+                // PUNTO 1: Agregar automáticamente al listado
+                // Llamamos a tu función existente que ya sabe qué hacer con los datos
+                agregarCancion();
+
+                // Limpiar y resetear el buscador para la siguiente canción
+                buscador.value = '';
+                sugerencias.innerHTML = '';
+                buscador.focus(); // Dejamos el foco listo por si quiere buscar otra
+            };
+            sugerencias.appendChild(div);
+        });
+    });
+
+    // Cerrar sugerencias al hacer clic fuera
+    document.addEventListener('click', (e) => {
+        if (!buscador.contains(e.target)) sugerencias.innerHTML = '';
+    });
+});
+
+// fin código buscador
+
+
+
+
 
     /* --- Transposición de tono (respeta 'm') --- */
     function transponerTono(tono, semitonos) {

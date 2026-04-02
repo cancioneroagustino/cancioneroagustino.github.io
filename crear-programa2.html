@@ -142,15 +142,14 @@ $(function(){
       }
     }
 
-    // --- CÓDIGO DEL BUSCADOR CORREGIDO ---
-document.addEventListener('DOMContentLoaded', () => {
-    // 1. Referencias exactas a tus IDs del HTML
+   //código buscador
+   document.addEventListener('DOMContentLoaded', () => {
     const buscador = document.getElementById('globalSearch');
     const sugerencias = document.getElementById('searchSuggestions');
     const seccionSelect = document.getElementById("seccion-select");
     const cancionSelect = document.getElementById("cancion-select");
 
-    // 2. Usamos 'canciones' (que es tu variable global de canciones.js)
+    // 1. Crear el catálogo (usando tu variable 'canciones')
     const catalogo = [];
     for (const [nombreSeccion, listaDeCanciones] of Object.entries(canciones)) {
         for (const nombreCancion in listaDeCanciones) {
@@ -161,7 +160,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // 3. Escuchar la escritura
+    // 2. Lógica de búsqueda
     buscador.addEventListener('input', () => {
         const txt = buscador.value.toLowerCase().trim();
         sugerencias.innerHTML = '';
@@ -172,41 +171,43 @@ document.addEventListener('DOMContentLoaded', () => {
 
         matches.forEach(item => {
             const div = document.createElement('div');
-            div.className = 'suggestion-item'; // Clase que ya tienes en tu CSS
+            div.className = 'suggestion-item';
+            
+            // Mostramos siempre la sección para dar contexto (Solución punto 2)
             div.innerHTML = `
-                <span>${item.nombre}</span> 
+                <div style="display: flex; flex-direction: column;">
+                    <span style="font-weight: 500;">${item.nombre}</span>
+                    <small style="color: #666; font-size: 0.75em;">${item.seccion}</small>
+                </div>
                 <span class="category-tag">${item.seccion}</span>
             `;
             
             div.onclick = () => {
-                // PRIMERO: Cambiamos la sección en el primer select
+                // Sincronizar los selects invisibles
                 seccionSelect.value = item.seccion;
-                
-                // SEGUNDO: Forzamos la actualización de la lista de canciones
-                // (Llamamos a tu función existente)
-                actualizarListaCanciones();
-                
-                // TERCERO: Seleccionamos la canción en el segundo select
+                actualizarListaCanciones(); // Tu función que llena el segundo select
                 cancionSelect.value = item.nombre;
 
-                // Feedback visual en el selector de canciones
-                cancionSelect.style.border = "2px solid #004a99";
-                setTimeout(() => cancionSelect.style.border = "", 2000);
+                // PUNTO 1: Agregar automáticamente al listado
+                // Llamamos a tu función existente que ya sabe qué hacer con los datos
+                agregarCancion();
 
-                // Limpiar y cerrar
+                // Limpiar y resetear el buscador para la siguiente canción
                 buscador.value = '';
                 sugerencias.innerHTML = '';
+                buscador.focus(); // Dejamos el foco listo por si quiere buscar otra
             };
             sugerencias.appendChild(div);
         });
     });
 
-    // Cerrar si hacen clic afuera
+    // Cerrar sugerencias al hacer clic fuera
     document.addEventListener('click', (e) => {
         if (!buscador.contains(e.target)) sugerencias.innerHTML = '';
     });
 });
-// --- FIN CÓDIGO BUSCADOR ---
+
+// fin código buscador
 
 
 

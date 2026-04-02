@@ -144,82 +144,60 @@ $(function(){
 
     // Buscador
     document.addEventListener('DOMContentLoaded', () => {
-        const inputSearch = document.getElementById('globalSearch');
-        const suggestionsPanel = document.getElementById('searchSuggestions');
+    const buscador = document.getElementById('inputBusqueda');
+    const sugerencias = document.getElementById('listaSugerencias');
 
-        // 1. Crear un índice plano de búsqueda
-        // Usamos 'listaCanciones' que viene de tu archivo canciones.js
-        let searchIndex = [];
-        for (const [seccion, canciones] of Object.entries(listaCanciones)) {
-            for (const nombreCancion in canciones) {
-                searchIndex.push({
-                    nombre: nombreCancion,
-                    seccion: seccion
-                });
-            }
+    // 1. Preparamos los datos para buscar rápido
+    const catalogo = [];
+    for (const [seccion, canciones] of Object.entries(listaCanciones)) {
+        for (const nombre in canciones) {
+            catalogo.push({ nombre, seccion });
         }
+    }
 
-        // 2. Lógica de filtrado
-        inputSearch.addEventListener('input', () => {
-            const query = inputSearch.value.toLowerCase().trim();
-            suggestionsPanel.innerHTML = '';
+    // 2. Escuchar cuando el usuario escribe
+    buscador.addEventListener('input', () => {
+        const txt = buscador.value.toLowerCase().trim();
+        sugerencias.innerHTML = '';
 
-            if (query.length < 2) return;
+        if (txt.length < 2) return;
 
-            const results = searchIndex.filter(item => 
-                item.nombre.toLowerCase().includes(query)
-            );
+        const matches = catalogo.filter(c => c.nombre.toLowerCase().includes(txt));
 
-            results.forEach(result => {
-                const div = document.createElement('div');
-                div.className = 'suggestion-item';
-                div.innerHTML = `
-                    <span>${result.nombre}</span>
-                    <span class="category-tag">${result.seccion}</span>
-                `;
-
-                div.onclick = () => {
-                    marcarCancion(result.seccion, result.nombre);
-                    inputSearch.value = '';
-                    suggestionsPanel.innerHTML = '';
-                };
-
-                suggestionsPanel.appendChild(div);
-            });
-        });
-
-        // 3. Función para marcar en el formulario
-        function marcarCancion(seccion, nombre) {
-            // En tu HTML, los IDs de los select coinciden con las secciones
-            const select = document.getElementById(seccion);
+        matches.forEach(item => {
+            const div = document.createElement('div');
+            div.className = 'item-sugerencia';
+            div.innerHTML = `<span>${item.nombre}</span> <span class="tag-seccion">${item.seccion}</span>`;
             
-            if (select) {
-                select.value = nombre;
+            div.onclick = () => {
+                // AQUÍ ESTÁ EL TRUCO:
+                // Buscamos el <select> cuyo ID sea igual a la sección de la canción
+                const selectElement = document.getElementById(item.seccion);
                 
-                // Disparar evento de cambio para que se actualice la letra o tono si tienes esa lógica
-                select.dispatchEvent(new Event('change'));
+                if (selectElement) {
+                    selectElement.value = item.nombre; // Lo selecciona
+                    selectElement.dispatchEvent(new Event('change')); // Avisa al sistema que cambió
+                    
+                    // Feedback visual: scrollea y resalta
+                    selectElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    selectElement.style.border = "2px solid green";
+                    setTimeout(() => selectElement.style.border = "", 2000);
+                }
 
-                // Feedback visual: Hacer scroll hasta el elemento y resaltarlo
-                select.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                select.focus();
-                
-                // Un pequeño destello para saber qué cambió
-                select.style.backgroundColor = "#d4edda";
-                setTimeout(() => select.style.backgroundColor = "", 1500);
-            } else {
-                console.warn(`No se encontró un selector con ID: ${seccion}`);
-            }
-        }
-
-        // Cerrar sugerencias al hacer clic fuera
-        document.addEventListener('click', (e) => {
-            if (!inputSearch.contains(e.target)) {
-                suggestionsPanel.innerHTML = '';
-            }
+                // Limpiar buscador
+                buscador.value = '';
+                sugerencias.innerHTML = '';
+            };
+            sugerencias.appendChild(div);
         });
     });
-    
 
+    // Cerrar si hacen clic afuera
+    document.addEventListener('click', (e) => {
+        if (!buscador.contains(e.target)) sugerencias.innerHTML = '';
+    });
+});
+  
    //Fin código buscador
 
 

@@ -11,39 +11,55 @@
   <script src="/scripts/jquery.min.js"></script>
   <script src="/scripts/Sortable.min.js"></script>
 <style>
-.search-container { position: relative; width: 100%; }
-#songSearch { width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #ccc; }
-
-.results-list {
-  position: absolute;
-  top: 40px;
-  left: 0;
-  right: 0;
-  background: white;
-  border: 1px solid #ddd;
-  z-index: 1000;
-  max-height: 200px;
-  overflow-y: auto;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+.search-box-container {
+    position: relative;
+    margin: 20px 0;
+    width: 100%;
 }
 
-.result-item {
-  padding: 8px 12px;
-  cursor: pointer;
-  border-bottom: 1px solid #eee;
+#globalSearch {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    border: 2px solid #004a99; /* El azul de tu diseño */
+    border-radius: 8px;
+    outline: none;
 }
 
-.result-item:hover { background-color: #f0f7ff; }
-
-/* Animación para cuando se selecciona la canción */
-.highlight-flash {
-  animation: flash 1s ease;
+.suggestions-panel {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: white;
+    border: 1px solid #ccc;
+    border-top: none;
+    max-height: 300px;
+    overflow-y: auto;
+    z-index: 10000; /* Para que flote sobre todo */
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    border-radius: 0 0 8px 8px;
 }
 
-@keyframes flash {
-  0% { background-color: #fff; }
-  50% { background-color: #d4edda; }
-  100% { background-color: #fff; }
+.suggestion-item {
+    padding: 12px;
+    cursor: pointer;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.suggestion-item:hover {
+    background-color: #f0f7ff;
+}
+
+.suggestion-item .category-tag {
+    font-size: 0.8em;
+    background: #e1e1e1;
+    padding: 2px 8px;
+    border-radius: 4px;
+    color: #666;
 }
 </style>
 
@@ -60,10 +76,10 @@ $(function(){
   <main class="container mt-4 text-center">
     <h1 class="titulo">CREAR PROGRAMA DE MISA</h1>
 
-  <div class="search-container">
-  <input type="text" id="songSearch" placeholder="🔍 Buscar canción por nombre..." autocomplete="off">
-  <div id="searchResults" class="results-list"></div>
-</div>
+    <div class="search-box-container">
+      <input type="text" id="globalSearch" placeholder="🔍 Buscar canción por nombre..." autocomplete="off">
+      <div id="searchSuggestions" class="suggestions-panel"></div>
+    </div>
 
     <!-- Formulario 1: Selección de sección -->
     <form id="form-seccion" class="mt-4">
@@ -126,64 +142,87 @@ $(function(){
       }
     }
 
-     // Supongamos que 'data' es tu objeto gigante con todas las secciones
-const allSongs = [];
+    // Buscador
+    document.addEventListener('DOMContentLoaded', () => {
+        const inputSearch = document.getElementById('globalSearch');
+        const suggestionsPanel = document.getElementById('searchSuggestions');
 
-// 1. Creamos un índice plano para buscar rápido
-for (const [seccion, canciones] in Object.entries(data)) {
-  for (const nombreCancion in canciones) {
-    allSongs.push({
-      nombre: nombreCancion,
-      seccion: seccion, // Guardamos la sección para saber a qué formulario ir
-      detalles: canciones[nombreCancion]
+        // 1. Crear un índice plano de búsqueda
+        // Usamos 'listaCanciones' que viene de tu archivo canciones.js
+        let searchIndex = [];
+        for (const [seccion, canciones] of Object.entries(listaCanciones)) {
+            for (const nombreCancion in canciones) {
+                searchIndex.push({
+                    nombre: nombreCancion,
+                    seccion: seccion
+                });
+            }
+        }
+
+        // 2. Lógica de filtrado
+        inputSearch.addEventListener('input', () => {
+            const query = inputSearch.value.toLowerCase().trim();
+            suggestionsPanel.innerHTML = '';
+
+            if (query.length < 2) return;
+
+            const results = searchIndex.filter(item => 
+                item.nombre.toLowerCase().includes(query)
+            );
+
+            results.forEach(result => {
+                const div = document.createElement('div');
+                div.className = 'suggestion-item';
+                div.innerHTML = `
+                    <span>${result.nombre}</span>
+                    <span class="category-tag">${result.seccion}</span>
+                `;
+
+                div.onclick = () => {
+                    marcarCancion(result.seccion, result.nombre);
+                    inputSearch.value = '';
+                    suggestionsPanel.innerHTML = '';
+                };
+
+                suggestionsPanel.appendChild(div);
+            });
+        });
+
+        // 3. Función para marcar en el formulario
+        function marcarCancion(seccion, nombre) {
+            // En tu HTML, los IDs de los select coinciden con las secciones
+            const select = document.getElementById(seccion);
+            
+            if (select) {
+                select.value = nombre;
+                
+                // Disparar evento de cambio para que se actualice la letra o tono si tienes esa lógica
+                select.dispatchEvent(new Event('change'));
+
+                // Feedback visual: Hacer scroll hasta el elemento y resaltarlo
+                select.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                select.focus();
+                
+                // Un pequeño destello para saber qué cambió
+                select.style.backgroundColor = "#d4edda";
+                setTimeout(() => select.style.backgroundColor = "", 1500);
+            } else {
+                console.warn(`No se encontró un selector con ID: ${seccion}`);
+            }
+        }
+
+        // Cerrar sugerencias al hacer clic fuera
+        document.addEventListener('click', (e) => {
+            if (!inputSearch.contains(e.target)) {
+                suggestionsPanel.innerHTML = '';
+            }
+        });
     });
-  }
-}
-
-const inputSearch = document.getElementById('songSearch');
-const resultsDiv = document.getElementById('searchResults');
-
-// 2. Evento que detecta cuando escribes
-inputSearch.addEventListener('input', (e) => {
-  const term = e.target.value.toLowerCase();
-  resultsDiv.innerHTML = ''; // Limpiar resultados anteriores
-
-  if (term.length < 2) return; // No buscar hasta tener al menos 2 letras
-
-  const matches = allSongs.filter(s => s.nombre.toLowerCase().includes(term));
-
-  matches.forEach(song => {
-    const item = document.createElement('div');
-    item.classList.add('result-item');
-    item.innerHTML = `<strong>${song.nombre}</strong> <small>(${song.seccion})</small>`;
     
-    // 3. Al elegir una, marcar en el "formulario correspondiente"
-    item.onclick = () => {
-      seleccionarEnFormulario(song.seccion, song.nombre);
-      inputSearch.value = ''; // Limpiar buscador
-      resultsDiv.innerHTML = '';
-    };
-    
-    resultsDiv.appendChild(item);
-  });
-});
 
-    // 4. Función para "marcar" la opción en tu UI existente
-    function seleccionarEnFormulario(seccion, nombre) {
-      // Aquí asumo que tus selects o formularios tienen un ID basado en la sección
-      // Ejemplo: <select id="select-Mariano">
-      const selectElement = document.getElementById(`select-${seccion}`);
-      
-      if (selectElement) {
-        selectElement.value = nombre;
-        // Disparamos un evento 'change' manualmente por si tienes lógica que dependa de eso
-        selectElement.dispatchEvent(new Event('change'));
-        
-        // Opcional: Hacer scroll hasta el formulario para feedback visual
-        selectElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        selectElement.classList.add('highlight-flash'); // Una pequeña animación de éxito
-      }
-    }
+   //Fin código buscador
+
+
 
 
 

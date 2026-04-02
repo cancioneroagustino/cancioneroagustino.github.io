@@ -131,7 +131,7 @@
             currentKey = getKeyByName(startKey);
 
             var keyLinks = [];
-            var allowed = ['DO', 'REb', 'RE', 'MIb', 'MI', 'FA', 'FA#', 'SOL', 'LAb', 'LA', 'SIb', 'SI'];
+            var allowed = ['DO', 'REb', 'RE', 'MIb', 'MI', 'FA', 'FA#', 'SOLb', 'SOL', 'LAb', 'LA', 'SIb', 'SI'];
             $(keys).each(function(i, key) {
                 if (allowed.indexOf(key.name) !== -1) {
                     var sel = (currentKey.name == key.name) ? "class='selected'" : "";

@@ -142,20 +142,26 @@ $(function(){
       }
     }
 
-    // Buscador
-    document.addEventListener('DOMContentLoaded', () => {
-    const buscador = document.getElementById('inputBusqueda');
-    const sugerencias = document.getElementById('listaSugerencias');
+    // --- CÓDIGO DEL BUSCADOR CORREGIDO ---
+document.addEventListener('DOMContentLoaded', () => {
+    // 1. Referencias exactas a tus IDs del HTML
+    const buscador = document.getElementById('globalSearch');
+    const sugerencias = document.getElementById('searchSuggestions');
+    const seccionSelect = document.getElementById("seccion-select");
+    const cancionSelect = document.getElementById("cancion-select");
 
-    // 1. Preparamos los datos para buscar rápido
+    // 2. Usamos 'canciones' (que es tu variable global de canciones.js)
     const catalogo = [];
-    for (const [seccion, canciones] of Object.entries(listaCanciones)) {
-        for (const nombre in canciones) {
-            catalogo.push({ nombre, seccion });
+    for (const [nombreSeccion, listaDeCanciones] of Object.entries(canciones)) {
+        for (const nombreCancion in listaDeCanciones) {
+            catalogo.push({ 
+                nombre: nombreCancion, 
+                seccion: nombreSeccion 
+            });
         }
     }
 
-    // 2. Escuchar cuando el usuario escribe
+    // 3. Escuchar la escritura
     buscador.addEventListener('input', () => {
         const txt = buscador.value.toLowerCase().trim();
         sugerencias.innerHTML = '';
@@ -166,25 +172,28 @@ $(function(){
 
         matches.forEach(item => {
             const div = document.createElement('div');
-            div.className = 'item-sugerencia';
-            div.innerHTML = `<span>${item.nombre}</span> <span class="tag-seccion">${item.seccion}</span>`;
+            div.className = 'suggestion-item'; // Clase que ya tienes en tu CSS
+            div.innerHTML = `
+                <span>${item.nombre}</span> 
+                <span class="category-tag">${item.seccion}</span>
+            `;
             
             div.onclick = () => {
-                // AQUÍ ESTÁ EL TRUCO:
-                // Buscamos el <select> cuyo ID sea igual a la sección de la canción
-                const selectElement = document.getElementById(item.seccion);
+                // PRIMERO: Cambiamos la sección en el primer select
+                seccionSelect.value = item.seccion;
                 
-                if (selectElement) {
-                    selectElement.value = item.nombre; // Lo selecciona
-                    selectElement.dispatchEvent(new Event('change')); // Avisa al sistema que cambió
-                    
-                    // Feedback visual: scrollea y resalta
-                    selectElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    selectElement.style.border = "2px solid green";
-                    setTimeout(() => selectElement.style.border = "", 2000);
-                }
+                // SEGUNDO: Forzamos la actualización de la lista de canciones
+                // (Llamamos a tu función existente)
+                actualizarListaCanciones();
+                
+                // TERCERO: Seleccionamos la canción en el segundo select
+                cancionSelect.value = item.nombre;
 
-                // Limpiar buscador
+                // Feedback visual en el selector de canciones
+                cancionSelect.style.border = "2px solid #004a99";
+                setTimeout(() => cancionSelect.style.border = "", 2000);
+
+                // Limpiar y cerrar
                 buscador.value = '';
                 sugerencias.innerHTML = '';
             };
@@ -197,8 +206,7 @@ $(function(){
         if (!buscador.contains(e.target)) sugerencias.innerHTML = '';
     });
 });
-  
-   //Fin código buscador
+// --- FIN CÓDIGO BUSCADOR ---
 
 
 

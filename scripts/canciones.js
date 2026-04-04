@@ -1169,8 +1169,8 @@
       "ruta": "Salmos/ntasradelbuenconsejo.html",
       "tono": "DO"
     },
-    "22-mayo: Santa Rita de Cascia": {
-      "ruta": "Salmos/staritadecascia.html",
+    "22-mayo: Santa Rita de Casia": {
+      "ruta": "Salmos/staritadecasia.html",
       "tono": "DO"
     },
     "29-junio: San Pedro y San Pablo": {

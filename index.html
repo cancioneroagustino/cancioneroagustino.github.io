@@ -85,54 +85,6 @@ $(function(){
    </div>
 </div>
 
-<script>
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./service-worker.js')
-      .then(reg => {
-        console.log('✅ Service Worker registrado correctamente:', reg.scope);
-
-        // Intentar sincronizar todo el sitemap en segundo plano
-        if ('SyncManager' in window) {
-          reg.sync.register('cache-sitemap').catch(err => console.warn('No se pudo registrar sync:', err));
-        } else {
-          // Si el navegador no soporta SyncManager, cachea inmediatamente
-          reg.active?.postMessage({ type: "CACHE_SITEMAP" });
-        }
-      })
-      .catch(err => console.error('❌ Error al registrar el Service Worker:', err));
-  });
-
-  // Escucha mensajes del SW (por ejemplo, cuando termine el cacheo)
-  navigator.serviceWorker.addEventListener('message', event => {
-    if (event.data && event.data.type === 'CACHE_COMPLETE') {
-      const msg = document.createElement('div');
-      msg.textContent = `✅ Sitio disponible sin conexión (${event.data.count} páginas guardadas).`;
-      Object.assign(msg.style, {
-        position: "fixed",
-        bottom: "20px",
-        left: "50%",
-        transform: "translateX(-50%)",
-        background: "#28a745",
-        color: "white",
-        padding: "10px 20px",
-        borderRadius: "10px",
-        fontSize: "14px",
-        boxShadow: "0 2px 5px rgba(0,0,0,0.2)",
-        zIndex: "9999",
-        opacity: "0",
-        transition: "opacity 0.5s"
-      });
-      document.body.appendChild(msg);
-      setTimeout(() => (msg.style.opacity = "1"), 100);
-      setTimeout(() => {
-        msg.style.opacity = "0";
-        setTimeout(() => msg.remove(), 500);
-      }, 6000);
-    }
-  });
-}
-</script>
 
 
 

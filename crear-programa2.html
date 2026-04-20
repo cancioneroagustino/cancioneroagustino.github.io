@@ -375,19 +375,36 @@ window.addEventListener("DOMContentLoaded", () => {
 /* --- Compartir programa (genera URL con tonos) --- */
 document.getElementById("compartir-programa").addEventListener("click", () => {
   const nombreMisa = document.getElementById("nombreMisa").value;
-  const params = programa.map(item =>
+  
+  // 1. Generamos los parámetros de las canciones
+  let paramsArray = programa.map(item =>
     `${encodeURIComponent(item.seccion)}=${encodeURIComponent(item.nombre)}~${encodeURIComponent(item.tono)}`
-  ).join("&");
+  );
 
-    // Añadimos el nombre de la misa al final de la URL
+  // 2. Si hay nombre de misa, lo añadimos al array de parámetros
   if (nombreMisa) {
-    params += `&Misa=${encodeURIComponent(nombreMisa)}`;
+    paramsArray.push(`Misa=${encodeURIComponent(nombreMisa)}`);
   }
-  const url = `${window.location.origin}${window.location.pathname}?${params}`;
-  navigator.clipboard.writeText(url);
-  alert("Enlace copiado al portapapeles:\n\n" + url);
-});
 
+  // 3. Unimos todo con "&"
+  const queryString = paramsArray.join("&");
+
+  // 4. Construimos la URL final
+  const url = `${window.location.origin}${window.location.pathname}${queryString ? '?' + queryString : ''}`;
+
+  // 5. Copiar al portapapeles
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(url).then(() => {
+      alert("✅ Enlace copiado al portapapeles:\n\n" + url);
+    }).catch(err => {
+      console.error('Error al copiar: ', err);
+      prompt("Copia el enlace manualmente:", url);
+    });
+  } else {
+    // Fallback para navegadores antiguos o contextos no seguros
+    prompt("Copia el enlace manualmente:", url);
+  }
+});
 
 
 

@@ -114,7 +114,7 @@ $(function(){
   <div class="mb-5"></div>
   </main>
 
-  <script src="scripts/canciones.js"></script>
+  <script src="/scripts/canciones.js"></script>
 
   <script>
     let programa = JSON.parse(localStorage.getItem("programaMisa")) || [];
@@ -143,14 +143,13 @@ $(function(){
       option.value = seccion;
       option.textContent = seccion;
       seccionSelect.appendChild(option);
+      seccionSelect.dispatchEvent(new Event("change"));
     }
-    seccionSelect.dispatchEvent(new Event("change"));
 
     /* --- Actualizar canciones según sección --- */
     function actualizarListaCanciones() {
       const seccion = seccionSelect.value;
       const selectCancion = document.getElementById("cancion-select");
-      if (!selectCancion) return;
       selectCancion.innerHTML = "";
 
       for (const nombre in canciones[seccion]) {
@@ -161,51 +160,74 @@ $(function(){
       }
     }
 
-   // Buscador
+    //código buscador
    document.addEventListener('DOMContentLoaded', () => {
     const buscador = document.getElementById('globalSearch');
     const sugerencias = document.getElementById('searchSuggestions');
+    const seccionSelect = document.getElementById("seccion-select");
     const cancionSelect = document.getElementById("cancion-select");
 
+    // 1. Crear el catálogo (usando tu variable 'canciones')
     const catalogo = [];
     for (const [nombreSeccion, listaDeCanciones] of Object.entries(canciones)) {
         for (const nombreCancion in listaDeCanciones) {
-            catalogo.push({ nombre: nombreCancion, seccion: nombreSeccion });
+            catalogo.push({ 
+                nombre: nombreCancion, 
+                seccion: nombreSeccion 
+            });
         }
     }
 
+    // 2. Lógica de búsqueda
     buscador.addEventListener('input', () => {
         const txt = buscador.value.toLowerCase().trim();
         sugerencias.innerHTML = '';
+
         if (txt.length < 2) return;
+
         const matches = catalogo.filter(c => c.nombre.toLowerCase().includes(txt));
+
         matches.forEach(item => {
             const div = document.createElement('div');
             div.className = 'suggestion-item';
+            
+            // Mostramos siempre la sección para dar contexto (Solución punto 2)
             div.innerHTML = `
                 <div style="display: flex; flex-direction: column;">
                     <span style="font-weight: 500;">${item.nombre}</span>
                     <small style="color: #666; font-size: 0.75em;">${item.seccion}</small>
                 </div>
-                <span class="category-tag">${item.seccion}</span>`;
+                <span class="category-tag">${item.seccion}</span>
+            `;
+            
             div.onclick = () => {
+                // Sincronizar los selects invisibles
                 seccionSelect.value = item.seccion;
-                actualizarListaCanciones();
+                actualizarListaCanciones(); // Tu función que llena el segundo select
                 cancionSelect.value = item.nombre;
+
+                // PUNTO 1: Agregar automáticamente al listado
+                // Llamamos a tu función existente que ya sabe qué hacer con los datos
                 agregarCancion();
+
+                // Limpiar y resetear el buscador para la siguiente canción
                 buscador.value = '';
                 sugerencias.innerHTML = '';
-                buscador.focus();
+                buscador.focus(); // Dejamos el foco listo por si quiere buscar otra
             };
             sugerencias.appendChild(div);
         });
     });
 
+    // Cerrar sugerencias al hacer clic fuera
     document.addEventListener('click', (e) => {
         if (!buscador.contains(e.target)) sugerencias.innerHTML = '';
     });
 });
 
+// fin código buscador
+
+ /* --- Transposición de tono (respeta 'm') --- */
     function transponerTono(tono, semitonos) {
       const tonos = ["DO","DO#","RE","MIb","MI","FA","FA#","SOL","LAb","LA","SIb","SI"];
       const esMenor = tono.endsWith("m");
@@ -216,6 +238,7 @@ $(function(){
       return esMenor ? nuevo + "m" : nuevo;
     }
 
+    /* --- Agregar canción al programa --- */
     function agregarCancion() {
       const seccion = seccionSelect.value;
       const nombre = document.getElementById("cancion-select").value;
@@ -230,11 +253,12 @@ $(function(){
       guardarPrograma();
     }
 
+    /* --- Guardar programa --- */
     function guardarPrograma() {
       localStorage.setItem("programaMisa", JSON.stringify(programa));
-      // El nombre de la misa ya se guarda en su propio listener de 'input'
     }
 
+    /* --- Mostrar programa en pantalla --- */
     function mostrarPrograma() {
       const lista = document.getElementById("programa-lista");
       lista.innerHTML = "";
@@ -247,6 +271,7 @@ $(function(){
        const buttonGroup = document.createElement('div');
         buttonGroup.className = 'd-inline-flex justify-content-end';
 
+        // Control de tono
         const contTono = document.createElement("span");
         contTono.classList.add("control-tono");
 
@@ -277,9 +302,18 @@ $(function(){
         contTono.appendChild(btnUp);
         buttonGroup.appendChild(contTono);
 
+        // Botón eliminar
         const btnEliminar = document.createElement("button");
-        btnEliminar.className = 'btn-eliminar';
-        btnEliminar.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16"><path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/><path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/></svg>`;
+    btnEliminar.className = 'btn-eliminar';
+    btnEliminar.title = "Eliminar canción";
+    
+    // Icono SVG de papelera (minimalista)
+    btnEliminar.innerHTML = `
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
+        <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
+        <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
+      </svg>
+    `;
         btnEliminar.onclick = () => {
           programa.splice(index, 1);
           mostrarPrograma();
@@ -292,12 +326,22 @@ $(function(){
       });
     }
 
+    /* --- Inicialización de Arrastre --- */
 function inicializarSortable() {
   const lista = document.getElementById("programa-lista");
+  
   Sortable.create(lista, {
     animation: 150,
-    delay: 200,
-    delayOnTouchOnly: true,
+    delay: 200,      // <--- MANTENER PRESIONADO 0.2s para arrastrar
+    delayOnTouchOnly: true, // El delay solo aplica en móviles
+    touchStartThreshold: 5, // Margen de error de movimiento antes de cancelar el delay
+    ghostClass: 'sortable-ghost',
+    
+    // Al empezar a arrastrar, podemos dar un feedback (vibración)
+    onStart: function() {
+        if (navigator.vibrate) navigator.vibrate(40);
+    },
+    
     onEnd: function (evt) {
       const itemMovido = programa.splice(evt.oldIndex, 1)[0];
       programa.splice(evt.newIndex, 0, itemMovido);
@@ -307,24 +351,47 @@ function inicializarSortable() {
   });
 }
 
-/* --- Compartir programa mejorado --- */
+/* --- Actualiza tu window.addEventListener final --- */
+window.addEventListener("DOMContentLoaded", () => {
+  actualizarListaCanciones();
+  mostrarPrograma();
+  cargarProgramaDesdeURL();
+  inicializarSortable(); // <--- Activar el arrastre aquí
+});
+
+    /* --- Limpiar programa --- */
+    document.getElementById("limpiar-programa").addEventListener("click", () => {
+       {
+        programa = [];
+        guardarPrograma();
+        mostrarPrograma();
+      }
+    });
+
+
+
+
+
+/* --- Compartir programa (genera URL con tonos) --- */
 document.getElementById("compartir-programa").addEventListener("click", () => {
   const nombreMisa = document.getElementById("nombreMisa").value;
-  
-  // Generamos los parámetros de las canciones
-  let params = programa.map(item =>
+  const params = programa.map(item =>
     `${encodeURIComponent(item.seccion)}=${encodeURIComponent(item.nombre)}~${encodeURIComponent(item.tono)}`
   ).join("&");
 
-  // Añadimos el nombre de la misa al final de la URL
+    // Añadimos el nombre de la misa al final de la URL
   if (nombreMisa) {
     params += `&Misa=${encodeURIComponent(nombreMisa)}`;
   }
-
   const url = `${window.location.origin}${window.location.pathname}?${params}`;
   navigator.clipboard.writeText(url);
-  alert("Enlace copiado al portapapeles);
+  alert("Enlace copiado al portapapeles:\n\n" + url);
 });
+
+
+
+
+
 
 /* --- Cargar programa y Misa desde URL --- */
 function cargarProgramaDesdeURL() {

@@ -75,6 +75,11 @@ $(function(){
   <main class="container mt-4 text-center">
     <h1 class="titulo">CREAR PROGRAMA DE MISA</h1>
 
+    <div class="d-flex mt-3 mb-3 justify-content-start">
+    <div class="fw-bold"><p>TÍTULO:  </p></div>
+    <div class="col ms-3"><input type="text" id="nombreMisa" class="form-control"  style="border: 2px solid #004a99; font-weight: bold; text-align: center;"></div>
+    </div>
+
     <div class="search-box-container">
       <input type="text" id="globalSearch" placeholder="🔍 Buscar canción por nombre..." autocomplete="off">
       <div id="searchSuggestions" class="suggestions-panel"></div>
@@ -112,10 +117,29 @@ $(function(){
   <div class="mb-5"></div>
   </main>
 
-  <script src="scripts/canciones.js"></script>
+  <script src="/scripts/canciones.js"></script>
 
   <script>
     let programa = JSON.parse(localStorage.getItem("programaMisa")) || [];
+
+    /* --- Lógica para el Nombre de la Misa --- */
+    const inputMisa = document.getElementById("nombreMisa");
+
+    // Cargar nombre guardado al iniciar
+    if(localStorage.getItem("nombreMisaActual")) {
+        const nombreGuardado = localStorage.getItem("nombreMisaActual");
+        inputMisa.value = nombreGuardado;
+        document.title = nombreGuardado;
+    }
+
+    // Escuchar cambios en el input
+    inputMisa.addEventListener('input', function() {
+        const valor = this.value;
+        localStorage.setItem("nombreMisaActual", valor);
+        document.title = valor || "PROGRAMA DE MISA";
+    });
+
+
 
     /* --- Poblar el select de secciones --- */
     const seccionSelect = document.getElementById("seccion-select");

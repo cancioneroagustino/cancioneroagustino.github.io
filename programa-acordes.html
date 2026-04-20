@@ -19,6 +19,15 @@
     });
   </script>
 
+  <main class="container mt-5">
+    <div class="misa-header text-center">
+        <h1 id="displayNombreMisa" class="fw-bold">PROGRAMA DE MISA</h1>
+        <div class="no-print mt-3">
+            <button id="toggleNotationButton" class="btn btn-outline-primary btn-sm" data-format="Solfeo">Cambiar a Notación ABC</button>
+            <button onclick="window.print()" class="btn btn-primary btn-sm ms-2">🖨️ Imprimir / Guardar PDF</button>
+        </div>
+    </div>
+
   <div id="programa-acordes-container" class="d-flex flex-column mt-5"></div>
 
   <script>
@@ -28,6 +37,12 @@
     alert('No hay un programa de misa guardado.');
     window.location.href = 'crear-programa.html';
   }
+
+// Mostrar el título de la misa
+    if (nombreMisa) {
+        document.getElementById('displayNombreMisa').textContent = nombreMisa;
+        document.title = nombreMisa + " - Acordes";
+    }
 
   // --- Helper: cargar un script solo una vez ---
   function cargarScript(src) {

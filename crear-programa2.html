@@ -388,12 +388,12 @@ document.getElementById("compartir-programa").addEventListener("click", () => {
   const url = `${window.location.origin}${window.location.pathname}${queryString ? '?' + queryString : ''}`;
 
   // --- NUEVO: Creamos un texto elegante para acompañar el link ---
-  const textoWhatsApp = `🎶 *${nombreMisa.toUpperCase()}*\nAquí tienes el listado para la misa:\n\n🔗 ${url}`;
+  const textoWhatsApp = `🎶 *${nombreMisa.toUpperCase()}*\n🔗 ${url}`;
 
   if (navigator.clipboard && navigator.clipboard.writeText) {
     // Copiamos el texto con el nombre incluido
     navigator.clipboard.writeText(textoWhatsApp).then(() => {
-      alert("✅ Enlace con formato copiado para WhatsApp.");
+      alert("✅ Enlace copiado al portapapeles.");
     });
   } else {
     prompt("Copia el enlace:", url);

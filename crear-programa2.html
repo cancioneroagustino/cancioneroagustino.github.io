@@ -372,37 +372,31 @@ window.addEventListener("DOMContentLoaded", () => {
 
 
 
-/* --- Compartir programa (genera URL con tonos) --- */
+/* --- Compartir programa optimizado para WhatsApp --- */
 document.getElementById("compartir-programa").addEventListener("click", () => {
-  const nombreMisa = document.getElementById("nombreMisa").value;
+  const nombreMisa = document.getElementById("nombreMisa").value || "Programa de Misa";
   
-  // 1. Generamos los parámetros de las canciones
   let paramsArray = programa.map(item =>
     `${encodeURIComponent(item.seccion)}=${encodeURIComponent(item.nombre)}~${encodeURIComponent(item.tono)}`
   );
 
-  // 2. Si hay nombre de misa, lo añadimos al array de parámetros
   if (nombreMisa) {
     paramsArray.push(`Misa=${encodeURIComponent(nombreMisa)}`);
   }
 
-  // 3. Unimos todo con "&"
   const queryString = paramsArray.join("&");
-
-  // 4. Construimos la URL final
   const url = `${window.location.origin}${window.location.pathname}${queryString ? '?' + queryString : ''}`;
 
-  // 5. Copiar al portapapeles
+  // --- NUEVO: Creamos un texto elegante para acompañar el link ---
+  const textoWhatsApp = `🎶 *${nombreMisa.toUpperCase()}*\nAquí tienes el listado para la misa:\n\n🔗 ${url}`;
+
   if (navigator.clipboard && navigator.clipboard.writeText) {
-    navigator.clipboard.writeText(url).then(() => {
-      alert("✅ Enlace copiado al portapapeles:\n\n" + url);
-    }).catch(err => {
-      console.error('Error al copiar: ', err);
-      prompt("Copia el enlace manualmente:", url);
+    // Copiamos el texto con el nombre incluido
+    navigator.clipboard.writeText(textoWhatsApp).then(() => {
+      alert("✅ Enlace con formato copiado para WhatsApp.");
     });
   } else {
-    // Fallback para navegadores antiguos o contextos no seguros
-    prompt("Copia el enlace manualmente:", url);
+    prompt("Copia el enlace:", url);
   }
 });
 

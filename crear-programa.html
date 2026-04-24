@@ -334,11 +334,6 @@ function inicializarSortable() {
   
   Sortable.create(lista, {
     animation: 150,
-    delay: 150,
-    delayOnTouchOnly: true,
-    touchStartThreshold: 5,
-    forceFallback: true,      // <--- CLAVE: Ignora el sistema nativo de móvil
-    fallbackTolerance: 3,     // Permite un margen de error antes de cancelar
     ghostClass: 'sortable-ghost',
     
     onStart: function() {

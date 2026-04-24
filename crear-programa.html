@@ -333,13 +333,14 @@ function inicializarSortable() {
   const lista = document.getElementById("programa-lista");
   
   Sortable.create(lista, {
+    handle: '.drag-handle', // <--- SOLO se arrastra desde el icono
     animation: 150,
-    ghostClass: 'sortable-ghost',
-    
+    forceFallback: true,    // Muy importante para iOS/Android
+    fallbackOnBody: true,
+    swapThreshold: 0.65,
     onStart: function() {
         if (navigator.vibrate) navigator.vibrate(50);
     },
-    
     onEnd: function (evt) {
       const itemMovido = programa.splice(evt.oldIndex, 1)[0];
       programa.splice(evt.newIndex, 0, itemMovido);
@@ -348,6 +349,7 @@ function inicializarSortable() {
     }
   });
 }
+
 
 
 /* --- Actualiza tu window.addEventListener final --- */

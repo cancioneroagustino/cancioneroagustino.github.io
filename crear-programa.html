@@ -335,15 +335,14 @@ function inicializarSortable() {
   Sortable.create(lista, {
     animation: 150,
     delay: 150,
-    delayOnTouchOnly: true, // El delay solo aplica en móviles
-    touchStartThreshold: 5, // Margen de error de movimiento antes de cancelar el delay
-    forceFallback: true,
-    fallbackTolerance: 3,
+    delayOnTouchOnly: true,
+    touchStartThreshold: 5,
+    forceFallback: true,      // <--- CLAVE: Ignora el sistema nativo de móvil
+    fallbackTolerance: 3,     // Permite un margen de error antes de cancelar
     ghostClass: 'sortable-ghost',
     
-    // Al empezar a arrastrar, podemos dar un feedback (vibración)
     onStart: function() {
-        if (navigator.vibrate) navigator.vibrate(40);
+        if (navigator.vibrate) navigator.vibrate(50);
     },
     
     onEnd: function (evt) {
@@ -354,6 +353,7 @@ function inicializarSortable() {
     }
   });
 }
+
 
 /* --- Actualiza tu window.addEventListener final --- */
 window.addEventListener("DOMContentLoaded", () => {

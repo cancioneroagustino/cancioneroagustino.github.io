@@ -334,9 +334,11 @@ function inicializarSortable() {
   
   Sortable.create(lista, {
     animation: 150,
-    delay: 200,      // <--- MANTENER PRESIONADO 0.2s para arrastrar
+    delay: 150,
     delayOnTouchOnly: true, // El delay solo aplica en móviles
     touchStartThreshold: 5, // Margen de error de movimiento antes de cancelar el delay
+    forceFallback: true,
+    fallbackTolerance: 3,
     ghostClass: 'sortable-ghost',
     
     // Al empezar a arrastrar, podemos dar un feedback (vibración)

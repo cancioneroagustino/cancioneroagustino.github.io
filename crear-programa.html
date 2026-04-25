@@ -333,7 +333,6 @@ function inicializarSortable() {
   const lista = document.getElementById("programa-lista");
   
   Sortable.create(lista, {
-    handle: '.drag-handle', // <--- SOLO se arrastra desde el icono
     animation: 150,
     forceFallback: true,    // Muy importante para iOS/Android
     fallbackOnBody: true,

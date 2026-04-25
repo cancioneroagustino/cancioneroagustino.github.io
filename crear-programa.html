@@ -62,6 +62,16 @@
     padding: 2px 8px;
     border-radius: 4px;
     color: #666;
+    
+.programa-item {
+    touch-action: none;      /* Evita que el navegador use el touch para scroll en este elemento */
+    user-select: none;       /* Evita que se seleccione texto al mantener presionado */
+    cursor: grab;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.programa-item:active {
+    cursor: grabbing;
 }
 </style>
 </head>
@@ -330,23 +340,25 @@ $(function(){
 
     /* --- Inicialización de Arrastre --- */
 function inicializarSortable() {
-  const lista = document.getElementById("programa-lista");
-  
-  Sortable.create(lista, {
-    animation: 150,
-    forceFallback: true,    // Muy importante para iOS/Android
-    fallbackOnBody: true,
-    swapThreshold: 0.65,
-    onStart: function() {
-        if (navigator.vibrate) navigator.vibrate(50);
-    },
-    onEnd: function (evt) {
-      const itemMovido = programa.splice(evt.oldIndex, 1)[0];
-      programa.splice(evt.newIndex, 0, itemMovido);
-      guardarPrograma();
-      mostrarPrograma(); 
-    }
-  });
+    const lista = document.getElementById("programa-lista");
+    Sortable.create(lista, {
+        animation: 150,
+        forceFallback: true,      // Mantiene la compatibilidad en móviles
+        fallbackOnBody: true,
+        swapThreshold: 0.65,
+        delay: 150,               // IMPORTANTE: Debes presionar el item por 150ms para empezar a moverlo
+        delayOnTouchOnly: true,   // El retraso solo aplica en móviles
+        touchStartThreshold: 5,   // Tolerancia de movimiento antes de cancelar el drag
+        onStart: function() {
+            if (navigator.vibrate) navigator.vibrate(50); // Feedback táctil
+        },
+        onEnd: function (evt) {
+            const itemMovido = programa.splice(evt.oldIndex, 1)[0];
+            programa.splice(evt.newIndex, 0, itemMovido);
+            guardarPrograma();
+            mostrarPrograma();
+        }
+    });
 }
 
 

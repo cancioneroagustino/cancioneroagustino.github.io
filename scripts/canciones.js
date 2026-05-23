@@ -3116,6 +3116,10 @@
       "ruta": "Espíritu Santo/Respira en mí, oh Espíritu Santo.html",
       "tono": "MIm"
     },
+     "Señor, envía tu espíritu": {
+      "ruta": "Espíritu Santo/Señor, envía tu espíritu.html",
+      "tono": "MI"
+    },     
     "Si Tú no vienes (Espíritu Santo, ven)": {
       "ruta": "Espíritu Santo/Si Tú no vienes.html",
       "tono": "LA"

@@ -390,50 +390,50 @@
 
   Gloria: {
     "Gloria (Misa rítmica)": {
-      "ruta": "gloria/Gloria (Misa rítmica).html",
+      "ruta": "Gloria/Gloria (Misa rítmica).html",
       "tono": "MIm"
     },
     "Gloria (C. Fones)": {
-      "ruta": "gloria/Gloria (C. Fones).html",
+      "ruta": "Gloria/Gloria (C. Fones).html",
       "tono": "MI"
     },
     "Gloria Misión País - Marcelo Cid": {
-      "ruta": "gloria/Gloria Mision Pais - Marcelo Cid.html",
+      "ruta": "Gloria/Gloria Mision Pais - Marcelo Cid.html",
       "tono": "RE"
     },
     "Gloria (Nebreda)": {
-      "ruta": "gloria/Gloria (Nebreda).html",
+      "ruta": "Gloria/Gloria (Nebreda).html",
       "tono": "DO"
     },
     "Gloria folclórico": {
-      "ruta": "gloria/Gloria folclórico.html",
+      "ruta": "Gloria/Gloria folclórico.html",
       "tono": "DO"
     },
     "Gloria pascual (Gen verde)": {
-      "ruta": "gloria/Gloria pascual (Gen verde).html",
+      "ruta": "Gloria/Gloria pascual (Gen verde).html",
       "tono": "LA"
        }
     },
 
     "Gloria no litúrgico": {
     "Gloria abreviado": {
-      "ruta": "gloria/Gloria abreviado.html",
+      "ruta": "Gloria/Gloria abreviado.html",
       "tono": "DO"
     },
     "Gloria juvenil": {
-      "ruta": "gloria/Gloria juvenil.html",
+      "ruta": "Gloria/Gloria juvenil.html",
       "tono": "SOL"
     },
     "Gloria (Ma José Bravo y C. Fones)": {
-      "ruta": "gloria/Gloria (Ma Jose Bravo y C. Fones).html",
+      "ruta": "Gloria/Gloria (Ma Jose Bravo y C. Fones).html",
       "tono": "LA"
     },
     "Gloria Salesianos (Misa joven)": {
-      "ruta": "gloria/Gloria Salesianos (Misa joven).html",
+      "ruta": "Gloria/Gloria Salesianos (Misa joven).html",
       "tono": "MI"
     },
     "Gloria Trinidad": {
-      "ruta": "gloria/Gloria Trinidad.html",
+      "ruta": "Gloria/Gloria Trinidad.html",
       "tono": "REm"
     }
   },
@@ -3279,6 +3279,10 @@
       "ruta": "Marianos/Ave María blues.html",
       "tono": "DO"
     },
+    "Ave María de Lourdes": {
+      "ruta": "Marianos/Ave María de Lourdes.html",
+      "tono": "MI"
+    },
     "Bajo tu amparo": {
       "ruta": "Marianos/Bajo tu amparo.html",
       "tono": "RE"
@@ -4083,7 +4087,7 @@
       "tono": "RE"
     },
     "Gloria folclórico": {
-      "ruta": "gloria/Gloria folclórico.html",
+      "ruta": "Gloria/Gloria folclórico.html",
       "tono": "DO"
     },
     "Aleluya folclórico (1)": {

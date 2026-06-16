@@ -3283,6 +3283,10 @@
       "ruta": "Marianos/Ave María de Lourdes.html",
       "tono": "MI"
     },
+    "Ave María de Fátima": {
+      "ruta": "Marianos/Ave María de Fátima.html",
+      "tono": "RE"
+    },
     "Bajo tu amparo": {
       "ruta": "Marianos/Bajo tu amparo.html",
       "tono": "RE"

@@ -3611,6 +3611,10 @@
       "ruta": "Marianos/Ven y reina, Madre de Dios.html",
       "tono": "RE"
     },
+    "Virgen del Carmen (Jésed)": {
+      "ruta": "Marianos/Virgen del Carmen (Jésed).html",
+      "tono": "RE"
+    },
     "Virgen del Carmen bella": {
       "ruta": "Marianos/Virgen del Carmen bella.html",
       "tono": "RE"
@@ -3626,6 +3630,10 @@
     "Virgencita del niño Dios": {
       "ruta": "Marianos/Virgencita del niño Dios.html",
       "tono": "DO"
+    },
+    "Viva María, viva el Carmelo": {
+      "ruta": "Marianos/Viva María, viva el Carmelo.html",
+      "tono": "LA"
     }
   },
 

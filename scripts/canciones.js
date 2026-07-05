@@ -3363,6 +3363,10 @@
       "ruta": "Marianos/El Señor hizo en mí maravillas.html",
       "tono": "MIm"
     },
+    "Flor del Carmelo": {
+      "ruta": "Marianos/Flor del Carmelo.html",
+      "tono": "MIm"
+    },
     "Gestación de paz": {
       "ruta": "Marianos/Gestación de paz.html",
       "tono": "SOL"

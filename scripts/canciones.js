@@ -503,7 +503,7 @@
     },
     "Domingo 17 A": {
       "ruta": "Salmos/adom17.html",
-      "tono": "LAm"
+      "tono": "DO"
     },
     "Domingo 18 A": {
       "ruta": "Salmos/adom18.html",

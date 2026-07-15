@@ -3379,6 +3379,10 @@
       "ruta": "Marianos/Hasta que el mundo arda por Él.html",
       "tono": "SIm"
     },
+    "Himno Centenario Coronación Virgen del Carmen": {
+      "ruta": "Marianos/Himno Centenario Coronación Virgen del Carmen.html",
+      "tono": "RE"
+    },
     "Hoy he vuelto": {
       "ruta": "Marianos/Hoy he vuelto.html",
       "tono": "DO"

@@ -1177,9 +1177,9 @@
       "ruta": "Salmos/pedroypablo.html",
       "tono": "LAm"
     },
-    "16-julio: Virgen del Carmen": {
+    "16-julio: Nuestra Señora del Carmen": {
       "ruta": "Salmos/virgencarmen.html",
-      "tono": "FA#m"
+      "tono": "DO"
     },
     "6-agosto: Transfiguración del Señor": {
       "ruta": "Salmos/transfiguracion.html",

@@ -3505,7 +3505,7 @@
     },
     "María, Virgen del Carmen": {
       "ruta": "Marianos/María, Virgen del Carmen.html",
-      "tono": "LA"
+      "tono": "MI"
     },
     "Mi alma canta": {
       "ruta": "Marianos/Mi alma canta.html",

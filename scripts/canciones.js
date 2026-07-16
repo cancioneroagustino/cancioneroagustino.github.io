@@ -581,15 +581,15 @@
     },
     "Domingo 3 B": {
       "ruta": "Salmos/bdom03.html",
-      "tono": "DO"
+      "tono": "LAm"
     },
     "Domingo 4 B": {
       "ruta": "Salmos/bdom04.html",
-      "tono": "DO"
+      "tono": "DO#m"
     },
     "Domingo 5 B": {
       "ruta": "Salmos/bdom05.html",
-      "tono": "DO"
+      "tono": "RE"
     },
     "Domingo 6 B": {
       "ruta": "Salmos/bdom06.html",
@@ -597,15 +597,15 @@
     },
     "Domingo 7 B": {
       "ruta": "Salmos/bdom07.html",
-      "tono": "DO"
+      "tono": "FA#m"
     },
     "Domingo 8 B": {
       "ruta": "Salmos/bdom08.html",
-      "tono": "DO"
+      "tono": "REm"
     },
     "Domingo 9 B": {
       "ruta": "Salmos/bdom09.html",
-      "tono": "DO"
+      "tono": "RE"
     },
     "Domingo 10 B": {
       "ruta": "Salmos/bdom10.html",
@@ -621,7 +621,7 @@
     },
     "Domingo 13 B": {
       "ruta": "Salmos/bdom13.html",
-      "tono": "DO"
+      "tono": "FA#m"
     },
     "Domingo 14 B": {
       "ruta": "Salmos/bdom14.html",
@@ -657,7 +657,7 @@
     },
     "Domingo 22 B": {
       "ruta": "Salmos/bdom22.html",
-      "tono": "DO"
+      "tono": "MIm"
     },
     "Domingo 23 B": {
       "ruta": "Salmos/bdom23.html",
@@ -1071,7 +1071,7 @@
     },
     "Domingo 2 de pascua B": {
       "ruta": "Salmos/bpascua2.html",
-      "tono": "DO"
+      "tono": "RE"
     },
     "Domingo 3 de pascua B": {
       "ruta": "Salmos/bpascua3.html",
@@ -1175,7 +1175,7 @@
     },
     "29-junio: San Pedro y San Pablo": {
       "ruta": "Salmos/pedroypablo.html",
-      "tono": "LAm"
+      "tono": "RE"
     },
     "16-julio: Nuestra Señora del Carmen": {
       "ruta": "Salmos/virgencarmen.html",

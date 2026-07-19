@@ -859,7 +859,7 @@
     },
     "Adviento 1 B": {
       "ruta": "Salmos/badv1.html",
-      "tono": "DO"
+      "tono": "RE"
     },
     "Adviento 2 B": {
       "ruta": "Salmos/badv2.html",
@@ -867,11 +867,11 @@
     },
     "Adviento 3 B": {
       "ruta": "Salmos/badv3.html",
-      "tono": "DO"
+      "tono": "RE"
     },
     "Adviento 4 B": {
       "ruta": "Salmos/badv4.html",
-      "tono": "DO"
+      "tono": "RE"
     },
     "Adviento 1 C": {
       "ruta": "Salmos/cadv1.html",
@@ -1139,7 +1139,7 @@
     },
     "Corpus Christi B": {
       "ruta": "Salmos/bcorpuschristi.html",
-      "tono": "DO"
+      "tono": "RE"
     },
     "Corpus Christi C": {
       "ruta": "Salmos/ccorpuschristi.html",

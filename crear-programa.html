@@ -404,12 +404,9 @@ document.getElementById("compartir-programa").addEventListener("click", () => {
   const queryString = paramsArray.join("&");
   const url = `${window.location.origin}${window.location.pathname}${queryString ? '?' + queryString : ''}`;
 
-  // --- NUEVO: Creamos un texto elegante para acompañar el link ---
-  const textoWhatsApp = `🎶 *${nombreMisa.toUpperCase()}*\n🔗 ${url}`;
-
   if (navigator.clipboard && navigator.clipboard.writeText) {
     // Copiamos el texto con el nombre incluido
-    navigator.clipboard.writeText(textoWhatsApp).then(() => {
+    navigator.clipboard.writeText(url).then(() => {
       alert("✅ Enlace copiado al portapapeles.");
     });
   } else {

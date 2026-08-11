@@ -2575,6 +2575,10 @@
       "ruta": "Comunión/Más cerca, Oh Dios, de Ti.html",
       "tono": "RE"
     },
+    "Me has seducido, Señor": {
+      "ruta": "Comunión/Me has seducido, Señor.html",
+      "tono": "SOLm"
+    },
     "Mensajero de la paz": {
       "ruta": "Comunión/Mensajero de la paz.html",
       "tono": "LAm"
@@ -3858,10 +3862,6 @@
     "In persona Christi": {
       "ruta": "Agustinianos/In persona Christi.html",
       "tono": "DO"
-    },
-    "Me has seducido, Señor": {
-      "ruta": "Agustinianos/Me has seducido, Señor.html",
-      "tono": "SOLm"
     },
     "Oh amor": {
       "ruta": "Agustinianos/Oh amor.html",

@@ -3,6 +3,14 @@
     var solfeoToABC = { "DO": "C", "RE": "D", "MI": "E", "FA": "F", "SOL": "G", "LA": "A", "SI": "B" };
     var abcToSolfeo = { "C": "DO", "D": "RE", "E": "MI", "F": "FA", "G": "SOL", "A": "LA", "B": "SI" };
 
+
+    // --- Cejillo: texto según el valor de data-capo ---
+    var textoCejillo = function(n) {
+        var sufijo = (n === 1 || n === 3) ? "er" : "º";
+        return "Cejillo " + n + sufijo + " espacio";
+    };
+
+
     // --- CAPA VISUAL: SOBRESCRIBE SIN DEJAR RASTROS ---
     window.refreshNotation = function() {
         var isABC = $('#toggleNotationButton').data('format') === 'ABC';
@@ -151,8 +159,17 @@
 
             $this.before(keysHtml);
 
+            // --- Cejillo: si el <pre> tiene data-capo > 0, se antepone el aviso ---
+            var capo = parseInt($this.attr("data-capo"), 10) || 0;
+
             var output = [];
+            if (capo > 0) {
+                output.push("<span>" + textoCejillo(capo) + "</span>");
+                output.push("<span></span>"); // línea en blanco de separación
+            }
             var lines = $this.html().split("\n");
+
+
             for (var i = 0; i < lines.length; i++) {
                 var line = lines[i];
                 if (isChordLine(line)) {

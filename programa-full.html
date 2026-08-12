@@ -59,6 +59,13 @@
         navbar.remove();
       }
 
+        // ← NUEVO: aplicar el capo del programa antes de que corra el transpositor
+        const itemActual = programa[currentIndex];
+        const preLetra = tempContainer.querySelector('pre#letra');
+        if (preLetra && itemActual.capo !== undefined && itemActual.capo !== null) {
+          preLetra.setAttribute('data-capo', itemActual.capo);
+        }
+
       document.getElementById('programa-container').innerHTML = tempContainer.innerHTML;
 
       // Ajustar rutas de los scripts y ejecutarlos

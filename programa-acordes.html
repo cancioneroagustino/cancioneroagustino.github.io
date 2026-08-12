@@ -71,14 +71,15 @@
 
     const preInner = pre.innerHTML;
     const dataKey = pre.getAttribute('data-key') || '';
+    const dataCapo = pre.getAttribute('data-capo'); // ← Nuevo: extraer capo
 
-    return { title, preInner, dataKey };
+    return { title, preInner, dataKey, dataCapo };
   }
 
   // --- Insertar canción en el DOM y aplicar transposición ---
   async function insertarYCambiarSiCorresponde(container, ruta, tonoDeseado) {
     try {
-      const { title, preInner, dataKey: tonoOriginal } = await fetchCancionData(ruta);
+      const { title, preInner, dataKey: tonoOriginal, dataCapo } = await fetchCancionData(ruta);
 
       // Crear la columna bootstrap
       const col = document.createElement("div");
@@ -95,14 +96,29 @@
       article.appendChild(h2);
 
       // Pre con la letra
-      const pre = document.createElement("pre");
-      pre.className = "letra";
-      pre.setAttribute("data-key", tonoOriginal);
-      pre.innerHTML = preInner;
-      article.appendChild(pre);
+    // ← NUEVO: Mostrar cejillo si existe
+    const capoFinal = capoDeseado !== undefined ? capoDeseado : (parseInt(dataCapo) || 0);
+    if (capoFinal > 0) {
+      const capoInfo = document.createElement("p");
+      capoInfo.className = "capo-info";
+      capoInfo.style.textAlign = "center";
+      capoInfo.style.fontWeight = "bold";
+      capoInfo.style.margin = "10px 0";
+      capoInfo.textContent = `Cejillo ${capoFinal}° espacio`;
+      article.appendChild(capoInfo);
+    }
 
-      col.appendChild(article);
-      container.appendChild(col);
+    const pre = document.createElement("pre");
+    pre.className = "letra";
+    pre.setAttribute("data-key", tonoOriginal);
+    if (capoFinal > 0) {
+      pre.setAttribute("data-capo", capoFinal);
+    }
+    pre.innerHTML = preInner;
+
+    article.appendChild(pre);
+    col.appendChild(article);
+    container.appendChild(col);
 
       // Asegurar que jQuery esté cargado
       await cargarScript("https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js");
@@ -165,7 +181,7 @@
     // ---------------------------------------
 
     for (const item of programa) {
-      await insertarYCambiarSiCorresponde(container, item.cancion, item.tono);
+      await insertarYCambiarSiCorresponde(container, item.cancion, item.tono, item.capo);
     }
   }
 

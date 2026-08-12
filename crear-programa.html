@@ -259,7 +259,8 @@ $(function(){
         seccion: seccion,
         nombre: nombre,
         cancion: datos.ruta,
-        tono: datos.tono
+        tono: datos.tono,
+        capo: datos.capo || 0  // ← Si no existe, asume 0
       });
       mostrarPrograma();
       guardarPrograma();
@@ -313,6 +314,43 @@ $(function(){
         contTono.appendChild(spanTono);
         contTono.appendChild(btnUp);
         buttonGroup.appendChild(contTono);
+
+        // ← NUEVO: Control de capo
+    const contCapo = document.createElement("span");
+    contCapo.classList.add("control-capo");
+    contCapo.style.marginLeft = "15px"; // Espacio entre tono y capo
+
+    const btnCapoDown = document.createElement("span");
+    btnCapoDown.textContent = "◀";
+    btnCapoDown.classList.add("flecha-tono");
+    btnCapoDown.onclick = () => {
+      if (item.capo > 0) {
+        item.capo--;
+        spanCapo.textContent = `Capo: ${item.capo}`;
+        guardarPrograma();
+      }
+    };
+
+    const spanCapo = document.createElement("span");
+    spanCapo.classList.add("capo-actual");
+    spanCapo.textContent = `Capo: ${item.capo}`;
+
+    const btnCapoUp = document.createElement("span");
+    btnCapoUp.textContent = "▶";
+    btnCapoUp.classList.add("flecha-tono");
+    btnCapoUp.onclick = () => {
+      if (item.capo < 7) {
+        item.capo++;
+        spanCapo.textContent = `Capo: ${item.capo}`;
+        guardarPrograma();
+      }
+    };
+
+    contCapo.appendChild(btnCapoDown);
+    contCapo.appendChild(spanCapo);
+    contCapo.appendChild(btnCapoUp);
+    buttonGroup.appendChild(contCapo);
+    // ← FIN nuevo control de capo
 
         // Botón eliminar
         const btnEliminar = document.createElement("button");
@@ -389,12 +427,12 @@ window.addEventListener("DOMContentLoaded", () => {
 
 
 
-/* --- Compartir programa optimizado para WhatsApp --- */
+/* --- Compartir programa --- */
 document.getElementById("compartir-programa").addEventListener("click", () => {
   const nombreMisa = document.getElementById("nombreMisa").value || "Programa de Misa";
-  
+
   let paramsArray = programa.map(item =>
-    `${encodeURIComponent(item.seccion)}=${encodeURIComponent(item.nombre)}~${encodeURIComponent(item.tono)}`
+    `${encodeURIComponent(item.seccion)}=${encodeURIComponent(item.nombre)}~${encodeURIComponent(item.tono)}~${item.capo || 0}`
   );
 
   if (nombreMisa) {
@@ -434,16 +472,21 @@ function cargarProgramaDesdeURL() {
 
   programa = [];
   for (const [seccion, valor] of params.entries()) {
-    if (seccion === "Misa") continue; // Ignoramos el parámetro Misa aquí
+    if (seccion === "Misa") continue;
     
-    const [nombre, tono] = valor.split("~");
+    const partes = valor.split("~");
+    const nombre = partes[0];
+    const tono = partes[1];
+    const capo = parseInt(partes[2]) || 0; // ← Nuevo: leer capo de URL
+    
     if (canciones[seccion] && canciones[seccion][nombre]) {
       const datos = canciones[seccion][nombre];
       programa.push({
         seccion: seccion,
         nombre: nombre,
         cancion: datos.ruta,
-        tono: tono || datos.tono
+        tono: tono || datos.tono,
+        capo: capo || datos.capo // ← Nuevo: agregar capo al programa
       });
     }
   }

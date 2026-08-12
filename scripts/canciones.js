@@ -331,7 +331,8 @@
     },
     "Canción del perdón": {
       "ruta": "Perdón/Canción del perdón.html",
-      "tono": "LA"
+      "tono": "LA",
+      "capo": "1"
     },
     "Frente a Ti estoy, Señor": {
       "ruta": "Perdón/Frente a Ti estoy, Señor.html",
@@ -411,7 +412,8 @@
     },
     "Gloria pascual (Gen verde)": {
       "ruta": "Gloria/Gloria pascual (Gen verde).html",
-      "tono": "LA"
+      "tono": "LA",
+      "capo": "1"
        }
     },
 
@@ -779,7 +781,8 @@
     },
     "Domingo 19 C": {
       "ruta": "Salmos/cdom19.html",
-      "tono": "MIm"
+      "tono": "MIm",
+      "capo": "1"
     },
     "Domingo 20 C": {
       "ruta": "Salmos/cdom20.html",
@@ -791,7 +794,8 @@
     },
     "Domingo 22 C": {
       "ruta": "Salmos/cdom22.html",
-      "tono": "RE"
+      "tono": "RE",
+      "capo": "1"
     },
     "Domingo 23 C": {
       "ruta": "Salmos/cdom23.html",
@@ -1316,7 +1320,8 @@
     },
     "Aleluya Misión País (Mar adentro)": {
       "ruta": "Aleluya/Aleluya Misión País (Mar adentro).html",
-      "tono": "DO"
+      "tono": "DO",
+      "capo": "3"
     },
     "Aleluya mi Señor": {
       "ruta": "Aleluya/Aleluya mi Señor.html",
@@ -1361,7 +1366,8 @@
   Leccional: {
     "Acuérdate de mí": {
       "ruta": "Leccionales/Acuérdate de mí.html",
-      "tono": "MIm"
+      "tono": "MIm",
+      "capo": "2"
     },
     "Alabanza y gloria": {
       "ruta": "Leccionales/Alabanza y gloria.html",
@@ -1453,7 +1459,8 @@
     },
     "Grande es la bondad": {
       "ruta": "Leccionales/Grande es la bondad.html",
-      "tono": "RE"
+      "tono": "RE",
+      "capo": "1"
     },
     "Hágase tu voluntad": {
       "ruta": "Leccionales/Hágase tu voluntad.html",
@@ -1525,7 +1532,8 @@
     },
     "Oh Padre, entre tus manos": {
       "ruta": "Leccionales/Oh Padre, entre tus manos.html",
-      "tono": "LA"
+      "tono": "LA",
+      "capo": "1"
     },
     "Oh, Sagrado Corazón": {
       "ruta": "Leccionales/Oh, Sagrado Corazón.html",
@@ -1783,7 +1791,8 @@
     },
     "Santo DO (2)": {
       "ruta": "Santo/Santo DO (2).html",
-      "tono": "DO"
+      "tono": "DO",
+      "capo": "1"
     },
     "Santo Encuentro continental (Gen rosso)": {
       "ruta": "Santo/Santo Encuentro continental.html",
@@ -1803,7 +1812,8 @@
     },
     "Santo M. Frisina": {
       "ruta": "Santo/Santo M. Frisina.html",
-      "tono": "RE"
+      "tono": "RE",
+      "capo": "1"
     },
     "Santo Misión País": {
       "ruta": "Santo/Santo Misión País.html",
@@ -2009,7 +2019,8 @@
     },
     "Adorando": {
       "ruta": "Comunión/Adorando.html",
-      "tono": "LAm"
+      "tono": "LAm",
+      "capo": "5"
     },
     "Adoremos reverentes": {
       "ruta": "Comunión/Adoremos reverentes.html",
@@ -2161,7 +2172,8 @@
     },
     "Como en Caná": {
       "ruta": "Comunión/Como en Caná.html",
-      "tono": "LA"
+      "tono": "LA",
+      "capo": "2"
     },
     "Cómo le cantaré": {
       "ruta": "Comunión/Cómo le cantaré.html",
@@ -2169,7 +2181,8 @@
     },
     "Cómo quisiera": {
       "ruta": "Comunión/Cómo quisiera.html",
-      "tono": "SOL"
+      "tono": "SOL",
+      "capo": "3"
     },
     "Comunión": {
       "ruta": "Comunión/Comunión.html",
@@ -2229,7 +2242,8 @@
     },
     "Cruz de amor": {
       "ruta": "Comunión/Cruz de amor.html",
-      "tono": "LAm"
+      "tono": "LAm",
+      "capo": "3"
     },
     "Cuando los ángeles cantan gloria": {
       "ruta": "Comunión/Cuando los ángeles cantan gloria.html",
@@ -2325,7 +2339,8 @@
     },
     "El que muere por mí": {
       "ruta": "Comunión/El que muere por mí.html",
-      "tono": "DO"
+      "tono": "DO",
+      "capo": "2"
     },
     "El Señor es mi fuerza": {
       "ruta": "Comunión/El Señor es mi fuerza.html",
@@ -2417,7 +2432,8 @@
     },
     "Fuego": {
       "ruta": "Comunión/Fuego.html",
-      "tono": "RE"
+      "tono": "RE",
+      "capo": "4"
     },
     "Fue por ti": {
       "ruta": "Comunión/Fue por ti.html",
@@ -2569,7 +2585,8 @@
     },
     "Maranathá": {
       "ruta": "Comunión/Maranathá.html",
-      "tono": "SOL"
+      "tono": "SOL",
+      "capo": "2"
     },
     "Más cerca, Oh Dios, de Ti": {
       "ruta": "Comunión/Más cerca, Oh Dios, de Ti.html",
@@ -2593,11 +2610,13 @@
     },
     "Mi Buen Pastor (Misión País)": {
       "ruta": "Comunión/Mi Buen Pastor (MP).html",
-      "tono": "SOL"
+      "tono": "SOL",
+      "capo": "2"
     },
     "Mi Dios está vivo": {
       "ruta": "Comunión/Mi Dios está vivo.html",
-      "tono": "SOL"
+      "tono": "SOL",
+      "capo": "3"
     },
     "Milagro de amor": {
       "ruta": "Comunión/Milagro de amor.html",
@@ -2637,7 +2656,8 @@
     },
     "Oh, misericordia": {
       "ruta": "Comunión/Oh, misericordia.html",
-      "tono": "SOL"
+      "tono": "SOL",
+      "capo": "3"
     },
     "Oh, Sagrado Corazón": {
       "ruta": "Comunión/Oh, Sagrado Corazón.html",
@@ -2725,7 +2745,8 @@
     },
     "Presente, vivo y real": {
       "ruta": "Comunión/Presente, vivo y real.html",
-      "tono": "MIm"
+      "tono": "MIm",
+      "capo": "3"
     },
     "Quédate conmigo": {
       "ruta": "Comunión/Quédate conmigo.html",
@@ -2737,7 +2758,8 @@
     },
     "Quédate con nosotros (Romina González)": {
       "ruta": "Comunión/Quédate con nosotros (Romina González).html",
-      "tono": "SOL"
+      "tono": "SOL",
+      "capo": "3"
     },
     "Que tu palabra nos cambie el corazón": {
       "ruta": "Comunión/Que tu palabra nos cambie el corazón.html",
@@ -2753,7 +2775,8 @@
     },
     "Quiero ser tu amigo, Jesucristo": {
       "ruta": "Comunión/Quiero ser tu amigo, Jesucristo.html",
-      "tono": "MIm"
+      "tono": "MIm",
+      "capo": "3"
     },
     "Recíbeme": {
       "ruta": "Comunión/Recíbeme.html",
@@ -2761,7 +2784,8 @@
     },
     "Regálanos": {
       "ruta": "Comunión/Regálanos.html",
-      "tono": "MI"
+      "tono": "MI",
+      "capo": "1"
     },
     "Rendid a Yahvé": {
       "ruta": "Comunión/Rendid a Yahvé.html",
@@ -2773,7 +2797,8 @@
     },
     "Resucitó el Señor, aleluya": {
       "ruta": "Comunión/Resucitó el Señor, aleluya.html",
-      "tono": "LAm"
+      "tono": "LAm",
+      "capo": "2"
     },
     "Resurrección": {
       "ruta": "Comunión/Resurrección.html",
@@ -2869,7 +2894,8 @@
     },
     "Te deum": {
       "ruta": "Comunión/Te deum.html",
-      "tono": "MIm"
+      "tono": "MIm",
+      "capo": "2"
     },
     "Te pertenezco, Señor": {
       "ruta": "Comunión/Te pertenezco, Señor.html",
@@ -2905,7 +2931,8 @@
     },
     "Tú eres mi Pastor": {
       "ruta": "Comunión/Tú eres mi Pastor.html",
-      "tono": "MIm"
+      "tono": "MIm",
+      "capo": "3"
     },
     "Tú eres, Señor, el Pan de Vida": {
       "ruta": "Comunión/Tú eres, Señor, el Pan de Vida.html",
@@ -2929,7 +2956,8 @@
     },
     "Tu modo": {
       "ruta": "Comunión/Tu modo.html",
-      "tono": "MI"
+      "tono": "MI",
+      "capo": "1"
     },
     "Tú que habitas al amparo del Altísimo": {
       "ruta": "Comunión/Tú que habitas al amparo del Altísimo.html",
@@ -2989,11 +3017,13 @@
     },
     "Ven y verás": {
       "ruta": "Comunión/Ven y verás.html",
-      "tono": "LA"
+      "tono": "LA",
+      "capo": "1"
     },
     "Verbum panis": {
       "ruta": "Comunión/Verbum panis.html",
-      "tono": "SIm"
+      "tono": "SIm",
+      "capo": "1"
     },
     "Vive Dios": {
       "ruta": "Comunión/Vive Dios.html",
@@ -3090,7 +3120,8 @@
     },
     "Fruto nuevo de tu cielo (Sopla)": {
       "ruta": "Espíritu Santo/Fruto nuevo de tu cielo.html",
-      "tono": "LA"
+      "tono": "LA",
+      "capo": "1"
     },
     "Fuego de Dios": {
       "ruta": "Espíritu Santo/Fuego de Dios.html",
@@ -3098,7 +3129,8 @@
     },
     "Fuego Santo": {
       "ruta": "Espíritu Santo/Fuego Santo.html",
-      "tono": "LAm"
+      "tono": "LAm",
+      "capo": "2"
     },
     "Fuente bautismal": {
       "ruta": "Espíritu Santo/Fuente bautismal.html",
@@ -3134,7 +3166,8 @@
     },
     "Sopla tu viento": {
       "ruta": "Espíritu Santo/Sopla tu viento.html",
-      "tono": "DO"
+      "tono": "DO",
+      "capo": "1"
     },
     "Suave brisa": {
       "ruta": "Espíritu Santo/Suave brisa.html",
@@ -3146,7 +3179,8 @@
     },
     "Ven": {
       "ruta": "Espíritu Santo/Ven.html",
-      "tono": "LAm"
+      "tono": "LAm",
+      "capo": "2"
     },
     "Ven, Espíritu de Dios": {
       "ruta": "Espíritu Santo/Ven, Espíritu de Dios.html",
@@ -3196,7 +3230,8 @@
     },
     "Fronteras": {
       "ruta": "Salida/Fronteras.html",
-      "tono": "RE"
+      "tono": "RE",
+      "capo": "1"
     },
     "Id y anunciad": {
       "ruta": "Salida/Id y anunciad.html",
@@ -3305,7 +3340,8 @@
     },
     "Canción a María": {
       "ruta": "Marianos/Canción a María.html",
-      "tono": "SOL"
+      "tono": "SOL",
+      "capo": "3"
     },
     "Canta mi alma": {
       "ruta": "Marianos/Canta mi alma.html",
@@ -3329,7 +3365,8 @@
     },
     "Dijiste Sí": {
       "ruta": "Marianos/Dijiste Sí.html",
-      "tono": "RE"
+      "tono": "RE",
+      "capo": "2"
     },
     "Dios te salve": {
       "ruta": "Marianos/Dios te salve.html",
@@ -3509,7 +3546,8 @@
     },
     "María, Virgen del Carmen": {
       "ruta": "Marianos/María, Virgen del Carmen.html",
-      "tono": "MI"
+      "tono": "MI",
+      "capo": "1"
     },
     "Mi alma canta": {
       "ruta": "Marianos/Mi alma canta.html",
@@ -3521,7 +3559,8 @@
     },
     "Mirarte a ti": {
       "ruta": "Marianos/Mirarte a ti.html",
-      "tono": "LAm"
+      "tono": "LAm",
+      "capo": "4"
     },
     "Oh María": {
       "ruta": "Marianos/Oh María.html",
@@ -3621,7 +3660,8 @@
     },
     "Ven y reina, Madre de Dios": {
       "ruta": "Marianos/Ven y reina, Madre de Dios.html",
-      "tono": "RE"
+      "tono": "RE",
+      "capo": "1"
     },
     "Virgen del Carmen (Jésed)": {
       "ruta": "Marianos/Virgen del Carmen (Jésed).html",
@@ -3772,7 +3812,8 @@
     },
     "Pregón Pascual (Camino Neocatecumenal)": {
       "ruta": "Liturgias especiales/Pregón Pascual (Camino Neocatecumenal).html",
-      "tono": "LAm"
+      "tono": "LAm",
+      "capo": "2"
     },
     "Pregón Pascual (Fernando Leiva)": {
       "ruta": "Liturgias especiales/Pregón Pascual (Fernando Leiva).html",
@@ -3853,7 +3894,8 @@
     },
     "Himno a Santa Rita de Casia": {
       "ruta": "Agustinianos/Himno a Santa Rita.html",
-      "tono": "SOL"
+      "tono": "LA",
+      "capo": "2"
     },
     "Insigne Padre Agustín": {
       "ruta": "Agustinianos/Insigne Padre Agustín.html",
@@ -3889,7 +3931,8 @@
     },
     "Tarde te amé (3) - Fer Toledo": {
       "ruta": "Agustinianos/Tarde te amé (3) - Fer Toledo.html",
-      "tono": "SOL"
+      "tono": "SOL",
+      "capo": "4"
     },
     "Tarde te amé (4) - Pablo Martínez": {
       "ruta": "Agustinianos/Tarde te amé (4) - Pablo Martínez.html",
@@ -3922,7 +3965,8 @@
     },
     "Canta un ángel en el cielo": {
       "ruta": "Villancicos/Canta un ángel en el cielo.html",
-      "tono": "RE"
+      "tono": "RE",
+      "capo": "1"
     },
     "Carnavalito": {
       "ruta": "Villancicos/Carnavalito.html",
@@ -3946,7 +3990,8 @@
     },
     "Gloria cantan en el cielo": {
       "ruta": "Villancicos/Gloria cantan en el cielo.html",
-      "tono": "RE"
+      "tono": "RE",
+      "capo": "1"
     },
     "Gloria, hosanna": {
       "ruta": "Villancicos/Gloria, hosanna.html",

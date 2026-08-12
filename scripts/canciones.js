@@ -4098,16 +4098,32 @@
       "ruta": "Varios/Mensajero de la vida.html",
       "tono": "RE"
     },
-    "Oración a San Miguel Arcángel": {
-      "ruta": "Varios/Oración a San Miguel Arcángel.html",
-      "tono": ""
-    },
     "Oración a la Sagrada Familia": {
       "ruta": "Varios/Oración a la Sagrada Familia.html",
       "tono": ""
     },
+    "Oración a Nuestra Señora del Carmen": {
+      "ruta": "Varios/Oración a Nuestra Señora del Carmen.html",
+      "tono": ""
+    },
+    "Oración a San Miguel Arcángel": {
+      "ruta": "Varios/Oración a San Miguel Arcángel.html",
+      "tono": ""
+    },
+    "Oración de Consagración al Sagrado Corazón de Jesús": {
+      "ruta": "Varios/Oración de Consagración al Sagrado Corazón de Jesús.html",
+      "tono": ""
+    },
     "Oración del Jubileo 2025": {
       "ruta": "Varios/Oración del Jubileo 2025.html",
+      "tono": ""
+    },
+    "Oración para el Mes de la Solidaridad": {
+      "ruta": "Varios/Oración para el Mes de la Solidaridad.html",
+      "tono": ""
+    },
+    "Oración por Chile": {
+      "ruta": "Varios/Oración por Chile.html",
       "tono": ""
     }
   },

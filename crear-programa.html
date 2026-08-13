@@ -327,14 +327,14 @@ btnCapoDown.classList.add("flecha-tono");
 btnCapoDown.onclick = () => {
   if (item.capo > 0) {
     item.capo--;
-    spanCapo.textContent = `Capo: ${item.capo}`;
+    spanCapo.textContent = `Cej: ${item.capo}`;
     guardarPrograma();
   }
 };
 
 const spanCapo = document.createElement("span");
 spanCapo.classList.add("capo-actual");
-spanCapo.textContent = `Capo: ${item.capo || 0}`;
+spanCapo.textContent = `Cej: ${item.capo || 0}`;
 
 const btnCapoUp = document.createElement("span");
 btnCapoUp.textContent = "▶";
@@ -342,7 +342,7 @@ btnCapoUp.classList.add("flecha-tono");
 btnCapoUp.onclick = () => {
   if (item.capo < 7) {
     item.capo++;
-    spanCapo.textContent = `Capo: ${item.capo}`;
+    spanCapo.textContent = `Cej: ${item.capo}`;
     guardarPrograma();
   }
 };

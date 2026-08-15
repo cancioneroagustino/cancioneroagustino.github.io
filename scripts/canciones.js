@@ -1716,10 +1716,6 @@
       "ruta": "Ofertorio/Sabemos que vendrás.html",
       "tono": "DO"
     },
-    "Tal como soy, Señor": {
-      "ruta": "Ofertorio/Tal como soy, Señor.html",
-      "tono": "DO"
-    },
     "Te haces presente en mí": {
       "ruta": "Ofertorio/Te haces presente en mí.html",
       "tono": "RE"

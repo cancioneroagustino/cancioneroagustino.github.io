@@ -77,7 +77,7 @@
     // ← NUEVO: 2º opción: #oracion (texto libre) → HTML tal cual
     const oracion = doc.querySelector('#oracion');
     if (oracion) {
-      return `<h2>${title}</h2><div class="oracion lh-base">${oracion.innerHTML}</div>`;
+      return `<h2>${title}</h2><div class="oracion px-3 text-center" style="margin-top: 2rem;">${oracion.innerHTML}</div>`;
     }
 
     throw new Error('No se encontró #letra ni #oracion en ' + ruta);

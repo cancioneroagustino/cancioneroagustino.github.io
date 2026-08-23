@@ -154,6 +154,7 @@ async function insertarYCambiarSiCorresponde(container, ruta, tonoDeseado, capoD
       // ← NUEVO: === ORACIONES / TEXTO LIBRE: se muestra tal cual, sin transpositor ===
       const divTexto = document.createElement("div");
       divTexto.className = "oracion  px-3 text-center col-12"; // clase opcional, por si algún día quieres darle estilos propios
+      divTexto.style.marginTop = "2rem";  // ← Espacio entre título y contenido
       divTexto.innerHTML = contenido;
       article.appendChild(divTexto);
 

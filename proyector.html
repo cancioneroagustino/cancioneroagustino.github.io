@@ -326,11 +326,11 @@ function renderizarSlide() {
         // Pantalla totalmente limpia
         pantalla.innerHTML = ''; 
     }
-    else if (d.tipo === 'oracion-estrofa') {
-        // ← NUEVO: párrafo de oración sin negrita
-        const textoLimpio = d.texto.replace(/\n/g, '<br>');
-        pantalla.innerHTML = `<div style="font-weight: normal; width: 100%;">${textoLimpio}</div>`;
-    }
+else if (d.tipo === 'oracion-estrofa') {
+  // ← NUEVO: párrafo de oración sin negrita, con espaciado natural
+  const textoLimpio = d.texto.replace(/\n/g, '<br>');
+  pantalla.innerHTML = `<div style="font-weight: normal; width: 100%; line-height: 1.4;">${textoLimpio}</div>`;
+}
     else {
         const negrita = d.esEstribillo ? 'font-weight: bold;' : 'font-weight: normal;';
         const textoLimpio = d.texto.replace(/\n/g, '<br>');
@@ -380,7 +380,7 @@ async function iniciarProyeccion() {
         } else if (d.tipo === 'oracion-estrofa') {
             // ← NUEVO: oración en modo continuo
             const textoLimpio = d.texto.replace(/\n/g, '<br>');
-            htmlFinal += `<div class="letra-normal" style="margin-bottom:7vh">${textoLimpio}</div>`;
+            htmlFinal += `<div class="letra-normal" style="margin-bottom:2vh">${textoLimpio}</div>`;
         }
     });
     

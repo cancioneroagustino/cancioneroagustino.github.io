@@ -64,20 +64,38 @@ async function fetchCancionData(ruta) {
   const titleEl = doc.querySelector('title');
   const title = titleEl ? titleEl.innerText : 'Sin título';
 
+  // 1º prioridad: <pre id="letra"> (canciones con acordes) → flujo de siempre
   const pre = doc.querySelector('pre#letra');
-  if (!pre) throw new Error('No se encontró <pre id="letra"> en ' + ruta);
+  if (pre) {
+    return {
+      title,
+      contenido: pre.innerHTML,
+      dataKey: pre.getAttribute('data-key') || '',
+      dataCapo: pre.getAttribute('data-capo'),
+      esPre: true
+    };
+  }
 
-  const preInner = pre.innerHTML;
-  const dataKey = pre.getAttribute('data-key') || '';
-  const dataCapo = pre.getAttribute('data-capo'); // ← NUEVO
+  // ← 2º opción: oraciones en texto libre
+  const oracion = doc.querySelector('#oracion');
+  if (oracion) {
+    return {
+      title,
+      contenido: oracion.innerHTML,
+      dataKey: '',
+      dataCapo: null,
+      esPre: false
+    };
+  }
 
-  return { title, preInner, dataKey, dataCapo };
+  throw new Error('No se encontró #letra ni #oracion en ' + ruta);
 }
+
 
 // --- Insertar canción en el DOM y aplicar transposición ---
 async function insertarYCambiarSiCorresponde(container, ruta, tonoDeseado, capoDeseado) {
   try {
-    const { title, preInner, dataKey: tonoOriginal, dataCapo } = await fetchCancionData(ruta);
+    const { title, contenido, dataKey: tonoOriginal, dataCapo, esPre } = await fetchCancionData(ruta);
 
     const col = document.createElement("div");
     col.className = "col-12 col-md-8 col-lg-4 align-self-center";
@@ -90,50 +108,65 @@ async function insertarYCambiarSiCorresponde(container, ruta, tonoDeseado, capoD
     h2.className = "col-12 text-center";
     article.appendChild(h2);
 
-    const pre = document.createElement("pre");
-    pre.className = "letra";
-    pre.setAttribute("data-key", tonoOriginal);
+    if (esPre) {
+      // === CANCIONES CON ACORDES: mismo flujo de siempre, sin cambios ===
+      const pre = document.createElement("pre");
+      pre.className = "letra";
+      pre.setAttribute("data-key", tonoOriginal);
 
-    // ← NUEVO: el capo del programa manda; si no viene, se respeta el del archivo
-    const capoFinal = (capoDeseado !== undefined && capoDeseado !== null)
-      ? capoDeseado
-      : (parseInt(dataCapo) || 0);
-    pre.setAttribute("data-capo", capoFinal);
+      const capoFinal = (capoDeseado !== undefined && capoDeseado !== null)
+        ? capoDeseado
+        : (parseInt(dataCapo) || 0);
+      pre.setAttribute("data-capo", capoFinal);
 
-    pre.innerHTML = preInner;
+      pre.innerHTML = contenido;
+      article.appendChild(pre);
 
-    article.appendChild(pre);
-    col.appendChild(article);
-    container.appendChild(col);
+      col.appendChild(article);
+      container.appendChild(col);
 
-    await cargarScript("https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js");
-    await cargarScript("scripts/transpositor.js");
-    await new Promise((r) => setTimeout(r, 100));
+      await cargarScript("https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js");
+      await cargarScript("scripts/transpositor.js");
+      await new Promise((r) => setTimeout(r, 100));
 
-    if (window.jQuery && typeof jQuery.fn.transpose === "function") {
-      const $pre = jQuery(pre);
-      $pre.transpose();
+      if (window.jQuery && typeof jQuery.fn.transpose === "function") {
+        const $pre = jQuery(pre);
+        $pre.transpose();
 
-      if (tonoDeseado && tonoDeseado !== tonoOriginal) {
-        const claveObjetivo = tonoDeseado.replace(/m$/i, "");
-        const $keysBlock = $pre.prev(".transpose-keys");
-        const $link = $keysBlock.find("a").filter(function () {
-          return (jQuery(this).data('original-note') || jQuery(this).text()).toUpperCase() === claveObjetivo.toUpperCase();
-        }).first();
+        if (tonoDeseado && tonoDeseado !== tonoOriginal) {
+          const claveObjetivo = tonoDeseado.replace(/m$/i, "");
+          const $keysBlock = $pre.prev(".transpose-keys");
+          const $link = $keysBlock.find("a").filter(function () {
+            return (jQuery(this).data('original-note') || jQuery(this).text()).toUpperCase() === claveObjetivo.toUpperCase();
+          }).first();
 
-        if ($link.length) {
-          $link.trigger("click");
-        } else {
-          console.warn("No se encontró enlace de tono", claveObjetivo, "para", ruta);
+          if ($link.length) {
+            $link.trigger("click");
+          } else {
+            console.warn("No se encontró enlace de tono", claveObjetivo, "para", ruta);
+          }
         }
+      } else {
+        console.warn("⚠️ Plugin transpose no disponible aún");
       }
+
     } else {
-      console.warn("⚠️ Plugin transpose no disponible aún");
+      // ← NUEVO: === ORACIONES / TEXTO LIBRE: se muestra tal cual, sin transpositor ===
+      const divTexto = document.createElement("div");
+      divTexto.className = "oracion col-12"; // clase opcional, por si algún día quieres darle estilos propios
+      divTexto.innerHTML = contenido;
+      article.appendChild(divTexto);
+
+      col.appendChild(article);
+      container.appendChild(col);
     }
   } catch (err) {
-    console.warn("⚠️ Error menor o falta de tonalidad en:", ruta, err.message);
+    console.warn("⚠️ Error al cargar:", ruta, err.message);
   }
 }
+
+
+
 
 // --- Mostrar todas las canciones del programa ---
 async function mostrarProgramaConAcordes() {

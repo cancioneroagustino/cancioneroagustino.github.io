@@ -148,7 +148,7 @@ button {
 
 
 <script>
-// 1. Datos y Estado
+// 1. Datos y estado
 const programaMisa = JSON.parse(localStorage.getItem('programaMisa'));
 let diapositivas = [];
 let indiceActual = 0;
@@ -170,8 +170,35 @@ async function cargarTodoElPrograma() {
             const parser = new DOMParser();
             const doc = parser.parseFromString(html, 'text/html');
             const titulo = doc.querySelector('title')?.innerText || "Sin título";
-            const pre = doc.querySelector('pre');
-            if (!pre) continue;
+            
+            // ← NUEVO: buscar primero pre#letra, luego #oracion
+            const pre = doc.querySelector('pre#letra');
+            
+            if (!pre) {
+                // ← NUEVO: rama de oraciones
+                const oracion = doc.querySelector('#oracion');
+                if (oracion) {
+                    diapositivas.push({ tipo: 'titulo', contenido: titulo });
+                    
+                    // Dividir por párrafos
+                    const parrafos = oracion.querySelectorAll('p');
+                    if (parrafos.length > 0) {
+                        parrafos.forEach(p => {
+                            diapositivas.push({ 
+                                tipo: 'oracion-estrofa', 
+                                texto: p.innerHTML 
+                            });
+                        });
+                    } else {
+                        // Si no hay <p>, tomar todo el contenido como una sola diapositiva
+                        diapositivas.push({ 
+                            tipo: 'oracion-estrofa', 
+                            texto: oracion.innerHTML 
+                        });
+                    }
+                }
+                continue;
+            }
 
             const lineas = pre.innerHTML.split('\n');
             let bloques = [];
@@ -299,6 +326,11 @@ function renderizarSlide() {
         // Pantalla totalmente limpia
         pantalla.innerHTML = ''; 
     }
+    else if (d.tipo === 'oracion-estrofa') {
+        // ← NUEVO: párrafo de oración sin negrita
+        const textoLimpio = d.texto.replace(/\n/g, '<br>');
+        pantalla.innerHTML = `<div style="font-weight: normal; width: 100%;">${textoLimpio}</div>`;
+    }
     else {
         const negrita = d.esEstribillo ? 'font-weight: bold;' : 'font-weight: normal;';
         const textoLimpio = d.texto.replace(/\n/g, '<br>');
@@ -345,6 +377,10 @@ async function iniciarProyeccion() {
             const textoConFormato = d.esEstribillo ? `<b>${textoSeguro}</b>` : textoSeguro;
             const render = textoConFormato.replace(/\n/g, '<br>');
             htmlFinal += `<p class="letra-normal" style="margin-bottom:7vh">${render}</p>`;
+        } else if (d.tipo === 'oracion-estrofa') {
+            // ← NUEVO: oración en modo continuo
+            const textoLimpio = d.texto.replace(/\n/g, '<br>');
+            htmlFinal += `<div class="letra-normal" style="margin-bottom:7vh">${textoLimpio}</div>`;
         }
     });
     

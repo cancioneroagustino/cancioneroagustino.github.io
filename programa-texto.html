@@ -56,25 +56,36 @@
       return output;
     }
 
-    async function cargarCancion(ruta) {
-      try {
-        const response = await fetch(ruta);
-        if (!response.ok) {
-          throw new Error('Error al cargar la canción');
-        }
-        const contenido = await response.text();
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(contenido, 'text/html');
-        const preContent = doc.querySelector('pre').innerHTML;
-        const title = doc.querySelector('title').innerText;
-
-        const contenidoProcesado = procesarCancion(preContent);
-        return `<h2>${title}</h2><pre class="lh-base">${contenidoProcesado}</pre></div>`;
-      } catch (error) {
-        console.error('Error:', error);
-        return '<p>Error al cargar la canción. Inténtalo de nuevo más tarde.</p>';
-      }
+ async function cargarCancion(ruta) {
+  try {
+    const response = await fetch(ruta);
+    if (!response.ok) {
+      throw new Error('Error al cargar la canción');
     }
+    const contenido = await response.text();
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(contenido, 'text/html');
+    const title = doc.querySelector('title').innerText;
+
+    // 1º prioridad: <pre#letra> (canciones con acordes) → flujo actual
+    const pre = doc.querySelector('pre#letra');
+    if (pre) {
+      const contenidoProcesado = procesarCancion(pre.innerHTML);
+      return `<h2>${title}</h2><pre class="lh-base">${contenidoProcesado}</pre>`;
+    }
+
+    // ← NUEVO: 2º opción: #oracion (texto libre) → HTML tal cual
+    const oracion = doc.querySelector('#oracion');
+    if (oracion) {
+      return `<h2>${title}</h2><div class="oracion">${oracion.innerHTML}</div>`;
+    }
+
+    throw new Error('No se encontró #letra ni #oracion en ' + ruta);
+  } catch (error) {
+    console.error('Error:', error);
+    return '<p>Error al cargar la canción. Inténtalo de nuevo más tarde.</p>';
+  }
+}
 
     async function mostrarProgramaCompleto() {
       const programaContainer = document.getElementById('programa-completo-container');

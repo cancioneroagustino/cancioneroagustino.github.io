@@ -406,6 +406,11 @@
       "ruta": "Gloria/Gloria (Nebreda).html",
       "tono": "DO"
     },
+    "Gloria (Palazón)": {
+      "ruta": "Gloria/Gloria (Palazón).html",
+      "tono": "LA",
+      "capo": "1"
+    },
     "Gloria folclórico": {
       "ruta": "Gloria/Gloria folclórico.html",
       "tono": "DO"
@@ -2503,6 +2508,10 @@
       "ruta": "Comunión/Id amigos.html",
       "tono": "LA"
     },
+    "In persona Christi": {
+      "ruta": "Comunión/In persona Christi.html",
+      "tono": "DO"
+    },
     "Isaías": {
       "ruta": "Comunión/Isaías.html",
       "tono": "RE"
@@ -3896,10 +3905,6 @@
     "Insigne Padre Agustín": {
       "ruta": "Agustinianos/Insigne Padre Agustín.html",
       "tono": "LA"
-    },
-    "In persona Christi": {
-      "ruta": "Agustinianos/In persona Christi.html",
-      "tono": "DO"
     },
     "Oh amor": {
       "ruta": "Agustinianos/Oh amor.html",

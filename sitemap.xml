@@ -14,7 +14,7 @@
 </url>
 <url>
 <loc>https://www.cancionerocatolico.cl/03 Gloria.html</loc>
-<lastmod>2026-06-10T17:56:13-04:00</lastmod>
+<lastmod>2026-08-23T22:19:31-04:00</lastmod>
 </url>
 <url>
 <loc>https://www.cancionerocatolico.cl/04 Salmos.html</loc>
@@ -50,7 +50,7 @@
 </url>
 <url>
 <loc>https://www.cancionerocatolico.cl/12 Comunión.html</loc>
-<lastmod>2026-08-10T20:05:36-04:00</lastmod>
+<lastmod>2026-08-23T22:19:31-04:00</lastmod>
 </url>
 <url>
 <loc>https://www.cancionerocatolico.cl/13 Espíritu Santo.html</loc>
@@ -78,7 +78,7 @@
 </url>
 <url>
 <loc>https://www.cancionerocatolico.cl/19 Agustinianos.html</loc>
-<lastmod>2026-08-10T20:05:36-04:00</lastmod>
+<lastmod>2026-08-23T22:19:31-04:00</lastmod>
 </url>
 <url>
 <loc>https://www.cancionerocatolico.cl/20 Villancicos.html</loc>
@@ -151,10 +151,6 @@
 <url>
 <loc>https://www.cancionerocatolico.cl/Agustinianos/Himno a Santa Rita.html</loc>
 <lastmod>2026-08-11T22:24:59-04:00</lastmod>
-</url>
-<url>
-<loc>https://www.cancionerocatolico.cl/Agustinianos/In persona Christi.html</loc>
-<lastmod>2026-03-29T14:39:50-03:00</lastmod>
 </url>
 <url>
 <loc>https://www.cancionerocatolico.cl/Agustinianos/Insigne Padre Agustín.html</loc>
@@ -803,6 +799,10 @@
 <url>
 <loc>https://www.cancionerocatolico.cl/Comunión/Id amigos.html</loc>
 <lastmod>2026-03-29T14:39:50-03:00</lastmod>
+</url>
+<url>
+<loc>https://www.cancionerocatolico.cl/Comunión/In persona Christi.html</loc>
+<lastmod>2026-08-23T22:19:31-04:00</lastmod>
 </url>
 <url>
 <loc>https://www.cancionerocatolico.cl/Comunión/Isaías.html</loc>
@@ -1814,7 +1814,11 @@
 </url>
 <url>
 <loc>https://www.cancionerocatolico.cl/Gloria/Gloria (Nebreda).html</loc>
-<lastmod>2026-06-10T18:46:22-04:00</lastmod>
+<lastmod>2026-08-23T22:19:31-04:00</lastmod>
+</url>
+<url>
+<loc>https://www.cancionerocatolico.cl/Gloria/Gloria (Palazón).html</loc>
+<lastmod>2026-08-23T22:19:31-04:00</lastmod>
 </url>
 <url>
 <loc>https://www.cancionerocatolico.cl/Gloria/Gloria Mision Pais - Marcelo Cid.html</loc>

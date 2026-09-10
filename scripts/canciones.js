@@ -1212,7 +1212,7 @@
     },
     "10-septiembre: San Nicolás de Tolentino": {
       "ruta": "Salmos/sannicolas.html",
-      "tono": "DO"
+      "tono": "REm"
     },
     "29-septiembre: Santos Arcángeles Miguel, Gabriel y Rafael": {
       "ruta": "Salmos/santosarcangeles.html",

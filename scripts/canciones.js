@@ -790,7 +790,7 @@
     },
     "Domingo 17 C": {
       "ruta": "Salmos/cdom17.html",
-      "tono": "DO"
+      "tono": "MIm"
     },
     "Domingo 18 C": {
       "ruta": "Salmos/cdom18.html",

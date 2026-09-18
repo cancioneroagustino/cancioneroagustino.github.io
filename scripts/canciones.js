@@ -4180,15 +4180,11 @@
       "ruta": "Perdón/Señor ten piedad folclórico (2).html",
       "tono": "RE"
     },
-    "Señor ten piedad folclórico (3)": {
-      "ruta": "Perdón/Señor ten piedad folclórico (3).html",
-      "tono": "RE"
-    },
-    "Señor ten piedad folclórico (4) - Nortino": {
+    "Señor ten piedad folclórico (3) - Nortino": {
       "ruta": "Perdón/Señor ten piedad folclórico (4) - Nortino.html",
       "tono": "MIm"
     },
-    "Señor ten piedad folclórico (5) - Misa Ulkantun": {
+    "Señor ten piedad folclórico (4) - Misa Ulkantun": {
       "ruta": "Perdón/Señor ten piedad folclórico (5) - Misa Ulkantun.html",
       "tono": "SIm"
     },

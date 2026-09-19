@@ -4177,11 +4177,11 @@
       "tono": "RE"
     },
     "Señor ten piedad folclórico (3) - Nortino": {
-      "ruta": "Perdón/Señor ten piedad folclórico (4) - Nortino.html",
+      "ruta": "Perdón/Señor ten piedad folclórico (3) - Nortino.html",
       "tono": "MIm"
     },
     "Señor ten piedad folclórico (4) - Misa Ulkantun": {
-      "ruta": "Perdón/Señor ten piedad folclórico (5) - Misa Ulkantun.html",
+      "ruta": "Perdón/Señor ten piedad folclórico (4) - Misa Ulkantun.html",
       "tono": "SIm"
     },
     "Gloria folclórico": {

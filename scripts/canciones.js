@@ -423,6 +423,10 @@
       "ruta": "Gloria/Gloria folclórico.html",
       "tono": "DO"
     },
+    "Gloria Nortino (Misión País)": {
+      "ruta": "Gloria/Gloria Nortino (Misión País).html",
+      "tono": "MIm"
+    },
     "Gloria pascual (Gen verde)": {
       "ruta": "Gloria/Gloria pascual (Gen verde).html",
       "tono": "LA",

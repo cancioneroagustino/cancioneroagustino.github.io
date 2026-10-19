@@ -1741,6 +1741,10 @@
       "ruta": "Ofertorio/Te ofrecemos con el vino y con el pan.html",
       "tono": "DO"
     },
+    "Te ofrecemos el vino y el pan": {
+      "ruta": "Ofertorio/Te ofrecemos el vino y el pan.html",
+      "tono": "RE"
+    },
     "Te ofrecemos, Padre nuestro": {
       "ruta": "Ofertorio/Te ofrecemos, Padre nuestro.html",
       "tono": "DO"
@@ -1811,6 +1815,10 @@
       "ruta": "Santo/Santo Encuentro continental.html",
       "tono": "SOL"
     },
+    "Santo Español (Jaime Olguín)": {
+      "ruta": "Santo/Santo Español (Jaime Olguín).html",
+      "tono": "RE"
+    },
     "Santo folclórico": {
       "ruta": "Santo/Santo folclórico.html",
       "tono": "RE"
@@ -1818,10 +1826,6 @@
     "Santo LAm": {
       "ruta": "Santo/Santo LAm.html",
       "tono": "LAm"
-    },
-    "Santo MI": {
-      "ruta": "Santo/Santo MI.html",
-      "tono": "MI"
     },
     "Santo M. Frisina": {
       "ruta": "Santo/Santo M. Frisina.html",
@@ -2864,6 +2868,10 @@
     "Si yo no tengo amor": {
       "ruta": "Comunión/Si yo no tengo amor.html",
       "tono": "RE"
+    },
+    "Sobre el mar": {
+      "ruta": "Comunión/Sobre el mar.html",
+      "tono": "DO"
     },
     "Sobre la arena": {
       "ruta": "Comunión/Sobre la arena.html",

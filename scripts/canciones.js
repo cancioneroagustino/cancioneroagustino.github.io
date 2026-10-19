@@ -4192,6 +4192,10 @@
       "ruta": "Gloria/Gloria folclórico.html",
       "tono": "DO"
     },
+    "Gloria Nortino (Misión País)": {
+      "ruta": "Gloria/Gloria Nortino (Misión País).html",
+      "tono": "MIm"
+    },
     "Aleluya folclórico (1)": {
       "ruta": "Aleluya/Aleluya folclórico (1).html",
       "tono": "RE"

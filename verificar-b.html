@@ -49,38 +49,21 @@ function isChordLine(line) {
   return /(\bDO|\bRE|\bMI|\bFA|\bSOL|\bLA|\bSI)[b#]?|\bCejillo\b|\bIntro\b/.test(line);
 }
 
-const NOTA = '(?:DO|RE|MI|FA|SOL|LA|SI)';
-const TOKEN_ACORDE = new RegExp('^' + NOTA + '[b#]?[a-z0-9]{0,6}(?:/' + NOTA + '[b#]?[a-z0-9]{0,3})?$');
-
-function esTokenNeutro(t) {
-  const s = t.replace(/[()|\/\\:;.,\-–—*_~"'\[\]]/g, '');
-  return /^[x×]?\d*$/i.test(s) || /^(cejillo|intro)$/i.test(s);
-}
-
-// En una línea detectada como "de acordes": devuelve las palabras que NO son acordes
-// (si hay alguna, esa línea podría tener letra mezclada y el proyector la descartaría entera)
-function tokensSobrantes(textoLimpio) {
-  return textoLimpio
-    .split(/\s+/)
-    .filter(Boolean)
-    .filter(t => {
-      const sinBordes = t.replace(/^[(|\[]+|[)|\]:.,;]+$/g, '');
-      return !TOKEN_ACORDE.test(sinBordes) && !esTokenNeutro(t);
-    });
-}
-
 // Recibe el innerHTML de <pre id="letra"> y devuelve la lista de problemas
 function analizarPre(preHtml) {
   const lineas = preHtml.split('\n');
   const problemas = [];
-  let abierto = false;
+  let abierto = false;        // <b> simple abierto
+  let abiertoClase = false;   // <b class="..."> abierto
   let lineaApertura = null;
 
   lineas.forEach((linea, i) => {
     const n = i + 1;
     const limpia = linea.replace(/<[^>]*>/g, '').trim();
     const esAcordes = isChordLine(limpia);
-    const tieneTagB = /<\/?b>/i.test(linea);
+    const tieneClase = /<b\s[^>]*>/i.test(linea);
+    // </b> que cierra un <b class> de la misma línea no cuenta como marca de estribillo
+    const tieneTagB = /<b>/i.test(linea) || (/<\/b>/i.test(linea) && !tieneClase);
 
     // 1) <b> o </b> en una línea de acordes: el proyector la descarta y pierde la marca
     if (esAcordes && tieneTagB) {
@@ -88,15 +71,21 @@ function analizarPre(preHtml) {
         detalle: 'la etiqueta está en una línea de acordes' });
     }
 
-    // 2) Variantes que el proyector no reconoce (<strong>, <b class="...">)
-    if (/<strong\b/i.test(linea) || /<b\s[^>]*>/i.test(linea)) {
+    // 2) <strong>: el proyector no lo reconoce como estribillo
+    if (/<strong\b/i.test(linea)) {
       problemas.push({ tipo: 'B_VARIANTE', linea: n, texto: linea,
-        detalle: 'negrita escrita de una forma que el proyector no reconoce' });
+        detalle: 'usa <strong>, que el proyector no reconoce' });
     }
 
     // 3) Equilibrio de aperturas y cierres
-    for (const m of linea.matchAll(/<(\/?)b>/gi)) {
-      if (m[1] === '') {
+    for (const m of linea.matchAll(/<(\/?)b(\s[^>]*)?>/gi)) {
+      const esCierre = m[1] === '/';
+      const conAtributos = !!m[2];
+
+      if (!esCierre && conAtributos) {
+        // <b class="..."> (p. ej. subtítulos) es negrita normal: sólo se registra para emparejar su </b>
+        abiertoClase = true;
+      } else if (!esCierre) {
         if (abierto) {
           problemas.push({ tipo: 'B_DESBALANCEADO', linea: n, texto: linea,
             detalle: 'abre <b> sin haber cerrado el anterior (abierto en la línea ' + lineaApertura + ')' });
@@ -105,21 +94,14 @@ function analizarPre(preHtml) {
           lineaApertura = n;
         }
       } else {
-        if (!abierto) {
+        if (abiertoClase) {
+          abiertoClase = false;
+        } else if (!abierto) {
           problemas.push({ tipo: 'B_DESBALANCEADO', linea: n, texto: linea,
             detalle: 'cierra </b> sin que haya una apertura' });
         } else {
           abierto = false;
         }
-      }
-    }
-
-    // 4) Línea de acordes con otras palabras: posible letra que se perdería
-    if (esAcordes) {
-      const sobrantes = tokensSobrantes(limpia);
-      if (sobrantes.length > 0) {
-        problemas.push({ tipo: 'MIXTA', linea: n, texto: linea,
-          detalle: 'palabras que no son acordes: ' + sobrantes.join(' ') });
       }
     }
   });
@@ -139,8 +121,7 @@ const CONCURRENCIA = 6;
 const CATEGORIAS = [
   { id: 'B_EN_ACORDES',    titulo: '<b> en línea de acordes',                    gravedad: 'Problema' },
   { id: 'B_DESBALANCEADO', titulo: '<b> sin cierre, o cierre sin apertura',      gravedad: 'Problema' },
-  { id: 'B_VARIANTE',      titulo: 'Negrita no reconocida (<strong>, <b class>)', gravedad: 'Problema' },
-  { id: 'MIXTA',           titulo: 'Línea de acordes con otras palabras',        gravedad: 'Aviso' },
+  { id: 'B_VARIANTE',      titulo: 'Usa <strong> (el proyector no lo reconoce)',  gravedad: 'Problema' },
   { id: 'SIN_LETRA',       titulo: 'Sin letra reconocible (no se proyecta)',     gravedad: 'Info' }
 ];
 

@@ -134,16 +134,16 @@ button {
 
   <div class="mt-4">
     <h5>Presets</h5>
-    <button class="btn btn-outline-secondary" data-preset="dia1">Día 1</button>
-    <button class="btn btn-outline-secondary" data-preset="dia2">Día 2</button>
-    <button class="btn btn-outline-secondary" data-preset="dia3">Día 3</button>
-    <button class="btn btn-outline-secondary" data-preset="dia4">Día 4</button>
+    <button class="btn btn-outline-secondary" data-preset="op1">1</button>
+    <button class="btn btn-outline-secondary" data-preset="op2">2</button>
+    <button class="btn btn-outline-secondary" data-preset="op3">3</button>
+    <button class="btn btn-outline-secondary" data-preset="op4">4</button>
   </div>
   <div>
-    <button class="btn btn-outline-secondary" data-preset="dia5">Día 5</button>
-    <button class="btn btn-outline-secondary" data-preset="dia6">Día 6</button>
-    <button class="btn btn-outline-secondary" data-preset="dia7">Día 7</button>
-    <button class="btn btn-outline-secondary" data-preset="noche">Noche</button>
+    <button class="btn btn-outline-secondary" data-preset="op5">5</button>
+    <button class="btn btn-outline-secondary" data-preset="op6">6</button>
+    <button class="btn btn-outline-secondary" data-preset="op7">7</button>
+    <button class="btn btn-outline-secondary" data-preset="op8">8</button>
   </div>
 
   <div class="mt-4">
@@ -155,6 +155,10 @@ button {
   <div class="mt-4">
     <button id="btn-continuo" class="btn btn-outline-secondary btn-lg">Proyectar letras continuas</button>
     <button id="btn-estrofa" class="btn btn-outline-secondary btn-lg">Proyectar letras por estrofa</button>
+  </div>
+
+  <div class="mt-2">
+    <label><input type="checkbox" id="chk-titulos"> Mostrar títulos de las canciones en la proyección por estrofa</label>
   </div>
 
   <p id="estado" class="mt-3" role="status"></p>
@@ -185,14 +189,14 @@ const FONT_PASO = 0.5;
 const AJUSTE_MIN = 0.65;
 
 const PRESETS = {
-  dia1:  ['#ffffff', '#000000'],
-  dia2:  ['#f2e6a7', '#1a1a1a'],
-  dia3:  ['#dedede', '#1a1a1a'],
-  dia4:  ['#dedede', '#7a1121'],
-  dia5:  ['#4B1F1F', '#F5F5F2'],
-  dia6:  ['#3A2618', '#F5F5F2'],
-  dia7:  ['#3A2618', '#D4B15F'],
-  noche: ['#000000', '#ffffff']
+  op1:  ['#ffffff', '#000000'],
+  op2:  ['#f2e6a7', '#1a1a1a'],
+  op3:  ['#dedede', '#1a1a1a'],
+  op4:  ['#dedede', '#7a1121'],
+  op5:  ['#4B1F1F', '#F5F5F2'],
+  op6:  ['#3A2618', '#F5F5F2'],
+  op7:  ['#3A2618', '#D4B15F'],
+  op8: ['#000000', '#ffffff']
 };
 
 /* =====================================================================
@@ -413,10 +417,18 @@ function dividirTexto(texto) {
   return partes;
 }
 
-function expandirSlides(lista) {
+// conTitulos = true  -> cada canción empieza con su diapositiva de título
+// conTitulos = false -> en su lugar va una diapositiva vacía, sólo ENTRE canciones
+//                       (la primera canción empieza directo; al final ya hay una vacía)
+function expandirSlides(lista, conTitulos) {
   const salida = [];
+  let primeraCancion = true;
   lista.forEach(d => {
-    if (d.tipo === 'estrofa') {
+    if (d.tipo === 'titulo') {
+      if (conTitulos) salida.push(d);
+      else if (!primeraCancion) salida.push({ tipo: 'separador' });
+      primeraCancion = false;
+    } else if (d.tipo === 'estrofa') {
       dividirTexto(d.texto).forEach(parte => salida.push({ ...d, texto: parte }));
     } else {
       salida.push(d);
@@ -432,7 +444,7 @@ function htmlDeSlide(d) {
   if (d.tipo === 'titulo') {
     return `<h2 class="titulo-cancion">${escaparHtml(d.contenido)}</h2>`;
   }
-  if (d.tipo === 'fin') {
+  if (d.tipo === 'fin' || d.tipo === 'separador') {
     return '';
   }
   const texto = d.texto.replace(/\n/g, '<br>');
@@ -499,7 +511,7 @@ async function iniciar(tipoModo) {
     modo = tipoModo;
 
     if (tipoModo === 'estrofa') {
-      slides = expandirSlides(diapositivas);
+      slides = expandirSlides(diapositivas, $('chk-titulos').checked);
       pantalla.className = 'modo-estrofa';
       renderizarSlide(false);
     } else {
@@ -600,7 +612,7 @@ $('textColor').addEventListener('input', e => {
   document.documentElement.style.setProperty('--text-color', e.target.value);
 });
 
-setColors(...PRESETS.dia1); // sincroniza los selectores con los colores reales
+setColors(...PRESETS.op1); // sincroniza los selectores con los colores reales
 
 /* =====================================================================
    TAMAÑO DEL TEXTO
@@ -625,6 +637,17 @@ try {
   if (!isNaN(guardado)) fontSize = Math.min(FONT_MAX, Math.max(FONT_MIN, guardado));
 } catch (err) { /* ignorar */ }
 aplicarFontSize();
+
+/* =====================================================================
+   OPCIÓN: TÍTULOS EN LA PROYECCIÓN POR ESTROFA (se recuerda la elección)
+   ===================================================================== */
+try {
+  $('chk-titulos').checked = localStorage.getItem('proyectorMostrarTitulos') === '1';
+} catch (err) { /* ignorar */ }
+
+$('chk-titulos').addEventListener('change', e => {
+  try { localStorage.setItem('proyectorMostrarTitulos', e.target.checked ? '1' : '0'); } catch (err) { /* ignorar */ }
+});
 </script>
 </body>
 </html>

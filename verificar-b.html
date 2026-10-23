@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Verificador de letras - Cancionero Católico</title>
+<meta name="robots" content="noindex">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="/css/cancionero.css">
+<style>
+  body { padding: 1.5rem 0 4rem; }
+  #resumen { font-weight: 600; margin: 1rem 0; }
+  details { margin: 0.75rem 0; border: 1px solid #bbb; border-radius: 6px; padding: 0.5rem 0.9rem; }
+  summary { cursor: pointer; font-weight: 600; }
+  .cancion { margin: 0.9rem 0 0.4rem; }
+  .cancion a { font-weight: 600; }
+  .linea { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 0.85rem;
+           background: #f4f4f4; color: #222; padding: 0.15rem 0.4rem; border-radius: 4px;
+           display: block; margin: 0.2rem 0 0 1rem; white-space: pre-wrap; word-break: break-word; }
+  .detalle { margin-left: 1rem; font-size: 0.85rem; color: #555; }
+  .ok { color: #1a7f37; }
+  progress { width: 100%; }
+</style>
+</head>
+<body>
+<main class="container">
+  <h1>Verificador de letras</h1>
+  <p>
+    Revisa todas las canciones del catálogo con las mismas reglas que usa el proyector.
+    Sólo lee los archivos: no modifica nada.
+  </p>
+
+  <button id="btn-revisar" class="btn btn-outline-primary">Revisar todas las canciones</button>
+  <button id="btn-copiar" class="btn btn-outline-secondary" disabled>Copiar informe</button>
+
+  <progress id="progreso" value="0" max="1" hidden></progress>
+  <div id="resumen" role="status"></div>
+  <div id="resultados"></div>
+</main>
+
+<script src="/scripts/canciones.js"></script>
+<script>
+/* =====================================================================
+   REGLAS DE ANÁLISIS (funciones puras: sólo trabajan con texto)
+   ===================================================================== */
+
+// Idéntica a la del proyector
+function isChordLine(line) {
+  return /(\bDO|\bRE|\bMI|\bFA|\bSOL|\bLA|\bSI)[b#]?|\bCejillo\b|\bIntro\b/.test(line);
+}
+
+const NOTA = '(?:DO|RE|MI|FA|SOL|LA|SI)';
+const TOKEN_ACORDE = new RegExp('^' + NOTA + '[b#]?[a-z0-9]{0,6}(?:/' + NOTA + '[b#]?[a-z0-9]{0,3})?$');
+
+function esTokenNeutro(t) {
+  const s = t.replace(/[()|\/\\:;.,\-–—*_~"'\[\]]/g, '');
+  return /^[x×]?\d*$/i.test(s) || /^(cejillo|intro)$/i.test(s);
+}
+
+// En una línea detectada como "de acordes": devuelve las palabras que NO son acordes
+// (si hay alguna, esa línea podría tener letra mezclada y el proyector la descartaría entera)
+function tokensSobrantes(textoLimpio) {
+  return textoLimpio
+    .split(/\s+/)
+    .filter(Boolean)
+    .filter(t => {
+      const sinBordes = t.replace(/^[(|\[]+|[)|\]:.,;]+$/g, '');
+      return !TOKEN_ACORDE.test(sinBordes) && !esTokenNeutro(t);
+    });
+}
+
+// Recibe el innerHTML de <pre id="letra"> y devuelve la lista de problemas
+function analizarPre(preHtml) {
+  const lineas = preHtml.split('\n');
+  const problemas = [];
+  let abierto = false;
+  let lineaApertura = null;
+
+  lineas.forEach((linea, i) => {
+    const n = i + 1;
+    const limpia = linea.replace(/<[^>]*>/g, '').trim();
+    const esAcordes = isChordLine(limpia);
+    const tieneTagB = /<\/?b>/i.test(linea);
+
+    // 1) <b> o </b> en una línea de acordes: el proyector la descarta y pierde la marca
+    if (esAcordes && tieneTagB) {
+      problemas.push({ tipo: 'B_EN_ACORDES', linea: n, texto: linea,
+        detalle: 'la etiqueta está en una línea de acordes' });
+    }
+
+    // 2) Variantes que el proyector no reconoce (<strong>, <b class="...">)
+    if (/<strong\b/i.test(linea) || /<b\s[^>]*>/i.test(linea)) {
+      problemas.push({ tipo: 'B_VARIANTE', linea: n, texto: linea,
+        detalle: 'negrita escrita de una forma que el proyector no reconoce' });
+    }
+
+    // 3) Equilibrio de aperturas y cierres
+    for (const m of linea.matchAll(/<(\/?)b>/gi)) {
+      if (m[1] === '') {
+        if (abierto) {
+          problemas.push({ tipo: 'B_DESBALANCEADO', linea: n, texto: linea,
+            detalle: 'abre <b> sin haber cerrado el anterior (abierto en la línea ' + lineaApertura + ')' });
+        } else {
+          abierto = true;
+          lineaApertura = n;
+        }
+      } else {
+        if (!abierto) {
+          problemas.push({ tipo: 'B_DESBALANCEADO', linea: n, texto: linea,
+            detalle: 'cierra </b> sin que haya una apertura' });
+        } else {
+          abierto = false;
+        }
+      }
+    }
+
+    // 4) Línea de acordes con otras palabras: posible letra que se perdería
+    if (esAcordes) {
+      const sobrantes = tokensSobrantes(limpia);
+      if (sobrantes.length > 0) {
+        problemas.push({ tipo: 'MIXTA', linea: n, texto: linea,
+          detalle: 'palabras que no son acordes: ' + sobrantes.join(' ') });
+      }
+    }
+  });
+
+  if (abierto) {
+    problemas.push({ tipo: 'B_DESBALANCEADO', linea: lineaApertura, texto: lineas[lineaApertura - 1],
+      detalle: '<b> abierto aquí que nunca se cierra' });
+  }
+  return problemas;
+}
+
+/* =====================================================================
+   REVISIÓN DEL CATÁLOGO
+   ===================================================================== */
+const CONCURRENCIA = 6;
+
+const CATEGORIAS = [
+  { id: 'B_EN_ACORDES',    titulo: '<b> en línea de acordes',                    gravedad: 'Problema' },
+  { id: 'B_DESBALANCEADO', titulo: '<b> sin cierre, o cierre sin apertura',      gravedad: 'Problema' },
+  { id: 'B_VARIANTE',      titulo: 'Negrita no reconocida (<strong>, <b class>)', gravedad: 'Problema' },
+  { id: 'MIXTA',           titulo: 'Línea de acordes con otras palabras',        gravedad: 'Aviso' },
+  { id: 'SIN_LETRA',       titulo: 'Sin letra reconocible (no se proyecta)',     gravedad: 'Info' }
+];
+
+async function revisarCancion(seccion, nombre, ruta) {
+  const base = { seccion, nombre, ruta, problemas: [], tipoContenido: 'cancion' };
+  try {
+    const res = await fetch(ruta);
+    if (!res.ok) {
+      base.problemas.push({ tipo: 'SIN_LETRA', linea: null, texto: '', detalle: 'HTTP ' + res.status });
+      return base;
+    }
+    const doc = new DOMParser().parseFromString(await res.text(), 'text/html');
+    const pre = doc.querySelector('pre#letra');
+    if (pre) {
+      base.problemas = analizarPre(pre.innerHTML);
+    } else if (doc.querySelector('#oracion')) {
+      base.tipoContenido = 'oracion';
+    } else {
+      base.problemas.push({ tipo: 'SIN_LETRA', linea: null, texto: '',
+        detalle: 'no tiene pre#letra ni #oracion' });
+    }
+  } catch (err) {
+    base.problemas.push({ tipo: 'SIN_LETRA', linea: null, texto: '', detalle: 'error al cargar: ' + err.message });
+  }
+  return base;
+}
+
+function listarCatalogo() {
+  const lista = [];
+  for (const [seccion, canciones_] of Object.entries(canciones)) {
+    for (const [nombre, datos] of Object.entries(canciones_)) {
+      if (datos && datos.ruta) lista.push({ seccion, nombre, ruta: datos.ruta });
+    }
+  }
+  return lista;
+}
+
+async function revisarTodo(lista, onProgreso) {
+  const resultados = new Array(lista.length);
+  let siguiente = 0;
+  let hechas = 0;
+
+  async function trabajador() {
+    while (siguiente < lista.length) {
+      const idx = siguiente++;
+      const { seccion, nombre, ruta } = lista[idx];
+      resultados[idx] = await revisarCancion(seccion, nombre, ruta);
+      onProgreso(++hechas, lista.length);
+    }
+  }
+  await Promise.all(Array.from({ length: CONCURRENCIA }, trabajador));
+  return resultados;
+}
+
+/* =====================================================================
+   PRESENTACIÓN
+   ===================================================================== */
+const $ = id => document.getElementById(id);
+let informeTexto = '';
+
+function crear(tag, texto, clase) {
+  const e = document.createElement(tag);
+  if (texto !== undefined) e.textContent = texto;   // textContent: las etiquetas se ven tal cual
+  if (clase) e.className = clase;
+  return e;
+}
+
+function mostrarResultados(resultados) {
+  const cont = $('resultados');
+  cont.innerHTML = '';
+  const lineasInforme = [];
+
+  const totales = { canciones: 0, oraciones: 0 };
+  resultados.forEach(r => { r.tipoContenido === 'oracion' ? totales.oraciones++ : totales.canciones++; });
+
+  const partesResumen = [];
+  CATEGORIAS.forEach(cat => {
+    const afectadas = resultados.filter(r => r.problemas.some(p => p.tipo === cat.id));
+    partesResumen.push(`${cat.titulo}: ${afectadas.length}`);
+
+    if (afectadas.length === 0) return;
+
+    const det = document.createElement('details');
+    det.open = cat.gravedad === 'Problema';
+    det.appendChild(crear('summary', `${cat.gravedad} · ${cat.titulo} (${afectadas.length})`));
+    lineasInforme.push('', `== ${cat.gravedad}: ${cat.titulo} (${afectadas.length}) ==`);
+
+    afectadas.forEach(r => {
+      const div = crear('div', undefined, 'cancion');
+      const a = crear('a', `${r.seccion} › ${r.nombre}`);
+      a.href = r.ruta;
+      a.target = '_blank';
+      a.rel = 'noopener';
+      div.appendChild(a);
+      det.appendChild(div);
+      lineasInforme.push(`- ${r.seccion} › ${r.nombre}  [${r.ruta}]`);
+
+      r.problemas.filter(p => p.tipo === cat.id).forEach(p => {
+        const etiqueta = p.linea ? `línea ${p.linea}: ` : '';
+        if (p.detalle) det.appendChild(crear('div', etiqueta + p.detalle, 'detalle'));
+        if (p.texto) det.appendChild(crear('code', p.texto, 'linea'));
+        lineasInforme.push(`    ${etiqueta}${p.detalle || ''}`);
+        if (p.texto) lineasInforme.push(`    | ${p.texto}`);
+      });
+    });
+    cont.appendChild(det);
+  });
+
+  const hayProblemas = resultados.some(r => r.problemas.some(p => ['B_EN_ACORDES', 'B_DESBALANCEADO', 'B_VARIANTE'].includes(p.tipo)));
+  const cabecera = `Revisadas ${resultados.length} (${totales.canciones} canciones, ${totales.oraciones} oraciones). ` +
+                   partesResumen.join(' · ');
+  const resumen = $('resumen');
+  resumen.textContent = cabecera + (hayProblemas ? '' : ' — Sin problemas con <b>.');
+  resumen.className = hayProblemas ? '' : 'ok';
+
+  informeTexto = [cabecera, ...lineasInforme].join('\n');
+  $('btn-copiar').disabled = false;
+}
+
+$('btn-revisar').addEventListener('click', async () => {
+  if (typeof canciones === 'undefined') {
+    $('resumen').textContent = 'No se encontró el catálogo (/scripts/canciones.js).';
+    return;
+  }
+  const boton = $('btn-revisar');
+  boton.disabled = true;
+  $('btn-copiar').disabled = true;
+  $('resultados').innerHTML = '';
+
+  const lista = listarCatalogo();
+  const progreso = $('progreso');
+  progreso.hidden = false;
+  progreso.max = lista.length;
+  progreso.value = 0;
+
+  const resultados = await revisarTodo(lista, (hechas, total) => {
+    progreso.value = hechas;
+    $('resumen').textContent = `Revisando ${hechas} de ${total}…`;
+  });
+
+  progreso.hidden = true;
+  mostrarResultados(resultados);
+  boton.disabled = false;
+});
+
+$('btn-copiar').addEventListener('click', async () => {
+  try {
+    await navigator.clipboard.writeText(informeTexto);
+    $('btn-copiar').textContent = 'Copiado ✓';
+  } catch (err) {
+    prompt('Copia el informe:', informeTexto);
+  }
+  setTimeout(() => { $('btn-copiar').textContent = 'Copiar informe'; }, 2000);
+});
+</script>
+</body>
+</html>

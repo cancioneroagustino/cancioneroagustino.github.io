@@ -7,7 +7,6 @@
 <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0">
 <link href="/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="/css/cancionero.css">
-
 <style>
 :root {
   --bg-color: #ffffff;
@@ -21,59 +20,103 @@ body {
   margin: 0;
 }
 
+/* ---------- Pantalla de configuración ---------- */
 #configuracion {
   padding: 2rem;
   background-color: var(--bg-color);
   color: var(--text-color);
 }
-
 #configuracion .btn {
   color: var(--text-color);
   border-color: var(--text-color);
 }
-
-#configuracion .btn:hover {
+#configuracion .btn:hover:not(:disabled) {
   background-color: var(--text-color);
   color: var(--bg-color);
 }
-
-#pantalla-proyector {
-    display: none; /* Se cambia a flex en JS */
-    text-align: center;
-    width: 100%;
-    min-height: 100vh; /* Ocupa toda la altura */
-    padding: 5vh 6vw;
-    font-family: 'Atkinson Hyperlegible', system-ui, sans-serif;
-    font-size: var(--font-size, 6vh);
-    line-height: 1.25;
-    cursor: pointer; /* Indica que se puede hacer clic */
-    user-select: none; /* Evita que se seleccione el texto al hacer clics rápidos */
-    touch-action: manipulation; /* Optimiza para toques en móvil */
+#configuracion .btn:disabled {
+  opacity: 0.5;
 }
-
-
-#pantalla-proyector h2 {
-  margin-bottom: 6rem;   /* ajusta a gusto */
+#estado {
+  min-height: 1.5rem;
 }
-
-
 button {
   margin: 0.25rem;
 }
 
-.letra-normal {
-  margin-bottom: 6rem;
+/* ---------- Pantalla de proyección ---------- */
+#pantalla-proyector {
+  display: none;
+  text-align: center;
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding: 5vh 6vw;
+  font-family: 'Atkinson Hyperlegible', system-ui, sans-serif;
+  /* --ajuste (0.65 a 1) lo calcula el script si una estrofa no cabe */
+  font-size: calc(var(--font-size, 6vh) * var(--ajuste, 1));
+  line-height: 1.25;
+  user-select: none;
+  transition: opacity 0.2s ease-in-out;
+  opacity: 1;
+}
+#pantalla-proyector.fade-out {
+  opacity: 0 !important;
 }
 
+/* Modo por estrofa: una diapositiva a la vez, centrada, navega con clic/teclas */
+#pantalla-proyector.modo-estrofa {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  touch-action: manipulation;
+}
 
+/* Modo continuo: texto corrido; sólo se desplaza, no responde a clics */
+#pantalla-proyector.modo-continuo {
+  display: block;
+  cursor: default;
+  touch-action: pan-y;
+}
 
+/* Tipografía interna: todo en em, para que escale con A+ / A− */
+.titulo-cancion {
+  font-size: 1.3em;
+  font-weight: 600;
+  line-height: 1.2;
+  margin: 0;
+}
+.modo-continuo .titulo-cancion {
+  margin: 1.6em 0 0.8em;
+}
+.bloque {
+  width: 100%;
+  font-weight: normal;
+}
+.modo-continuo .bloque {
+  margin: 0 0 1.2em;
+}
+.bloque-oracion {
+  width: 100%;
+  font-weight: normal;
+  line-height: 1.4;
+}
+.modo-continuo .bloque-oracion {
+  margin: 0 0 0.4em;
+}
+.estribillo-destacado {
+  font-weight: bold;
+}
+
+/* ---------- Controles de tamaño ---------- */
 #controles-tamano {
   position: fixed;
   top: 1rem;
   right: 1rem;
   z-index: 9999;
 }
-
 #controles-tamano button {
   display: block;
   margin-bottom: 0.3rem;
@@ -82,439 +125,506 @@ button {
   color: var(--text-color);
   border-color: var(--text-color);
 }
-
-/* Clases auxiliares para la proyección por estrofas */
-.slide-flex {
-    display: flex !important;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
-.estribillo-destacado {
-    font-weight: bold;
-}
-.titulo-slide {
-    display: none;
-}
-
-/* El contenedor siempre está listo para transicionar su opacidad */
-#pantalla-proyector {
-    transition: opacity 0.2s ease-in-out; 
-    opacity: 1;
-}
-
-/* Clase para el desvanecimiento */
-.fade-out {
-    opacity: 0 !important;
-}
-
 </style>
 </head>
-
 <body>
-
 
 <div id="configuracion" class="container text-center">
   <h1>Proyección de letras</h1>
 
   <div class="mt-4">
     <h5>Presets</h5>
-    <button class="btn btn-outline-secondary" onclick="presetDia1()">Día 1</button>
-    <button class="btn btn-outline-secondary" onclick="presetDia2()">Día 2</button>
-    <button class="btn btn-outline-secondary" onclick="presetDia3()">Día 3</button>
-    <button class="btn btn-outline-secondary" onclick="presetDia4()">Día 4</button>
- </div>
- <div>
-    <button class="btn btn-outline-secondary" onclick="presetDia5()">Día 5</button>
-    <button class="btn btn-outline-secondary" onclick="presetDia6()">Día 6</button>
-    <button class="btn btn-outline-secondary" onclick="presetDia7()">Día 7</button>
-    <button class="btn btn-outline-secondary" onclick="presetNoche()">Noche</button>
+    <button class="btn btn-outline-secondary" data-preset="dia1">Día 1</button>
+    <button class="btn btn-outline-secondary" data-preset="dia2">Día 2</button>
+    <button class="btn btn-outline-secondary" data-preset="dia3">Día 3</button>
+    <button class="btn btn-outline-secondary" data-preset="dia4">Día 4</button>
+  </div>
+  <div>
+    <button class="btn btn-outline-secondary" data-preset="dia5">Día 5</button>
+    <button class="btn btn-outline-secondary" data-preset="dia6">Día 6</button>
+    <button class="btn btn-outline-secondary" data-preset="dia7">Día 7</button>
+    <button class="btn btn-outline-secondary" data-preset="noche">Noche</button>
   </div>
 
   <div class="mt-4">
     <h5>Colores personalizados</h5>
     <label>Fondo: <input type="color" id="bgColor" value="#ffffff"></label>
-    <label class="ms-3">Texto: <input type="color" id="textColor" value="#1a1a1a"></label>
+    <label class="ms-3">Texto: <input type="color" id="textColor" value="#000000"></label>
   </div>
-
 
   <div class="mt-4">
-    <button class="btn btn-outline-secondary btn-lg" onclick="iniciarProyeccion()">Proyectar letras contínuas</button>
-    <button class="btn btn-outline-secondary btn-lg" onclick="ProyeccionPorEstrofa()">Proyectar letras por estrofa</button>
+    <button id="btn-continuo" class="btn btn-outline-secondary btn-lg">Proyectar letras continuas</button>
+    <button id="btn-estrofa" class="btn btn-outline-secondary btn-lg">Proyectar letras por estrofa</button>
   </div>
+
+  <p id="estado" class="mt-3" role="status"></p>
 </div>
 
 <div id="pantalla-proyector"></div>
 
+<div id="controles-tamano">
+  <button id="btn-mas" class="btn btn-outline-secondary">A+</button>
+  <button id="btn-menos" class="btn btn-outline-secondary">A−</button>
+</div>
 
 <script>
-// 1. Datos y estado
-const programaMisa = JSON.parse(localStorage.getItem('programaMisa'));
-let diapositivas = [];
+/* =====================================================================
+   CONFIGURACIÓN AJUSTABLE
+   ===================================================================== */
+// Una estrofa (o estribillo) con más líneas que esto se reparte en varias
+// diapositivas, de forma equilibrada (p. ej. 10 líneas -> 5 + 5).
+const MAX_LINEAS_POR_SLIDE = 8;
+
+// Tamaño del texto en vh (A+ / A−)
+const FONT_MIN = 2;
+const FONT_MAX = 14;
+const FONT_PASO = 0.5;
+
+// Si una diapositiva igual no cabe (líneas muy largas que se parten),
+// el texto se reduce hasta este factor del tamaño elegido, y no más.
+const AJUSTE_MIN = 0.65;
+
+const PRESETS = {
+  dia1:  ['#ffffff', '#000000'],
+  dia2:  ['#f2e6a7', '#1a1a1a'],
+  dia3:  ['#dedede', '#1a1a1a'],
+  dia4:  ['#dedede', '#7a1121'],
+  dia5:  ['#4B1F1F', '#F5F5F2'],
+  dia6:  ['#3A2618', '#F5F5F2'],
+  dia7:  ['#3A2618', '#D4B15F'],
+  noche: ['#000000', '#ffffff']
+};
+
+/* =====================================================================
+   ESTADO
+   ===================================================================== */
+const $ = id => document.getElementById(id);
+const pantalla = $('pantalla-proyector');
+
+let diapositivas = [];   // lista "lógica": título, estrofas, oraciones, fin
+let slides = [];         // lista para el modo por estrofa (con estrofas largas ya divididas)
 let indiceActual = 0;
+let modo = null;         // null | 'estrofa' | 'continuo'
+let cargando = false;
+let timerFade = null;
+let fontSize = 6;
 
-// Función para detectar acordes (CRUCIAL PARA QUE NO DE ERROR)
+/* =====================================================================
+   UTILIDADES
+   ===================================================================== */
+function escaparHtml(s) {
+  return String(s)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+
+// Lee el programa guardado. Si no existe o está dañado, devuelve [] en vez de
+// romper el script entero. No borra ni modifica lo guardado.
+function leerPrograma() {
+  try {
+    const datos = JSON.parse(localStorage.getItem('programaMisa'));
+    return Array.isArray(datos) ? datos : [];
+  } catch (err) {
+    console.warn('No se pudo leer programaMisa:', err);
+    return [];
+  }
+}
+
+function mostrarEstado(texto) {
+  $('estado').textContent = texto || '';
+}
+
+function setBotonesProyeccion(habilitados) {
+  $('btn-continuo').disabled = !habilitados;
+  $('btn-estrofa').disabled = !habilitados;
+}
+
+// Detecta líneas de acordes (el sitio no usa dos mayúsculas seguidas en letras)
 function isChordLine(line) {
-    return /(\bDO|\bRE|\bMI|\bFA|\bSOL|\bLA|\bSI)[b#]?|\bCejillo\b|\bIntro\b/.test(line);
+  return /(\bDO|\bRE|\bMI|\bFA|\bSOL|\bLA|\bSI)[b#]?|\bCejillo\b|\bIntro\b/.test(line);
 }
 
-// 2. Motor de Carga
-async function cargarTodoElPrograma() {
-    diapositivas = [];
-    if (!programaMisa) return;
+/* =====================================================================
+   CARGA Y ANÁLISIS DE LAS CANCIONES
+   ===================================================================== */
+// Devuelve las diapositivas lógicas de una canción. Si algo falla
+// (sin red, 404, mal codificada), devuelve [] en silencio.
+async function procesarCancion(item) {
+  try {
+    const res = await fetch(item.cancion);
+    if (!res.ok) return [];
 
-    for (const item of programaMisa) {
-        try {
-            const res = await fetch(item.cancion);
-            const html = await res.text();
-            const parser = new DOMParser();
-            const doc = parser.parseFromString(html, 'text/html');
-            const titulo = doc.querySelector('title')?.innerText || "Sin título";
-            
-            // ← NUEVO: buscar primero pre#letra, luego #oracion
-            const pre = doc.querySelector('pre#letra');
-            
-            if (!pre) {
-                // ← NUEVO: rama de oraciones
-                const oracion = doc.querySelector('#oracion');
-                if (oracion) {
-                    diapositivas.push({ tipo: 'titulo', contenido: titulo });
-                    
-                    // Dividir por párrafos
-                    const parrafos = oracion.querySelectorAll('p');
-                    if (parrafos.length > 0) {
-                        parrafos.forEach(p => {
-                            diapositivas.push({ 
-                                tipo: 'oracion-estrofa', 
-                                texto: p.innerHTML 
-                            });
-                        });
-                    } else {
-                        // Si no hay <p>, tomar todo el contenido como una sola diapositiva
-                        diapositivas.push({ 
-                            tipo: 'oracion-estrofa', 
-                            texto: oracion.innerHTML 
-                        });
-                    }
-                }
-                continue;
-            }
+    const html = await res.text();
+    const doc = new DOMParser().parseFromString(html, 'text/html');
+    const titulo = doc.querySelector('title')?.textContent.trim() || 'Sin título';
 
-            const lineas = pre.innerHTML.split('\n');
-            let bloques = [];
-            let bloqueActual = [];
-            let enModoEstribillo = false;
+    const pre = doc.querySelector('pre#letra');
 
-            lineas.forEach((linea) => {
-                const limpiaParaAcorde = linea.replace(/<[^>]*>/g, '').trim();
-                
-                // Ignorar líneas de acordes
-                if (isChordLine(limpiaParaAcorde)) return;
+    // Rama de oraciones
+    if (!pre) {
+      const oracion = doc.querySelector('#oracion');
+      if (!oracion) return [];
 
-                const esVacia = limpiaParaAcorde === "";
-                const detectaInicioB = /<b>/i.test(linea);
-                const detectaFinB = /<\/b>/i.test(linea);
-
-                // REGLA 1: Si aparece <b>, cerramos lo que hubiera antes y empezamos estribillo
-                if (detectaInicioB) {
-                    if (bloqueActual.length > 0) {
-                        bloques.push({
-                            texto: bloqueActual.join('\n').replace(/<[^>]*>/g, '').trim(),
-                            esEstribillo: false
-                        });
-                    }
-                    bloqueActual = [linea];
-                    enModoEstribillo = true;
-                    // Si el </b> está en la misma línea (estribillo de una sola línea)
-                    if (detectaFinB) {
-                        bloques.push({
-                            texto: bloqueActual.join('\n').replace(/<[^>]*>/g, '').trim(),
-                            esEstribillo: true
-                        });
-                        bloqueActual = [];
-                        enModoEstribillo = false;
-                    }
-                    return;
-                }
-
-                // REGLA 2: Si aparece </b>, cerramos el estribillo
-                if (detectaFinB) {
-                    bloqueActual.push(linea);
-                    bloques.push({
-                        texto: bloqueActual.join('\n').replace(/<[^>]*>/g, '').trim(),
-                        esEstribillo: true
-                    });
-                    bloqueActual = [];
-                    enModoEstribillo = false;
-                    return;
-                }
-
-                // REGLA 3: Línea en blanco separa estrofas normales
-                if (esVacia && !enModoEstribillo) {
-                    if (bloqueActual.length > 0) {
-                        bloques.push({
-                            texto: bloqueActual.join('\n').replace(/<[^>]*>/g, '').trim(),
-                            esEstribillo: false
-                        });
-                        bloqueActual = [];
-                    }
-                    return;
-                }
-
-                // Acumulación normal de líneas
-                if (!esVacia || enModoEstribillo) {
-                    bloqueActual.push(linea);
-                }
-            });
-
-            // Guardar último bloque residual
-            if (bloqueActual.length > 0) {
-                bloques.push({
-                    texto: bloqueActual.join('\n').replace(/<[^>]*>/g, '').trim(),
-                    esEstribillo: enModoEstribillo
-                });
-            }
-
-            // --- LÓGICA DE INTERCALADO (Misma anterior, ahora con bloques limpios) ---
-            diapositivas.push({ tipo: 'titulo', contenido: titulo });
-
-            const estribillos = bloques.filter(b => b.esEstribillo);
-            const soloEstrofas = bloques.filter(b => !b.esEstribillo);
-
-            if (estribillos.length === 1 && soloEstrofas.length > 0) {
-                const coro = estribillos[0];
-                const empiezaConCoro = bloques[0].esEstribillo;
-
-                if (empiezaConCoro) {
-                    soloEstrofas.forEach(estrofa => {
-                        diapositivas.push({ tipo: 'estrofa', texto: coro.texto, esEstribillo: true });
-                        diapositivas.push({ tipo: 'estrofa', texto: estrofa.texto, esEstribillo: false });
-                    });
-                    diapositivas.push({ tipo: 'estrofa', texto: coro.texto, esEstribillo: true });
-                } else {
-                    soloEstrofas.forEach(estrofa => {
-                        diapositivas.push({ tipo: 'estrofa', texto: estrofa.texto, esEstribillo: false });
-                        diapositivas.push({ tipo: 'estrofa', texto: coro.texto, esEstribillo: true });
-                    });
-                }
-            } else {
-                bloques.forEach(b => {
-                    diapositivas.push({ tipo: 'estrofa', texto: b.texto, esEstribillo: b.esEstribillo });
-                });
-            }
-        } catch (err) { console.error(err); }
-    }
-    // AÑADIR SLIDE EN BLANCO AL FINAL DE TODO EL PROGRAMA
-    diapositivas.push({ tipo: 'fin', contenido: '' });
-}
-
-// 3. Visualización
-function renderizarSlide() {
-    const pantalla = document.getElementById('pantalla-proyector');
-    const d = diapositivas[indiceActual];
-    if (!d) return;
-
-// Inicia el desvanecimiento (Fade Out)
-    pantalla.classList.add('fade-out');
-
-// 2. Esperar a que el texto sea invisible para cambiarlo
-    setTimeout(() => {
-    if (d.tipo === 'titulo') {
-        pantalla.innerHTML = `<h2 style="font-size: 8vh; margin:0;">${d.contenido}</h2>`;
-    }
-    else if (d.tipo === 'fin') {
-        // Pantalla totalmente limpia
-        pantalla.innerHTML = ''; 
-    }
-else if (d.tipo === 'oracion-estrofa') {
-  // ← NUEVO: párrafo de oración sin negrita, con espaciado natural
-  const textoLimpio = d.texto.replace(/\n/g, '<br>');
-  pantalla.innerHTML = `<div style="font-weight: normal; width: 100%; line-height: 1.4;">${textoLimpio}</div>`;
-}
-    else {
-        const negrita = d.esEstribillo ? 'font-weight: bold;' : 'font-weight: normal;';
-        const textoLimpio = d.texto.replace(/\n/g, '<br>');
-        pantalla.innerHTML = `<div style="${negrita} width: 100%;">${textoLimpio}</div>`;
+      const salida = [{ tipo: 'titulo', contenido: titulo }];
+      const parrafos = oracion.querySelectorAll('p');
+      if (parrafos.length > 0) {
+        parrafos.forEach(p => salida.push({ tipo: 'oracion-estrofa', texto: p.innerHTML }));
+      } else {
+        salida.push({ tipo: 'oracion-estrofa', texto: oracion.innerHTML });
+      }
+      return salida;
     }
 
-// Quitamos el desvanecimiento para que aparezca el nuevo texto (Fade In)
-        pantalla.classList.remove('fade-out');
-    }, 200); // 200ms coincide con el tiempo del CSS
-}
+    // Rama de canciones: separar estrofas y estribillos
+    const lineas = pre.innerHTML.split('\n');
+    let bloques = [];
+    let bloqueActual = [];
+    let enModoEstribillo = false;
 
-// 4. Modos de Inicio
-async function ProyeccionPorEstrofa() {
-    await cargarTodoElPrograma();
-    if (diapositivas.length === 0) return alert("No hay letras");
-    
-    document.getElementById('configuracion').style.display = 'none';
-    const p = document.getElementById('pantalla-proyector');
-    p.classList.add('slide-flex');
-    p.style.display = 'flex';
-    indiceActual = 0;
-    renderizarSlide();
-}
+    const limpiar = arr => arr.join('\n').replace(/<[^>]*>/g, '').trim();
 
-async function iniciarProyeccion() {
-    await cargarTodoElPrograma();
-    if (diapositivas.length === 0) return alert("No hay letras");
+    lineas.forEach(linea => {
+      const limpiaParaAcorde = linea.replace(/<[^>]*>/g, '').trim();
 
-    document.getElementById('configuracion').style.display = 'none';
-    const p = document.getElementById('pantalla-proyector');
-    
-    p.classList.remove('slide-flex');
-    p.style.display = 'block';
-    p.style.textAlign = 'center';
-    
-    let htmlFinal = "";
-    diapositivas.forEach(d => {
-        // Ignoramos el slide de "fin" en el modo continuo para que no añada espacio vacío
-        if (d.tipo === 'titulo') {
-            htmlFinal += `<h2 style="margin-top:10vh; margin-bottom: 5vh;">${d.contenido}</h2>`;
-        } else if (d.tipo === 'estrofa') {
-            // Verificamos que d.texto exista
-            const textoSeguro = d.texto || "";
-            const textoConFormato = d.esEstribillo ? `<b>${textoSeguro}</b>` : textoSeguro;
-            const render = textoConFormato.replace(/\n/g, '<br>');
-            htmlFinal += `<p class="letra-normal" style="margin-bottom:7vh">${render}</p>`;
-        } else if (d.tipo === 'oracion-estrofa') {
-            // ← NUEVO: oración en modo continuo
-            const textoLimpio = d.texto.replace(/\n/g, '<br>');
-            htmlFinal += `<div class="letra-normal" style="margin-bottom:2vh">${textoLimpio}</div>`;
+      // Ignorar líneas de acordes
+      if (isChordLine(limpiaParaAcorde)) return;
+
+      const esVacia = limpiaParaAcorde === '';
+      const detectaInicioB = /<b>/i.test(linea);
+      const detectaFinB = /<\/b>/i.test(linea);
+
+      // REGLA 1: <b> cierra lo anterior y abre estribillo
+      if (detectaInicioB) {
+        if (bloqueActual.length > 0) {
+          bloques.push({ texto: limpiar(bloqueActual), esEstribillo: false });
         }
+        bloqueActual = [linea];
+        enModoEstribillo = true;
+
+        // Estribillo de una sola línea (</b> en la misma línea)
+        if (detectaFinB) {
+          bloques.push({ texto: limpiar(bloqueActual), esEstribillo: true });
+          bloqueActual = [];
+          enModoEstribillo = false;
+        }
+        return;
+      }
+
+      // REGLA 2: </b> cierra el estribillo
+      if (detectaFinB) {
+        bloqueActual.push(linea);
+        bloques.push({ texto: limpiar(bloqueActual), esEstribillo: true });
+        bloqueActual = [];
+        enModoEstribillo = false;
+        return;
+      }
+
+      // REGLA 3: línea en blanco separa estrofas normales
+      if (esVacia && !enModoEstribillo) {
+        if (bloqueActual.length > 0) {
+          bloques.push({ texto: limpiar(bloqueActual), esEstribillo: false });
+          bloqueActual = [];
+        }
+        return;
+      }
+
+      // Acumulación normal
+      if (!esVacia || enModoEstribillo) {
+        bloqueActual.push(linea);
+      }
     });
-    
-    p.innerHTML = htmlFinal;
-    // Resetear scroll al inicio por si acaso
-    window.scrollTo(0,0);
+
+    // Bloque residual
+    if (bloqueActual.length > 0) {
+      bloques.push({ texto: limpiar(bloqueActual), esEstribillo: enModoEstribillo });
+    }
+
+    // Descartar bloques que quedaron sin texto
+    bloques = bloques.filter(b => b.texto !== '');
+    if (bloques.length === 0) return [];
+
+    const salida = [{ tipo: 'titulo', contenido: titulo }];
+
+    // Intercalado de un único estribillo entre estrofas
+    const estribillos = bloques.filter(b => b.esEstribillo);
+    const soloEstrofas = bloques.filter(b => !b.esEstribillo);
+
+    if (estribillos.length === 1 && soloEstrofas.length > 0) {
+      const coro = estribillos[0];
+      const empiezaConCoro = bloques[0].esEstribillo;
+
+      if (empiezaConCoro) {
+        soloEstrofas.forEach(estrofa => {
+          salida.push({ tipo: 'estrofa', texto: coro.texto, esEstribillo: true });
+          salida.push({ tipo: 'estrofa', texto: estrofa.texto, esEstribillo: false });
+        });
+        salida.push({ tipo: 'estrofa', texto: coro.texto, esEstribillo: true });
+      } else {
+        soloEstrofas.forEach(estrofa => {
+          salida.push({ tipo: 'estrofa', texto: estrofa.texto, esEstribillo: false });
+          salida.push({ tipo: 'estrofa', texto: coro.texto, esEstribillo: true });
+        });
+      }
+    } else {
+      bloques.forEach(b => salida.push({ tipo: 'estrofa', texto: b.texto, esEstribillo: b.esEstribillo }));
+    }
+
+    return salida;
+  } catch (err) {
+    console.error('Error procesando', item && item.cancion, err);
+    return [];
+  }
 }
 
-// 5. Navegación Universal
+// Carga todas las canciones en paralelo (conservando el orden del programa).
+// Devuelve [] si no hay ninguna letra utilizable.
+async function cargarTodoElPrograma(programa) {
+  const porCancion = await Promise.all(programa.map(procesarCancion));
+  const todas = porCancion.flat();
+  if (todas.length === 0) return [];
+  todas.push({ tipo: 'fin' });   // diapositiva en blanco al final
+  return todas;
+}
+
+/* =====================================================================
+   DIVISIÓN DE ESTROFAS LARGAS (modo por estrofa)
+   ===================================================================== */
+// Reparte un arreglo de líneas en partes parejas, de a MAX_LINEAS_POR_SLIDE como máximo
+function repartirLineas(lineas) {
+  if (lineas.length <= MAX_LINEAS_POR_SLIDE) return [lineas.join('\n')];
+  const partes = Math.ceil(lineas.length / MAX_LINEAS_POR_SLIDE);
+  const tam = Math.ceil(lineas.length / partes);
+  const salida = [];
+  for (let i = 0; i < lineas.length; i += tam) {
+    salida.push(lineas.slice(i, i + tam).join('\n'));
+  }
+  return salida;
+}
+
+function dividirTexto(texto) {
+  const lineas = texto.split('\n');
+  if (lineas.length <= MAX_LINEAS_POR_SLIDE) return [texto];
+
+  // Primero se respetan los cortes naturales (líneas en blanco dentro del bloque)
+  const grupos = texto.split(/\n\s*\n/).map(g => g.trim()).filter(Boolean);
+  const partes = [];
+  grupos.forEach(g => partes.push(...repartirLineas(g.split('\n'))));
+  return partes;
+}
+
+function expandirSlides(lista) {
+  const salida = [];
+  lista.forEach(d => {
+    if (d.tipo === 'estrofa') {
+      dividirTexto(d.texto).forEach(parte => salida.push({ ...d, texto: parte }));
+    } else {
+      salida.push(d);
+    }
+  });
+  return salida;
+}
+
+/* =====================================================================
+   VISUALIZACIÓN
+   ===================================================================== */
+function htmlDeSlide(d) {
+  if (d.tipo === 'titulo') {
+    return `<h2 class="titulo-cancion">${escaparHtml(d.contenido)}</h2>`;
+  }
+  if (d.tipo === 'fin') {
+    return '';
+  }
+  const texto = d.texto.replace(/\n/g, '<br>');
+  if (d.tipo === 'oracion-estrofa') {
+    return `<div class="bloque-oracion">${texto}</div>`;
+  }
+  const clase = d.esEstribillo ? 'bloque estribillo-destacado' : 'bloque';
+  return `<div class="${clase}">${texto}</div>`;
+}
+
+// Si el contenido no cabe en pantalla, reduce el texto de a poco (hasta AJUSTE_MIN)
+function ajustarAlto() {
+  let factor = 1;
+  pantalla.style.setProperty('--ajuste', factor);
+  const contenido = pantalla.firstElementChild;
+  if (!contenido) return;
+
+  const disponible = window.innerHeight * 0.90; // descuenta el padding de 5vh arriba y abajo
+  while (contenido.getBoundingClientRect().height > disponible && factor > AJUSTE_MIN) {
+    factor = Math.round((factor - 0.05) * 100) / 100;
+    pantalla.style.setProperty('--ajuste', factor);
+  }
+}
+
+function renderizarSlide(conFade = true) {
+  const d = slides[indiceActual];
+  if (!d) return;
+
+  const aplicar = () => {
+    pantalla.innerHTML = htmlDeSlide(d);
+    ajustarAlto();
+    pantalla.classList.remove('fade-out');
+  };
+
+  clearTimeout(timerFade);
+  if (!conFade) {
+    aplicar();
+    return;
+  }
+  pantalla.classList.add('fade-out');
+  timerFade = setTimeout(aplicar, 200); // coincide con la transición CSS
+}
+
+/* =====================================================================
+   MODOS DE PROYECCIÓN
+   ===================================================================== */
+async function iniciar(tipoModo) {
+  if (cargando) return;
+  cargando = true;
+  setBotonesProyeccion(false);
+  mostrarEstado('Cargando letras…');
+
+  try {
+    diapositivas = await cargarTodoElPrograma(leerPrograma());
+
+    if (diapositivas.length === 0) {
+      mostrarEstado('No hay letras para proyectar. Crea un programa y vuelve a intentarlo.');
+      return;
+    }
+
+    mostrarEstado('');
+    $('configuracion').style.display = 'none';
+    indiceActual = 0;
+    modo = tipoModo;
+
+    if (tipoModo === 'estrofa') {
+      slides = expandirSlides(diapositivas);
+      pantalla.className = 'modo-estrofa';
+      renderizarSlide(false);
+    } else {
+      pantalla.className = 'modo-continuo';
+      pantalla.style.setProperty('--ajuste', 1);
+      pantalla.innerHTML = htmlContinuo();
+      window.scrollTo(0, 0);
+    }
+  } catch (err) {
+    console.error(err);
+    mostrarEstado('No se pudo cargar el programa.');
+  } finally {
+    cargando = false;
+    setBotonesProyeccion(true);
+  }
+}
+
+function htmlContinuo() {
+  let html = '';
+  diapositivas.forEach(d => {
+    if (d.tipo === 'titulo' || d.tipo === 'estrofa' || d.tipo === 'oracion-estrofa') {
+      html += htmlDeSlide(d);
+    }
+    // 'fin' se ignora en modo continuo
+  });
+  return html;
+}
+
+/* =====================================================================
+   NAVEGACIÓN (sólo modo por estrofa)
+   ===================================================================== */
 function avanzar() {
-    if (indiceActual < diapositivas.length - 1) {
-        indiceActual++;
-        renderizarSlide();
-    } else {
-        // Solo pregunta si ya estamos en el último slide (el blanco) e intentamos seguir
-        if (confirm("¿Finalizar proyección y volver al menú?")) {
-            location.reload();
-        }
-    }
+  if (indiceActual < slides.length - 1) {
+    indiceActual++;
+    renderizarSlide();
+  } else if (confirm('¿Finalizar proyección y volver al menú?')) {
+    location.reload();
+  }
 }
+
 function retroceder() {
-    if (indiceActual > 0) { indiceActual--; renderizarSlide(); }
+  if (indiceActual > 0) {
+    indiceActual--;
+    renderizarSlide();
+  }
 }
 
-window.onkeydown = (e) => {
-    if (document.getElementById('pantalla-proyector').style.display !== 'none') {
-        if (["ArrowRight", "Enter", " "].includes(e.key)) { e.preventDefault(); avanzar(); }
-        if (["ArrowLeft", "Backspace"].includes(e.key)) { e.preventDefault(); retroceder(); }
-        if (e.key === "Escape") location.reload();
-    }
-};
+window.addEventListener('keydown', e => {
+  if (!modo) return;
 
+  // Esc vuelve al menú en cualquier modo
+  if (e.key === 'Escape') {
+    location.reload();
+    return;
+  }
 
-// Centralizamos la navegación para evitar saltos dobles
-document.getElementById('pantalla-proyector').onclick = (e) => {
-    // Si la pantalla no es visible, no hacer nada
-    if (document.getElementById('pantalla-proyector').style.display === 'none') return;
+  // En modo continuo no se toca nada: el teclado desplaza la página normalmente
+  if (modo !== 'estrofa') return;
 
-    const pantallaAncho = window.innerWidth;
-    // Si el clic es en el primer tercio (izquierda), retrocede. Si no, avanza.
-    if (e.clientX < pantallaAncho / 3) {
-        retroceder();
-    } else {
-        avanzar();
-    }
-};
+  if (['ArrowRight', 'PageDown', 'Enter', ' '].includes(e.key)) {
+    e.preventDefault();
+    if (!e.repeat) avanzar();
+  } else if (['ArrowLeft', 'PageUp', 'Backspace'].includes(e.key)) {
+    e.preventDefault();
+    if (!e.repeat) retroceder();
+  }
+});
 
-// Quitamos el onmousedown anterior y mantenemos el bloqueo del menú contextual
-document.getElementById('pantalla-proyector').onmousedown = null; 
-document.getElementById('pantalla-proyector').oncontextmenu = (e) => e.preventDefault();
+// Clic / toque: primer tercio retrocede, el resto avanza. Sólo en modo por estrofa.
+pantalla.addEventListener('click', e => {
+  if (modo !== 'estrofa') return;
+  if (e.clientX < window.innerWidth / 3) retroceder();
+  else avanzar();
+});
+pantalla.addEventListener('contextmenu', e => e.preventDefault());
 
-// Soporte Móvil
-document.getElementById('pantalla-proyector').onclick = (e) => {
-    if (window.innerWidth > 0) { // Simple check
-        if (e.clientX < window.innerWidth / 3) retroceder();
-        else avanzar();
-    }
-};
+$('btn-continuo').addEventListener('click', () => iniciar('continuo'));
+$('btn-estrofa').addEventListener('click', () => iniciar('estrofa'));
 
-// 6. Colores y Tamaño
-
-function presetDia1() {
-  setColors('#ffffff', '#000000');
-}
-
-function presetDia2() {
-  setColors('#f2e6a7', '#1a1a1a');
-}
-
-function presetDia3() {
-  setColors('#dedede', '#1a1a1a');
-}
-
-function presetDia4() {
-  setColors('#dedede', '#7a1121');
-}
-
-function presetDia5() {
-  setColors('#4B1F1F', '#F5F5F2');
-}
-
-function presetDia6() {
-  setColors('#3A2618', '#F5F5F2');
-}
-
-function presetDia7() {
-  setColors('#3A2618', '#D4B15F');
-}
-
-function presetNoche() {
-  setColors('#000000', '#ffffff');
-}
-
+/* =====================================================================
+   COLORES
+   ===================================================================== */
 function setColors(bg, text) {
   document.documentElement.style.setProperty('--bg-color', bg);
   document.documentElement.style.setProperty('--text-color', text);
-  document.getElementById('bgColor').value = bg;
-  document.getElementById('textColor').value = text;
+  $('bgColor').value = bg;
+  $('textColor').value = text;
 }
 
-// Definir los elementos antes de usarlos
-const inputBg = document.getElementById('bgColor');
-const inputText = document.getElementById('textColor');
-
-if(inputBg) {
-    inputBg.addEventListener('input', e => {
-        document.documentElement.style.setProperty('--bg-color', e.target.value);
-    });
-}
-
-if(inputText) {
-    inputText.addEventListener('input', e => {
-        document.documentElement.style.setProperty('--text-color', e.target.value);
-    });
-}
-
-
-bgColor.addEventListener('input', e => {
-  document.documentElement.style.setProperty('--bg-color', e.target.value);
+document.querySelectorAll('[data-preset]').forEach(btn => {
+  btn.addEventListener('click', () => setColors(...PRESETS[btn.dataset.preset]));
 });
 
-textColor.addEventListener('input', e => {
+$('bgColor').addEventListener('input', e => {
+  document.documentElement.style.setProperty('--bg-color', e.target.value);
+});
+$('textColor').addEventListener('input', e => {
   document.documentElement.style.setProperty('--text-color', e.target.value);
 });
 
-let fontSize = 6;
-function aumentarTexto() { fontSize += 0.5; document.documentElement.style.setProperty('--font-size', fontSize + 'vh'); }
-function disminuirTexto() { fontSize -= 0.5; document.documentElement.style.setProperty('--font-size', fontSize + 'vh'); }
+setColors(...PRESETS.dia1); // sincroniza los selectores con los colores reales
+
+/* =====================================================================
+   TAMAÑO DEL TEXTO
+   ===================================================================== */
+function aplicarFontSize() {
+  document.documentElement.style.setProperty('--font-size', fontSize + 'vh');
+}
+
+function cambiarTexto(delta) {
+  fontSize = Math.min(FONT_MAX, Math.max(FONT_MIN, fontSize + delta));
+  aplicarFontSize();
+  try { localStorage.setItem('proyectorFontSize', String(fontSize)); } catch (err) { /* ignorar */ }
+  if (modo === 'estrofa') ajustarAlto();
+}
+
+$('btn-mas').addEventListener('click', () => cambiarTexto(FONT_PASO));
+$('btn-menos').addEventListener('click', () => cambiarTexto(-FONT_PASO));
+
+// Recuperar el último tamaño usado
+try {
+  const guardado = parseFloat(localStorage.getItem('proyectorFontSize'));
+  if (!isNaN(guardado)) fontSize = Math.min(FONT_MAX, Math.max(FONT_MIN, guardado));
+} catch (err) { /* ignorar */ }
+aplicarFontSize();
 </script>
-
-<div id="controles-tamano">
-  <button class="btn btn-outline-secondary" onclick="aumentarTexto()">A+</button>
-  <button class="btn btn-outline-secondary" onclick="disminuirTexto()">A−</button>
-</div>
-
 </body>
 </html>

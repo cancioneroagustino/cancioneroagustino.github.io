@@ -2476,6 +2476,11 @@
       "ruta": "Comunión/Hagan esto en memoria mía.html",
       "tono": "SOL"
     },
+    "Hago nuevas todas las cosas": {
+      "ruta": "Comunión/Hago nuevas todas las cosas.html",
+      "tono": "SOL",
+      "capo": "2"
+    },
     "Hambre de Dios": {
       "ruta": "Comunión/Hambre de Dios.html",
       "tono": "DO"

@@ -1184,7 +1184,7 @@
     },
     "19-marzo: San José": {
       "ruta": "Salmos/sanjose.html",
-      "tono": "DO"
+      "tono": "SOL"
     },
     "26-abril: Nuestra Señora Madre del Buen Consejo": {
       "ruta": "Salmos/ntasradelbuenconsejo.html",
@@ -1228,7 +1228,7 @@
     },
     "29-septiembre: Santos Arcángeles Miguel, Gabriel y Rafael": {
       "ruta": "Salmos/santosarcangeles.html",
-      "tono": "DO"
+      "tono": "MI"
     },
     "10-octubre: Santo Tomás de Villanueva": {
       "ruta": "Salmos/stotomasdevillanueva.html",
@@ -1236,7 +1236,7 @@
     },
     "1-noviembre: Todos los santos": {
       "ruta": "Salmos/todoslossantos.html",
-      "tono": "RE"
+      "tono": "LA"
     },
     "2-noviembre: Todos los difuntos": {
       "ruta": "Salmos/todoslosdifuntos.html",

@@ -3592,6 +3592,10 @@
       "tono": "LAm",
       "capo": "4"
     },
+    "Mi Reina y mi Señora": {
+      "ruta": "Marianos/Mi Reina y mi Señora.html",
+      "tono": "LAm"
+    },
     "Oh María": {
       "ruta": "Marianos/Oh María.html",
       "tono": "SOL"

@@ -3730,20 +3730,36 @@
       "ruta": "Rosario/Oración inicial del mes de María.html",
       "tono": ""
     },
-    "Misterios gozosos (lunes y sábado)": {
+    "Misterios gozosos (lunes y sábado), Ave de Fátima": {
       "ruta": "Rosario/Misterios gozosos.html",
       "tono": "RE"
     },
-    "Misterios dolorosos (martes y viernes)": {
+    "Misterios gozosos (lunes y sábado), Ave de Lourdes": {
+      "ruta": "Rosario/Misterios gozosos - Lourdes.html",
+      "tono": "RE"
+    },
+    "Misterios dolorosos (martes y viernes), Ave de Fátima": {
       "ruta": "Rosario/Misterios dolorosos.html",
       "tono": "RE"
     },
-    "Misterios gloriosos (miércoles y domingo)": {
+    "Misterios dolorosos (martes y viernes), Ave de Lourdes": {
+      "ruta": "Rosario/Misterios dolorosos - Lourdes.html",
+      "tono": "RE"
+    },
+    "Misterios gloriosos (miércoles y domingo), Ave de Fátima": {
       "ruta": "Rosario/Misterios gloriosos.html",
       "tono": "RE"
     },
-    "Misterios luminosos (jueves)": {
+    "Misterios gloriosos (miércoles y domingo), Ave de Lourdes": {
+      "ruta": "Rosario/Misterios gloriosos - Lourdes.html",
+      "tono": "RE"
+    },
+    "Misterios luminosos (jueves), Ave de Fátima": {
       "ruta": "Rosario/Misterios luminosos.html",
+      "tono": "RE"
+    },
+    "Misterios luminosos (jueves), Ave de Lourdes": {
+      "ruta": "Rosario/Misterios luminosos - Lourdes.html",
       "tono": "RE"
     },
     "Oración final del mes de María": {

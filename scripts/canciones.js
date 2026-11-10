@@ -3410,6 +3410,10 @@
       "ruta": "Marianos/Dios te salve, María (2).html",
       "tono": "LA"
     },
+    "Dios te salve, María (Sagrada María)": {
+      "ruta": "Marianos/Dios te salve, María (Sagrada María).html",
+      "tono": "SOL"
+    },
     "Dolorosa": {
       "ruta": "Marianos/Dolorosa.html",
       "tono": "LAm"
@@ -3623,10 +3627,6 @@
     "Reina del Tamarugal": {
       "ruta": "Marianos/Reina del Tamarugal.html",
       "tono": "MIm"
-    },
-    "Sagrada María": {
-      "ruta": "Marianos/Sagrada María.html",
-      "tono": "SOL"
     },
     "Salve, María morena": {
       "ruta": "Marianos/Salve, María morena.html",
